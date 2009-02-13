@@ -7,8 +7,7 @@ all: mysql_ README
 
 
 README: mysql_.in
-	perldoc mysql_ > README
-	perl -pi -e 's/A~Xierud/Øierud/' README
+	perldoc -t mysql_ > README
 
 mysql_: mysql_.in
 	perl -pe 's/\@\@PERL\@\@/\/usr\/bin\/perl/' mysql_.in > mysql_
@@ -34,9 +33,15 @@ clean:
 	rm -f values.out~ config.out~ README mysql_
 	find . -maxdepth 1 -name 'mysql_?*' -and -type l -exec rm {} \;
 	rm -rf $(PACKAGE) $(PACKAGE).tar.bz2
+	rm -rf $(PACKAGE)-src $(PACKAGE)-src.tar.bz2
 
 
 bundle: all
 	mkdir -p $(PACKAGE)
 	cp mysql_ README $(PACKAGE)
 	tar cjf $(PACKAGE).tar.bz2 $(PACKAGE)
+
+src-bundle: 
+	mkdir -p $(PACKAGE)-src
+	cp -r config.out Makefile  mock  mysql_.in  values.out $(PACKAGE)-src
+	tar cjf $(PACKAGE)-src.tar.bz2 $(PACKAGE)-src
