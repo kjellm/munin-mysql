@@ -1,0 +1,480 @@
+graph_args --base 1000
+graph_title Binary/Relay Logs
+graph_vlabel FIX
+graph_category mysql2
+
+Binlog_cache_disk_u.draw LINE
+Binlog_cache_disk_u.min 0
+Binlog_cache_disk_u.label Binlog Cache Disk Use
+Binlog_cache_disk_u.type DERIVE
+Binlog_cache_use.draw LINE
+Binlog_cache_use.min 0
+Binlog_cache_use.label Binlog Cache Use
+Binlog_cache_use.type DERIVE
+ma_binlog_size.draw LINE
+ma_binlog_size.min 0
+ma_binlog_size.label Binary Log Space
+ma_binlog_size.type DERIVE
+relay_log_space.draw LINE
+relay_log_space.min 0
+relay_log_space.label Relay Log Space
+relay_log_space.type DERIVE
+graph_args --base 1000
+graph_title Connections
+graph_vlabel connections / ${graph_period}
+graph_category mysql2
+
+max_connections.draw AREA
+max_connections.colour cdcfc4
+max_connections.min 0
+max_connections.label Max connections
+max_connections.type GAUGE
+Max_used_connection.draw AREA
+Max_used_connection.colour ffd660
+Max_used_connection.min 0
+Max_used_connection.label Max used
+Max_used_connection.type GAUGE
+Aborted_clients.draw LINE
+Aborted_clients.min 0
+Aborted_clients.label Aborted clients
+Aborted_clients.type DERIVE
+Aborted_connects.draw LINE
+Aborted_connects.min 0
+Aborted_connects.label Aborted connects
+Aborted_connects.type DERIVE
+Threads_connected.draw LINE
+Threads_connected.min 0
+Threads_connected.label Threads connected
+Threads_connected.type GAUGE
+Connections.draw LINE
+Connections.min 0
+Connections.label New connections
+Connections.type DERIVE
+graph_args --base 1000
+graph_title Files and tables
+graph_vlabel tables
+graph_category mysql2
+
+table_open_cache.draw AREA
+table_open_cache.colour cdcfc4
+table_open_cache.min 0
+table_open_cache.label Table cache
+table_open_cache.type GAUGE
+Open_files.draw LINE
+Open_files.min 0
+Open_files.label Open files
+Open_files.type GAUGE
+Open_tables.draw LINE
+Open_tables.min 0
+Open_tables.label Open tables
+Open_tables.type GAUGE
+Opened_tables.draw LINE
+Opened_tables.min 0
+Opened_tables.label Opened tables
+Opened_tables.type GAUGE
+graph_base 1024
+graph_args --base 1000
+graph_title InnoDB Buffer Pool
+graph_vlabel pages
+graph_category mysql2
+
+ib_bpool_size.draw AREA
+ib_bpool_size.colour ffd660
+ib_bpool_size.min 0
+ib_bpool_size.label Buffer pool size
+ib_bpool_size.type GAUGE
+ib_bpool_free.draw LINE2
+ib_bpool_free.min 0
+ib_bpool_free.label Free pages
+ib_bpool_free.type GAUGE
+ib_bpool_dbpages.draw AREA
+ib_bpool_dbpages.colour cdcfc4
+ib_bpool_dbpages.min 0
+ib_bpool_dbpages.label Database pages
+ib_bpool_dbpages.type GAUGE
+ib_bpool_modpages.draw LINE2
+ib_bpool_modpages.min 0
+ib_bpool_modpages.label Modified pages
+ib_bpool_modpages.type GAUGE
+graph_args --base 1000
+graph_title InnoDB Buffer Pool Activity
+graph_vlabel actions / ${graph_period}
+graph_total Total
+graph_category mysql2
+
+ib_bpool_read.draw LINE2
+ib_bpool_read.min 0
+ib_bpool_read.label Pages read
+ib_bpool_read.type DERIVE
+ib_bpool_created.draw LINE2
+ib_bpool_created.min 0
+ib_bpool_created.label Pages created
+ib_bpool_created.type DERIVE
+ib_bpool_written.draw LINE2
+ib_bpool_written.min 0
+ib_bpool_written.label Pages written
+ib_bpool_written.type DERIVE
+graph_args --base 1000
+graph_title InnoDB Insert Buffer
+graph_vlabel FIX
+graph_category mysql2
+
+ib_ibuf_inserts.draw LINE
+ib_ibuf_inserts.min 0
+ib_ibuf_inserts.label Inserts
+ib_ibuf_inserts.type DERIVE
+ib_ibuf_merged_rec.draw LINE
+ib_ibuf_merged_rec.min 0
+ib_ibuf_merged_rec.label Merged Records
+ib_ibuf_merged_rec.type DERIVE
+ib_ibuf_merges.draw LINE
+ib_ibuf_merges.min 0
+ib_ibuf_merges.label Merges
+ib_ibuf_merges.type DERIVE
+graph_args --base 1000
+graph_title InnoDB IO
+graph_vlabel FIX
+graph_category mysql2
+
+ib_io_read.draw LINE
+ib_io_read.min 0
+ib_io_read.label File reads
+ib_io_read.type DERIVE
+ib_io_write.draw LINE
+ib_io_write.min 0
+ib_io_write.label File writes
+ib_io_write.type DERIVE
+ib_io_log.draw LINE
+ib_io_log.min 0
+ib_io_log.label Log writes
+ib_io_log.type DERIVE
+ib_io_fsync.draw LINE
+ib_io_fsync.min 0
+ib_io_fsync.label File syncs
+ib_io_fsync.type DERIVE
+graph_args --base 1000
+graph_title InnoDB IO Pending
+graph_vlabel FIX
+graph_category mysql2
+
+ib_iop_log.draw LINE
+ib_iop_log.min 0
+ib_iop_log.label AIO Log
+ib_iop_log.type DERIVE
+ib_iop_sync.draw LINE
+ib_iop_sync.min 0
+ib_iop_sync.label AIO Sync
+ib_iop_sync.type DERIVE
+ib_iop_flush_bpool.draw LINE
+ib_iop_flush_bpool.min 0
+ib_iop_flush_bpool.label Buf Pool Flush
+ib_iop_flush_bpool.type DERIVE
+ib_iop_flush_log.draw LINE
+ib_iop_flush_log.min 0
+ib_iop_flush_log.label Log Flushes
+ib_iop_flush_log.type DERIVE
+ib_iop_ibuf_aio.draw LINE
+ib_iop_ibuf_aio.min 0
+ib_iop_ibuf_aio.label Insert Buf AIO Read
+ib_iop_ibuf_aio.type DERIVE
+ib_iop_aioread.draw LINE
+ib_iop_aioread.min 0
+ib_iop_aioread.label Normal AIO Reads
+ib_iop_aioread.type DERIVE
+ib_iop_aiowrite.draw LINE
+ib_iop_aiowrite.min 0
+ib_iop_aiowrite.label Normal AIO Writes
+ib_iop_aiowrite.type DERIVE
+graph_args --base 1000
+graph_title InnoDB Log
+graph_vlabel FIX
+graph_category mysql2
+
+innodb_log_buffer_s.draw AREA
+innodb_log_buffer_s.colour fafd9e
+innodb_log_buffer_s.min 0
+innodb_log_buffer_s.label Buffer Size
+innodb_log_buffer_s.type GAUGE
+ib_log_flush.draw LINE
+ib_log_flush.min 0
+ib_log_flush.label KB Flushed
+ib_log_flush.type DERIVE
+ib_log_written.draw LINE
+ib_log_written.min 0
+ib_log_written.label KB Written
+ib_log_written.type DERIVE
+graph_args --base 1000
+graph_title InnoDB Row Operations
+graph_vlabel operations / ${graph_period}
+graph_total Total
+graph_category mysql2
+
+Innodb_rows_deleted.draw AREA
+Innodb_rows_deleted.min 0
+Innodb_rows_deleted.label Deletes
+Innodb_rows_deleted.type DERIVE
+Innodb_rows_inserte.draw STACK
+Innodb_rows_inserte.min 0
+Innodb_rows_inserte.label Inserts
+Innodb_rows_inserte.type DERIVE
+Innodb_rows_read.draw STACK
+Innodb_rows_read.min 0
+Innodb_rows_read.label Reads
+Innodb_rows_read.type DERIVE
+Innodb_rows_updated.draw STACK
+Innodb_rows_updated.min 0
+Innodb_rows_updated.label Updates
+Innodb_rows_updated.type DERIVE
+graph_args --base 1000
+graph_title InnoDB Semaphores
+graph_vlabel FIX
+graph_category mysql2
+
+ib_spin_rounds.draw LINE
+ib_spin_rounds.min 0
+ib_spin_rounds.label Spin Rounds
+ib_spin_rounds.type DERIVE
+ib_spin_waits.draw LINE
+ib_spin_waits.min 0
+ib_spin_waits.label Spin Waits
+ib_spin_waits.type DERIVE
+ib_os_waits.draw LINE
+ib_os_waits.min 0
+ib_os_waits.label OS Waits
+ib_os_waits.type DERIVE
+graph_args --base 1000
+graph_title InnoDB Transactions
+graph_vlabel FIX
+graph_category mysql2
+
+ib_tnx.draw LINE
+ib_tnx.min 0
+ib_tnx.label Transactions created
+ib_tnx.type DERIVE
+graph_args --base 1000
+graph_title MyISAM Indexes
+graph_vlabel Requests per ${graph_period}
+graph_category mysql2
+
+Key_read_requests.draw LINE2
+Key_read_requests.min 0
+Key_read_requests.label Key read requests
+Key_read_requests.type DERIVE
+Key_reads.draw LINE2
+Key_reads.min 0
+Key_reads.label Key reads
+Key_reads.type DERIVE
+Key_write_requests.draw LINE2
+Key_write_requests.min 0
+Key_write_requests.label Key write requests
+Key_write_requests.type DERIVE
+Key_writes.draw LINE2
+Key_writes.min 0
+Key_writes.label Key writes
+Key_writes.type DERIVE
+graph_args --base 1024
+graph_title Network Traffic
+graph_vlabel bytes received (-) / sent (+) per ${graph_period}
+graph_category mysql2
+
+Bytes_received.draw LINE2
+Bytes_received.min 0
+Bytes_received.label Bytes transfered
+Bytes_received.type DERIVE
+Bytes_received.graph no
+Bytes_sent.draw LINE2
+Bytes_sent.min 0
+Bytes_sent.label Bytes transfered
+Bytes_sent.negative Bytes_received
+Bytes_sent.type DERIVE
+graph_args --base 1000
+graph_title Query Cache
+graph_vlabel FIX
+graph_category mysql2
+
+Qcache_queries_in_c.draw LINE
+Qcache_queries_in_c.min 0
+Qcache_queries_in_c.label Queries in cache
+Qcache_queries_in_c.type DERIVE
+Qcache_hits.draw LINE
+Qcache_hits.min 0
+Qcache_hits.label Cache hits
+Qcache_hits.type DERIVE
+Qcache_inserts.draw LINE
+Qcache_inserts.min 0
+Qcache_inserts.label Inserts
+Qcache_inserts.type DERIVE
+Qcache_not_cached.draw LINE
+Qcache_not_cached.min 0
+Qcache_not_cached.label Not cached
+Qcache_not_cached.type DERIVE
+Qcache_lowmem_prune.draw LINE
+Qcache_lowmem_prune.min 0
+Qcache_lowmem_prune.label Low-memory prunes
+Qcache_lowmem_prune.type DERIVE
+graph_args --base 1000
+graph_title Query Cache Memory
+graph_vlabel FIX
+graph_category mysql2
+
+query_cache_size.draw AREA
+query_cache_size.min 0
+query_cache_size.label Cache size
+query_cache_size.type GAUGE
+Qcache_free_memory.draw AREA
+Qcache_free_memory.min 0
+Qcache_free_memory.label Free mem
+Qcache_free_memory.type GAUGE
+graph_args --base 1000
+graph_title Command Counters
+graph_vlabel commands / ${graph_period}
+graph_total Questions
+graph_category mysql2
+
+Com_delete.draw AREA
+Com_delete.min 0
+Com_delete.label Delete
+Com_delete.type DERIVE
+Com_insert.draw STACK
+Com_insert.min 0
+Com_insert.label Insert
+Com_insert.type DERIVE
+Com_insert_select.draw STACK
+Com_insert_select.min 0
+Com_insert_select.label Insert select
+Com_insert_select.type DERIVE
+Com_load.draw STACK
+Com_load.min 0
+Com_load.label Load Data
+Com_load.type DERIVE
+Com_replace.draw STACK
+Com_replace.min 0
+Com_replace.label Replace
+Com_replace.type DERIVE
+Com_replace_select.draw STACK
+Com_replace_select.min 0
+Com_replace_select.label Replace select
+Com_replace_select.type DERIVE
+Com_select.draw STACK
+Com_select.min 0
+Com_select.label Select
+Com_select.type DERIVE
+Com_update.draw STACK
+Com_update.min 0
+Com_update.label Update
+Com_update.type DERIVE
+Com_update_multi.draw STACK
+Com_update_multi.min 0
+Com_update_multi.label Update multi
+Com_update_multi.type DERIVE
+graph_args --base 1000
+graph_title Replication
+graph_vlabel FIX
+graph_category mysql2
+
+slave_running.draw AREA
+slave_running.min 0
+slave_running.label Slave Running
+slave_running.type GAUGE
+slave_stopped.draw AREA
+slave_stopped.min 0
+slave_stopped.label Slave Stopped
+slave_stopped.type GAUGE
+Slave_retried_trans.draw LINE
+Slave_retried_trans.min 0
+Slave_retried_trans.label Retried Transactions
+Slave_retried_trans.type DERIVE
+Slave_open_temp_tab.draw LINE
+Slave_open_temp_tab.min 0
+Slave_open_temp_tab.label Open Temp Tables
+Slave_open_temp_tab.type DERIVE
+seconds_behind_mast.draw LINE
+seconds_behind_mast.min 0
+seconds_behind_mast.label Secs Behind Master
+seconds_behind_mast.type GAUGE
+graph_args --base 1000
+graph_title Select types
+graph_vlabel commands / ${graph_period}
+graph_total Total
+graph_category mysql2
+
+Select_full_join.draw AREA
+Select_full_join.min 0
+Select_full_join.label Full join
+Select_full_join.type DERIVE
+Select_full_range_j.draw STACK
+Select_full_range_j.min 0
+Select_full_range_j.label Full range
+Select_full_range_j.type DERIVE
+Select_range.draw STACK
+Select_range.min 0
+Select_range.label Range
+Select_range.type DERIVE
+Select_range_check.draw STACK
+Select_range_check.min 0
+Select_range_check.label Range check
+Select_range_check.type DERIVE
+Select_scan.draw STACK
+Select_scan.min 0
+Select_scan.label Scan
+Select_scan.type DERIVE
+graph_args --base 1000
+graph_title Slow Queries
+graph_vlabel slow queries / ${graph_period}
+graph_category mysql2
+
+Slow_queries.draw LINE2
+Slow_queries.min 0
+Slow_queries.label Slow queries
+Slow_queries.type DERIVE
+graph_args --base 1000
+graph_title Sorts
+graph_vlabel sorts / ${graph_period}
+graph_category mysql2
+
+Sort_rows.draw LINE2
+Sort_rows.min 0
+Sort_rows.label Rows sorted
+Sort_rows.type DERIVE
+Sort_range.draw LINE2
+Sort_range.min 0
+Sort_range.label Range
+Sort_range.type DERIVE
+Sort_merge_passes.draw LINE2
+Sort_merge_passes.min 0
+Sort_merge_passes.label Merge passes
+Sort_merge_passes.type DERIVE
+Sort_scan.draw LINE2
+Sort_scan.min 0
+Sort_scan.label Scan
+Sort_scan.type DERIVE
+graph_args --base 1000
+graph_title Table locks
+graph_vlabel locks / ${graph_period}
+graph_category mysql2
+
+Table_locks_immedia.draw LINE2
+Table_locks_immedia.min 0
+Table_locks_immedia.label Table locks immed
+Table_locks_immedia.type DERIVE
+Table_locks_waited.draw LINE2
+Table_locks_waited.min 0
+Table_locks_waited.label Table locks waited
+Table_locks_waited.type DERIVE
+graph_args --base 1000
+graph_title Temporary objects
+graph_vlabel objects / ${graph_period}
+graph_category mysql2
+
+Created_tmp_disk_ta.draw LINE2
+Created_tmp_disk_ta.min 0
+Created_tmp_disk_ta.label Temp disk tables
+Created_tmp_disk_ta.type DERIVE
+Created_tmp_tables.draw LINE2
+Created_tmp_tables.min 0
+Created_tmp_tables.label Temp tables
+Created_tmp_tables.type DERIVE
+Created_tmp_files.draw LINE2
+Created_tmp_files.min 0
+Created_tmp_files.label Temp files
+Created_tmp_files.type DERIVE
