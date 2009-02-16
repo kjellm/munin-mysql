@@ -693,11 +693,6 @@ sub update_data {
 
     $data = {};
 
-    my $dsn        = $ENV{'mysqlconnection'} || 'DBI:mysql:mysql';
-    my $user       = $ENV{'mysqluser'}       || 'root';
-    my $password   = $ENV{'mysqlpassword'}   || '';
-    my $check_list = $ENV{'mysqlcheck'}      || 'vars,innodb,master,slave';
-
     my $dbh = DBI->connect($config{dsn}, $config{user}, $config{password},
                            {'RaiseError' => 1, FetchHashKeyName => 'NAME_lc'});
 
@@ -792,7 +787,7 @@ sub update_slave {
     }
     $sth->finish();
 
-    # undef when slave is stopped, or whem MySQL fails to calculate
+    # undef when slave is stopped, or when MySQL fails to calculate
     # the lag (which happens depresingly often). (mk-heartbeat fixes
     # this problem.)
     $data->{seconds_behind_master} ||= 0;
