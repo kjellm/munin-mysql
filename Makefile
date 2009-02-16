@@ -38,7 +38,7 @@ clean:
 
 bundle: all
 	mkdir -p $(PACKAGE)
-	cp mysql_ README $(PACKAGE)
+	cp mysql_ README COPYING $(PACKAGE)
 	tar cjf $(PACKAGE).tar.bz2 $(PACKAGE)
 
 src-bundle: 
