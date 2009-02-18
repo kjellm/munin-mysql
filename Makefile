@@ -15,14 +15,14 @@ mysql_: mysql_.in
 
 
 test: mysql_
-	> values.out~
-	> config.out~
+	> test/values.out~
+	> test/config.out~
 	for CMD in `find . -maxdepth 1 -name 'mysql_?*' -and -type l | sort`; do \
-          perl -Imock $$CMD >> values.out~; \
-          perl -Imock $$CMD config >> config.out~; \
+          perl -Itest/mock $$CMD >> test/values.out~; \
+          perl -Itest/mock $$CMD config >> test/config.out~; \
         done 
-	diff -q values.out values.out~ || true
-	diff -q config.out config.out~ || true
+	diff -q test/values.out test/values.out~ || true
+	diff -q test/config.out test/config.out~ || true
 
 
 links: mysql_
