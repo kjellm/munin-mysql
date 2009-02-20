@@ -879,8 +879,8 @@ sub parse_innodb_status {
     }
 
     parse_semaphores();
-    skip('LATEST DETECTED DEADLOCK');
     skip('LATEST FOREIGN KEY ERROR');
+    skip('LATEST DETECTED DEADLOCK');
     parse_transactions();
     parse_file_io();
     parse_insert_buffer_and_adaptive_hash_index();
@@ -891,10 +891,12 @@ sub parse_innodb_status {
 
 
 sub skip {
+    #warn substr($_, pos(), 20);
     my $section = shift;
     m/\G$section\n-+\n/gc &&  do {
         for (;;) {
             return if m/\G-+\n/gc;
+            m/\G.*\n/gc;
         }
     };
 }
