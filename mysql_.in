@@ -34,7 +34,11 @@ use utf8;
 use Cache::SharedMemoryCache;
 use DBI;
 use File::Basename;
-use Math::BigInt lib => 'GMP';
+use Math::BigInt; # Used to append "=> lib 'GMP'" here, but GMP caused
+                  # segfault on some occasions. Removed as I don't
+                  # think the tiny performance boost is worth the
+                  # debugging effort.
+
 
 
 #---------------------------------------------------------------------
@@ -1098,11 +1102,6 @@ The plugin uses shared memory to cache the statistics gathered from
 MySQL. This ensures minimal inpact on the MySQL server.
 
 =item DBD::Mysql
-
-=item Math::BigInt::GMP 
-
-This is for faster execution, and not required. The plugin fall back
-on Math::BigInt.
 
 =back
 
