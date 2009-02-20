@@ -1,5 +1,4 @@
-#!@@PERL@@
-# -*- perl -*-
+#!/usr/bin/perl
 
 #   Munin magick markers:
 #%# family=contrib
@@ -30,6 +29,8 @@ use utf8;
 #
 # - Add vlabel on graphs. 
 #
+# - Add documentation on minimum privileges needed (USAGE or SUPER
+#   depending on which tables are accessed)
 
 use Cache::SharedMemoryCache;
 use DBI;
@@ -114,7 +115,7 @@ $graphs{bin_relay_log} = {
             vlabel => 'FIX',
         },
         data_source_attrs => {
-            draw  => 'LINE',
+            draw  => 'LINE1',
         },
     },
     data_sources => [
@@ -134,7 +135,7 @@ $graphs{connections} = {
             vlabel => 'connections / ${graph_period}',
         },
         data_source_attrs => {
-            draw  => 'LINE',
+            draw  => 'LINE1',
         },
     },
     data_sources => [
@@ -164,7 +165,7 @@ $graphs{files_tables} = {
         },
         data_source_attrs => {
             type  => 'GAUGE',
-            draw  => 'LINE',
+            draw  => 'LINE1',
         },
     },
     data_sources => [
@@ -233,7 +234,7 @@ $graphs{innodb_insert_buf} = {
             vlabel => 'FIX',
         },
         data_source_attrs => {
-            draw => 'LINE',
+            draw => 'LINE1',
         },
     },
     data_sources => [
@@ -252,7 +253,7 @@ $graphs{innodb_io} = {
             vlabel => 'FIX',
         },
         data_source_attrs => {
-            draw => 'LINE',
+            draw => 'LINE1',
         },
     },
     data_sources => [
@@ -272,7 +273,7 @@ $graphs{innodb_io_pend} = {
             vlabel => 'FIX',
         },
         data_source_attrs => {
-            draw => 'LINE',
+            draw => 'LINE1',
         },
     },
     data_sources => [
@@ -295,7 +296,7 @@ $graphs{innodb_log} = {
             vlabel => 'FIX',
         },
         data_source_attrs => {
-            draw => 'LINE',
+            draw => 'LINE1',
         },
     },
     data_sources => [
@@ -336,7 +337,7 @@ $graphs{innodb_semaphores} = {
             vlabel => 'FIX',
         },
         data_source_attrs => {
-            draw  => 'LINE',
+            draw  => 'LINE1',
         },
     },
     data_sources => [
@@ -355,7 +356,7 @@ $graphs{innodb_tnx} = {
             vlabel => 'FIX',
         },
         data_source_attrs => {
-            draw  => 'LINE',
+            draw  => 'LINE1',
         },
     },
     data_sources => [
@@ -437,7 +438,7 @@ $graphs{qcache} = {
             vlabel => 'FIX',
         },
         data_source_attrs => {
-             draw => 'LINE',
+             draw => 'LINE1',
         },
     },
     data_sources => [
@@ -477,7 +478,7 @@ $graphs{replication} = {
             vlabel => 'FIX',
         },
         data_source_attrs => {
-            draw => 'LINE',
+            draw => 'LINE1',
         },
     },
     data_sources => [
@@ -1171,6 +1172,9 @@ USA.
 =item Fixed bug in parsing of SHOW ENGINE INNODB STATUS
 
 =item Removed dependency on Math::BigInt::GMP. Caused segfaults.
+
+=item Changed drawing type LINE to LINE1 for better compability with
+older versions of munin/rrdtool
 
 =back
 
