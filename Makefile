@@ -1,18 +1,13 @@
-VERSION=0.1
+VERSION=$(shell grep -A2 '=head1 VERSION' mysql_ | tail -n1)
 PACKAGE=munin-mysql_$(VERSION)
 
-.PHONY: all test links clean build
+.PHONY: all test links clean bundle
 
 all: mysql_ README
 
 
-README: mysql_.in
+README: mysql_
 	perldoc -t mysql_ > README
-
-mysql_: mysql_.in
-	perl -pe 's/\@\@PERL\@\@/\/usr\/bin\/perl/' mysql_.in > mysql_
-	chmod a+x mysql_
-
 
 test: mysql_
 	> test/values.out~
@@ -30,18 +25,12 @@ links: mysql_
 
 
 clean:
-	rm -f values.out~ config.out~ README mysql_
+	rm -f test/values.out~ test/config.out~ README
 	find . -maxdepth 1 -name 'mysql_?*' -and -type l -exec rm {} \;
 	rm -rf $(PACKAGE) $(PACKAGE).tar.bz2
-	rm -rf $(PACKAGE)-src $(PACKAGE)-src.tar.bz2
 
 
-bundle: all
+bundle: all COPYING
 	mkdir -p $(PACKAGE)
 	cp mysql_ README COPYING $(PACKAGE)
 	tar cjf $(PACKAGE).tar.bz2 $(PACKAGE)
-
-src-bundle: 
-	mkdir -p $(PACKAGE)-src
-	cp -r config.out Makefile  mock  mysql_.in  values.out $(PACKAGE)-src
-	tar cjf $(PACKAGE)-src.tar.bz2 $(PACKAGE)-src

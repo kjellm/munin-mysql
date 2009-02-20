@@ -3,19 +3,19 @@ graph_title Binary/Relay Logs
 graph_vlabel FIX
 graph_category mysql2
 
-Binlog_cache_disk_u.draw LINE
+Binlog_cache_disk_u.draw LINE1
 Binlog_cache_disk_u.min 0
 Binlog_cache_disk_u.label Binlog Cache Disk Use
 Binlog_cache_disk_u.type DERIVE
-Binlog_cache_use.draw LINE
+Binlog_cache_use.draw LINE1
 Binlog_cache_use.min 0
 Binlog_cache_use.label Binlog Cache Use
 Binlog_cache_use.type DERIVE
-ma_binlog_size.draw LINE
+ma_binlog_size.draw LINE1
 ma_binlog_size.min 0
 ma_binlog_size.label Binary Log Space
 ma_binlog_size.type DERIVE
-relay_log_space.draw LINE
+relay_log_space.draw LINE1
 relay_log_space.min 0
 relay_log_space.label Relay Log Space
 relay_log_space.type DERIVE
@@ -34,19 +34,19 @@ Max_used_connection.colour ffd660
 Max_used_connection.min 0
 Max_used_connection.label Max used
 Max_used_connection.type GAUGE
-Aborted_clients.draw LINE
+Aborted_clients.draw LINE1
 Aborted_clients.min 0
 Aborted_clients.label Aborted clients
 Aborted_clients.type DERIVE
-Aborted_connects.draw LINE
+Aborted_connects.draw LINE1
 Aborted_connects.min 0
 Aborted_connects.label Aborted connects
 Aborted_connects.type DERIVE
-Threads_connected.draw LINE
+Threads_connected.draw LINE1
 Threads_connected.min 0
 Threads_connected.label Threads connected
 Threads_connected.type GAUGE
-Connections.draw LINE
+Connections.draw LINE1
 Connections.min 0
 Connections.label New connections
 Connections.type DERIVE
@@ -60,15 +60,15 @@ table_open_cache.colour cdcfc4
 table_open_cache.min 0
 table_open_cache.label Table cache
 table_open_cache.type GAUGE
-Open_files.draw LINE
+Open_files.draw LINE1
 Open_files.min 0
 Open_files.label Open files
 Open_files.type GAUGE
-Open_tables.draw LINE
+Open_tables.draw LINE1
 Open_tables.min 0
 Open_tables.label Open tables
 Open_tables.type GAUGE
-Opened_tables.draw LINE
+Opened_tables.draw LINE1
 Opened_tables.min 0
 Opened_tables.label Opened tables
 Opened_tables.type GAUGE
@@ -119,15 +119,15 @@ graph_title InnoDB Insert Buffer
 graph_vlabel FIX
 graph_category mysql2
 
-ib_ibuf_inserts.draw LINE
+ib_ibuf_inserts.draw LINE1
 ib_ibuf_inserts.min 0
 ib_ibuf_inserts.label Inserts
 ib_ibuf_inserts.type DERIVE
-ib_ibuf_merged_rec.draw LINE
+ib_ibuf_merged_rec.draw LINE1
 ib_ibuf_merged_rec.min 0
 ib_ibuf_merged_rec.label Merged Records
 ib_ibuf_merged_rec.type DERIVE
-ib_ibuf_merges.draw LINE
+ib_ibuf_merges.draw LINE1
 ib_ibuf_merges.min 0
 ib_ibuf_merges.label Merges
 ib_ibuf_merges.type DERIVE
@@ -136,19 +136,19 @@ graph_title InnoDB IO
 graph_vlabel FIX
 graph_category mysql2
 
-ib_io_read.draw LINE
+ib_io_read.draw LINE1
 ib_io_read.min 0
 ib_io_read.label File reads
 ib_io_read.type DERIVE
-ib_io_write.draw LINE
+ib_io_write.draw LINE1
 ib_io_write.min 0
 ib_io_write.label File writes
 ib_io_write.type DERIVE
-ib_io_log.draw LINE
+ib_io_log.draw LINE1
 ib_io_log.min 0
 ib_io_log.label Log writes
 ib_io_log.type DERIVE
-ib_io_fsync.draw LINE
+ib_io_fsync.draw LINE1
 ib_io_fsync.min 0
 ib_io_fsync.label File syncs
 ib_io_fsync.type DERIVE
@@ -157,31 +157,31 @@ graph_title InnoDB IO Pending
 graph_vlabel FIX
 graph_category mysql2
 
-ib_iop_log.draw LINE
+ib_iop_log.draw LINE1
 ib_iop_log.min 0
 ib_iop_log.label AIO Log
 ib_iop_log.type DERIVE
-ib_iop_sync.draw LINE
+ib_iop_sync.draw LINE1
 ib_iop_sync.min 0
 ib_iop_sync.label AIO Sync
 ib_iop_sync.type DERIVE
-ib_iop_flush_bpool.draw LINE
+ib_iop_flush_bpool.draw LINE1
 ib_iop_flush_bpool.min 0
 ib_iop_flush_bpool.label Buf Pool Flush
 ib_iop_flush_bpool.type DERIVE
-ib_iop_flush_log.draw LINE
+ib_iop_flush_log.draw LINE1
 ib_iop_flush_log.min 0
 ib_iop_flush_log.label Log Flushes
 ib_iop_flush_log.type DERIVE
-ib_iop_ibuf_aio.draw LINE
+ib_iop_ibuf_aio.draw LINE1
 ib_iop_ibuf_aio.min 0
 ib_iop_ibuf_aio.label Insert Buf AIO Read
 ib_iop_ibuf_aio.type DERIVE
-ib_iop_aioread.draw LINE
+ib_iop_aioread.draw LINE1
 ib_iop_aioread.min 0
 ib_iop_aioread.label Normal AIO Reads
 ib_iop_aioread.type DERIVE
-ib_iop_aiowrite.draw LINE
+ib_iop_aiowrite.draw LINE1
 ib_iop_aiowrite.min 0
 ib_iop_aiowrite.label Normal AIO Writes
 ib_iop_aiowrite.type DERIVE
@@ -195,11 +195,11 @@ innodb_log_buffer_s.colour fafd9e
 innodb_log_buffer_s.min 0
 innodb_log_buffer_s.label Buffer Size
 innodb_log_buffer_s.type GAUGE
-ib_log_flush.draw LINE
+ib_log_flush.draw LINE1
 ib_log_flush.min 0
 ib_log_flush.label KB Flushed
 ib_log_flush.type DERIVE
-ib_log_written.draw LINE
+ib_log_written.draw LINE1
 ib_log_written.min 0
 ib_log_written.label KB Written
 ib_log_written.type DERIVE
@@ -230,15 +230,15 @@ graph_title InnoDB Semaphores
 graph_vlabel FIX
 graph_category mysql2
 
-ib_spin_rounds.draw LINE
+ib_spin_rounds.draw LINE1
 ib_spin_rounds.min 0
 ib_spin_rounds.label Spin Rounds
 ib_spin_rounds.type DERIVE
-ib_spin_waits.draw LINE
+ib_spin_waits.draw LINE1
 ib_spin_waits.min 0
 ib_spin_waits.label Spin Waits
 ib_spin_waits.type DERIVE
-ib_os_waits.draw LINE
+ib_os_waits.draw LINE1
 ib_os_waits.min 0
 ib_os_waits.label OS Waits
 ib_os_waits.type DERIVE
@@ -247,7 +247,7 @@ graph_title InnoDB Transactions
 graph_vlabel FIX
 graph_category mysql2
 
-ib_tnx.draw LINE
+ib_tnx.draw LINE1
 ib_tnx.min 0
 ib_tnx.label Transactions created
 ib_tnx.type DERIVE
@@ -292,23 +292,23 @@ graph_title Query Cache
 graph_vlabel FIX
 graph_category mysql2
 
-Qcache_queries_in_c.draw LINE
+Qcache_queries_in_c.draw LINE1
 Qcache_queries_in_c.min 0
 Qcache_queries_in_c.label Queries in cache
 Qcache_queries_in_c.type DERIVE
-Qcache_hits.draw LINE
+Qcache_hits.draw LINE1
 Qcache_hits.min 0
 Qcache_hits.label Cache hits
 Qcache_hits.type DERIVE
-Qcache_inserts.draw LINE
+Qcache_inserts.draw LINE1
 Qcache_inserts.min 0
 Qcache_inserts.label Inserts
 Qcache_inserts.type DERIVE
-Qcache_not_cached.draw LINE
+Qcache_not_cached.draw LINE1
 Qcache_not_cached.min 0
 Qcache_not_cached.label Not cached
 Qcache_not_cached.type DERIVE
-Qcache_lowmem_prune.draw LINE
+Qcache_lowmem_prune.draw LINE1
 Qcache_lowmem_prune.min 0
 Qcache_lowmem_prune.label Low-memory prunes
 Qcache_lowmem_prune.type DERIVE
@@ -380,15 +380,15 @@ slave_stopped.draw AREA
 slave_stopped.min 0
 slave_stopped.label Slave Stopped
 slave_stopped.type GAUGE
-Slave_retried_trans.draw LINE
+Slave_retried_trans.draw LINE1
 Slave_retried_trans.min 0
 Slave_retried_trans.label Retried Transactions
 Slave_retried_trans.type DERIVE
-Slave_open_temp_tab.draw LINE
+Slave_open_temp_tab.draw LINE1
 Slave_open_temp_tab.min 0
 Slave_open_temp_tab.label Open Temp Tables
 Slave_open_temp_tab.type DERIVE
-seconds_behind_mast.draw LINE
+seconds_behind_mast.draw LINE1
 seconds_behind_mast.min 0
 seconds_behind_mast.label Secs Behind Master
 seconds_behind_mast.type GAUGE
