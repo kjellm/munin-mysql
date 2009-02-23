@@ -100,7 +100,7 @@ END OF INNODB MONITOR OUTPUT
 
 END_STATUS
 
-%results = (
+$results1 = {
     'SHOW /*!50000 ENGINE*/ INNODB STATUS' => [
         [qw(status)],
         { status => $INNODB_STATUS},
@@ -710,6 +710,6 @@ END_STATUS
          last_sql_error                =>  '',
      },                                                           
     ],
-);
+};
 
 1;

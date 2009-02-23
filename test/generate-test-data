@@ -1,0 +1,63 @@
+#! /usr/bin/perl 
+
+use warnings;
+use strict;
+
+use DBI;
+use Data::Dumper qw(Dumper);
+use Getopt::Std;
+
+my %opts;
+getopt('dup', \%opts);
+
+warn Dumper(\%opts);
+
+my $dsn  = $opts{d} || 'DBI:mysql:mysql';
+my $user = $opts{u} || 'root';
+my $pass = $opts{p} || '';
+
+my @queries = (
+    'SHOW GLOBAL STATUS',
+    'SHOW GLOBAL VARIABLES',
+    'SHOW /*!50000 ENGINE*/ INNODB STATUS',
+    'SHOW MASTER LOGS',
+    'SHOW SLAVE STATUS',
+);
+
+my $dbh = DBI->connect($dsn, $user, $pass, {
+    FetchHashKeyName => 'NAME_lc', 
+    RaiseError => 1
+});
+
+sub selectall {
+    my ($query) = @_;
+
+    my @res = (); 
+
+    my $sth = $dbh->prepare($query);
+    $sth->execute();
+
+    # Need to add the column names first, the order of these names is
+    # significant. Used by fetch function in the DBI mock.
+    push @res, [map {lc $_} @{$sth->{NAME}}];
+
+    while (my $row = $sth->fetchrow_hashref()) {
+        push @res, $row;
+    }
+
+    return \@res;
+}
+ 
+my %results = ();
+
+for my $q (@queries) {
+    eval {
+        $results{$q} = selectall($q);
+    };
+    if ($@) {
+        $results{$q} = $@; #FIX Do the DBI mock need to handle this?
+    }
+}
+
+$Data::Dumper::Varname = 'results';
+print Dumper(\%results), "\n\n1;\n";

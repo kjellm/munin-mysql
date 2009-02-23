@@ -3,7 +3,7 @@ use strict;
 
 package DBI;
 
-our %results;
+our $results1;
 require 'mysql_51_data.pm';
 
 sub connect {
@@ -29,7 +29,7 @@ sub execute {
     my ($self) = @_;
 
     $self->{cursor} = 1;
-    $self->{result} = $results{$self->{prepared_query}};
+    $self->{result} = $results1->{$self->{prepared_query}};
 
     return $self;
 }
