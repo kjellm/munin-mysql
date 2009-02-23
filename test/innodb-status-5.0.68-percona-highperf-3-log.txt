@@ -16,7 +16,7 @@ LATEST FOREIGN KEY ERROR
 TRANSACTION 1 2572721126, ACTIVE 0 sec, process no 19730, OS thread id 1175857472 inserting
 mysql tables in use 2, locked 2
 6 lock struct(s), heap size 1216
-MySQL thread id 50400, query id 94321815 solsta.api.kunder.linpro.no 87.238.55.88 etc_api copy to tmp table
+MySQL thread id 50400, query id 94321815 solsta.example.com 10.0.0.88 etc_api copy to tmp table
 alter table api_redirect add index FK179F6C61719B5E02 (redirect_id), add constraint FK179F6C61719B5E02 foreign key (redirect_id) references api_publication (publication_id)
 Foreign key constraint fails for table "etc_api/#sql-4d12_c4e0":
 ,
@@ -38,7 +38,7 @@ LATEST DETECTED DEADLOCK
 TRANSACTION 1 2593719418, ACTIVE 0 sec, process no 19730, OS thread id 1237092672
 mysql tables in use 8, locked 8
 LOCK WAIT 9 lock struct(s), heap size 3024, undo log entries 1
-MySQL thread id 136873, query id 214863560 lycksele.api.kunder.linpro.no 87.238.55.100 ECE_API updating
+MySQL thread id 136873, query id 214863560 lycksele.example.com 10.0.0.100 ECE_API updating
 DELETE FROM article_list_view WHERE articleid = NEW.articleid
 *** (1) WAITING FOR THIS LOCK TO BE GRANTED:
 RECORD LOCKS space id 17715 page no 201104 n bits 1016 index "articleid" of table "ece_api/article_list_view" trx id 1 2593719418 lock_mode X locks rec but not gap waiting
@@ -49,7 +49,7 @@ Record lock, heap no 914 PHYSICAL RECORD: n_fields 2; compact format; info bits 
 TRANSACTION 1 2593719416, ACTIVE 0 sec, process no 19730, OS thread id 1197156672 fetching rows
 mysql tables in use 8, locked 8
 18 lock struct(s), heap size 3024, undo log entries 4
-MySQL thread id 136838, query id 214863559 lycksele.api.kunder.linpro.no 87.238.55.100 ECE_API Sending data
+MySQL thread id 136838, query id 214863559 lycksele.example.com 10.0.0.100 ECE_API Sending data
 INSERT INTO article_list_view
         (SELECT a.articleid, p.Publicationname, s.Sectionid, s.uniquename, a.publishdate, a.lastModified, at.codetext AS Articletype 
         FROM ArticleMetaContent a, Articletype at, ArticleSection ase, Publication p, Section s, ArticleState ast 
@@ -80,129 +80,129 @@ History list length 17
 Total number of lock structs in row lock hash table 0
 LIST OF TRANSACTIONS FOR EACH SESSION:
 ---TRANSACTION 0 0, not started, process no 19730, OS thread id 1196357952
-MySQL thread id 161015, query id 257800566 mysql.api.kunder.linpro.no 87.238.55.3 root
+MySQL thread id 161015, query id 257800566 mysql.example.com 10.0.0.3 root
 SHOW ENGINE INNODB STATUS
 ---TRANSACTION 1 2601504521, not started, process no 19730, OS thread id 1185974592
-MySQL thread id 161003, query id 257784475 backa.api.kunder.linpro.no 87.238.55.116 ECE_API
+MySQL thread id 161003, query id 257784475 backa.example.com 10.0.0.116 ECE_API
 ---TRANSACTION 1 2601505955, not started, process no 19730, OS thread id 1193163072
-MySQL thread id 161012, query id 257792978 fixhult.api.kunder.linpro.no 87.238.55.106 ECE_API
+MySQL thread id 161012, query id 257792978 fixhult.example.com 10.0.0.106 ECE_API
 ---TRANSACTION 1 2601504711, not started, process no 19730, OS thread id 1220852032
-MySQL thread id 161011, query id 257785611 fixhult.api.kunder.linpro.no 87.238.55.106 ECE_API
+MySQL thread id 161011, query id 257785611 fixhult.example.com 10.0.0.106 ECE_API
 ---TRANSACTION 1 2601506051, not started, process no 19730, OS thread id 1187039552
-MySQL thread id 161004, query id 257793492 mata.api.kunder.linpro.no 87.238.55.115 ECE_API
+MySQL thread id 161004, query id 257793492 mata.example.com 10.0.0.115 ECE_API
 ---TRANSACTION 1 2601506939, not started, process no 19730, OS thread id 1228306752
-MySQL thread id 161006, query id 257798116 lillberg.api.kunder.linpro.no 87.238.55.99 ECE_API
+MySQL thread id 161006, query id 257798116 lillberg.example.com 10.0.0.99 ECE_API
 ---TRANSACTION 1 2601506052, not started, process no 19730, OS thread id 1239488832
-MySQL thread id 161000, query id 257793493 gustav.api.kunder.linpro.no 87.238.55.121 ECE_API
+MySQL thread id 161000, query id 257793493 gustav.example.com 10.0.0.121 ECE_API
 ---TRANSACTION 1 2601499752, not started, process no 19730, OS thread id 1232300352
-MySQL thread id 160994, query id 257760667 mata.api.kunder.linpro.no 87.238.55.115 ECE_API
+MySQL thread id 160994, query id 257760667 mata.example.com 10.0.0.115 ECE_API
 ---TRANSACTION 1 2601497421, not started, process no 19730, OS thread id 1283684672
-MySQL thread id 160998, query id 257748165 ektorp.api.kunder.linpro.no 87.238.55.105 ECE_API
+MySQL thread id 160998, query id 257748165 ektorp.example.com 10.0.0.105 ECE_API
 ---TRANSACTION 1 2601507485, not started, process no 19730, OS thread id 1192896832
-MySQL thread id 160996, query id 257800556 ektorp.api.kunder.linpro.no 87.238.55.105 ECE_API
+MySQL thread id 160996, query id 257800556 ektorp.example.com 10.0.0.105 ECE_API
 ---TRANSACTION 1 2601507414, not started, process no 19730, OS thread id 1212332352
-MySQL thread id 160991, query id 257800192 lillberg.api.kunder.linpro.no 87.238.55.99 ECE_API
+MySQL thread id 160991, query id 257800192 lillberg.example.com 10.0.0.99 ECE_API
 ---TRANSACTION 1 2601507416, not started, process no 19730, OS thread id 1201682752
-MySQL thread id 160992, query id 257800199 lillberg.api.kunder.linpro.no 87.238.55.99 ECE_API
+MySQL thread id 160992, query id 257800199 lillberg.example.com 10.0.0.99 ECE_API
 ---TRANSACTION 1 2601507451, not started, process no 19730, OS thread id 1282885952
-MySQL thread id 160990, query id 257800350 lillberg.api.kunder.linpro.no 87.238.55.99 ECE_API
+MySQL thread id 160990, query id 257800350 lillberg.example.com 10.0.0.99 ECE_API
 ---TRANSACTION 1 2601494341, not started, process no 19730, OS thread id 1257859392
-MySQL thread id 160988, query id 257732468 lillberg.api.kunder.linpro.no 87.238.55.99 ECE_API
+MySQL thread id 160988, query id 257732468 lillberg.example.com 10.0.0.99 ECE_API
 ---TRANSACTION 1 2601501822, not started, process no 19730, OS thread id 1176123712
-MySQL thread id 160986, query id 257771019 lycksele.api.kunder.linpro.no 87.238.55.100 ECE_API
+MySQL thread id 160986, query id 257771019 lycksele.example.com 10.0.0.100 ECE_API
 ---TRANSACTION 1 2601503098, not started, process no 19730, OS thread id 1198754112
-MySQL thread id 160979, query id 257776727 karlanda.api.kunder.linpro.no 87.238.55.109 ECE_API
+MySQL thread id 160979, query id 257776727 karlanda.example.com 10.0.0.109 ECE_API
 ---TRANSACTION 1 2601507447, not started, process no 19730, OS thread id 1181980992
-MySQL thread id 160980, query id 257800336 karlanda.api.kunder.linpro.no 87.238.55.109 ECE_API
+MySQL thread id 160980, query id 257800336 karlanda.example.com 10.0.0.109 ECE_API
 ---TRANSACTION 1 2601494678, not started, process no 19730, OS thread id 1209669952
-MySQL thread id 160972, query id 257733837 mata.api.kunder.linpro.no 87.238.55.115 ECE_API
+MySQL thread id 160972, query id 257733837 mata.example.com 10.0.0.115 ECE_API
 ---TRANSACTION 1 2601497796, not started, process no 19730, OS thread id 1185175872
-MySQL thread id 160971, query id 257750277 backa.api.kunder.linpro.no 87.238.55.116 ECE_API
+MySQL thread id 160971, query id 257750277 backa.example.com 10.0.0.116 ECE_API
 ---TRANSACTION 1 2601497850, not started, process no 19730, OS thread id 1224579392
-MySQL thread id 160970, query id 257750573 backa.api.kunder.linpro.no 87.238.55.116 ECE_API
+MySQL thread id 160970, query id 257750573 backa.example.com 10.0.0.116 ECE_API
 ---TRANSACTION 1 2601496409, not started, process no 19730, OS thread id 1212066112
-MySQL thread id 160967, query id 257742467 gustav.api.kunder.linpro.no 87.238.55.121 ECE_API
+MySQL thread id 160967, query id 257742467 gustav.example.com 10.0.0.121 ECE_API
 ---TRANSACTION 1 2601504309, not started, process no 19730, OS thread id 1269041472
-MySQL thread id 160955, query id 257783166 fixhult.api.kunder.linpro.no 87.238.55.106 ECE_API
+MySQL thread id 160955, query id 257783166 fixhult.example.com 10.0.0.106 ECE_API
 ---TRANSACTION 1 2601501377, not started, process no 19730, OS thread id 1205410112
-MySQL thread id 160942, query id 257768774 lillberg.api.kunder.linpro.no 87.238.55.99 ECE_API
+MySQL thread id 160942, query id 257768774 lillberg.example.com 10.0.0.99 ECE_API
 ---TRANSACTION 1 2601506948, not started, process no 19730, OS thread id 1178786112
-MySQL thread id 160930, query id 257798118 klippan.api.kunder.linpro.no 87.238.55.118 ECE_API
+MySQL thread id 160930, query id 257798118 klippan.example.com 10.0.0.118 ECE_API
 ---TRANSACTION 1 2601507344, not started, process no 19730, OS thread id 1237891392
-MySQL thread id 160963, query id 257799891 lycksele.api.kunder.linpro.no 87.238.55.100 ECE_API
+MySQL thread id 160963, query id 257799891 lycksele.example.com 10.0.0.100 ECE_API
 ---TRANSACTION 1 2601507345, not started, process no 19730, OS thread id 1206208832
-MySQL thread id 160964, query id 257799895 lycksele.api.kunder.linpro.no 87.238.55.100 ECE_API
+MySQL thread id 160964, query id 257799895 lycksele.example.com 10.0.0.100 ECE_API
 ---TRANSACTION 1 2601494324, not started, process no 19730, OS thread id 1204078912
-MySQL thread id 160961, query id 257732370 lillberg.api.kunder.linpro.no 87.238.55.99 ECE_API
+MySQL thread id 160961, query id 257732370 lillberg.example.com 10.0.0.99 ECE_API
 ---TRANSACTION 1 2601494322, not started, process no 19730, OS thread id 1225644352
-MySQL thread id 160959, query id 257732371 lillberg.api.kunder.linpro.no 87.238.55.99 ECE_API
+MySQL thread id 160959, query id 257732371 lillberg.example.com 10.0.0.99 ECE_API
 ---TRANSACTION 1 2601507322, not started, process no 19730, OS thread id 1177721152
-MySQL thread id 160957, query id 257799798 lycksele.api.kunder.linpro.no 87.238.55.100 ECE_API
+MySQL thread id 160957, query id 257799798 lycksele.example.com 10.0.0.100 ECE_API
 ---TRANSACTION 1 2601504357, not started, process no 19730, OS thread id 1180383552
-MySQL thread id 160956, query id 257783480 fixhult.api.kunder.linpro.no 87.238.55.106 ECE_API
+MySQL thread id 160956, query id 257783480 fixhult.example.com 10.0.0.106 ECE_API
 ---TRANSACTION 1 2601506565, not started, process no 19730, OS thread id 1182779712
-MySQL thread id 160946, query id 257796229 lillberg.api.kunder.linpro.no 87.238.55.99 ECE_API
+MySQL thread id 160946, query id 257796229 lillberg.example.com 10.0.0.99 ECE_API
 ---TRANSACTION 1 2601501948, not started, process no 19730, OS thread id 1213929792
-MySQL thread id 160936, query id 257771648 lycksele.api.kunder.linpro.no 87.238.55.100 ECE_API
+MySQL thread id 160936, query id 257771648 lycksele.example.com 10.0.0.100 ECE_API
 ---TRANSACTION 1 2601506943, not started, process no 19730, OS thread id 1235761472
-MySQL thread id 160931, query id 257798098 klippan.api.kunder.linpro.no 87.238.55.118 ECE_API
+MySQL thread id 160931, query id 257798098 klippan.example.com 10.0.0.118 ECE_API
 ---TRANSACTION 1 2601506951, not started, process no 19730, OS thread id 1261852992
-MySQL thread id 160932, query id 257798133 klippan.api.kunder.linpro.no 87.238.55.118 ECE_API
+MySQL thread id 160932, query id 257798133 klippan.example.com 10.0.0.118 ECE_API
 ---TRANSACTION 1 2601481962, not started, process no 19730, OS thread id 1222981952
-MySQL thread id 160923, query id 257669328 karlanda.api.kunder.linpro.no 87.238.55.109 ECE_API
+MySQL thread id 160923, query id 257669328 karlanda.example.com 10.0.0.109 ECE_API
 ---TRANSACTION 1 2601481950, not started, process no 19730, OS thread id 1196091712
-MySQL thread id 160922, query id 257669250 karlanda.api.kunder.linpro.no 87.238.55.109 ECE_API
+MySQL thread id 160922, query id 257669250 karlanda.example.com 10.0.0.109 ECE_API
 ---TRANSACTION 1 2601503244, not started, process no 19730, OS thread id 1193695552
-MySQL thread id 160924, query id 257777497 karlanda.api.kunder.linpro.no 87.238.55.109 ECE_API
+MySQL thread id 160924, query id 257777497 karlanda.example.com 10.0.0.109 ECE_API
 ---TRANSACTION 1 2601506086, not started, process no 19730, OS thread id 1173993792
-MySQL thread id 160920, query id 257793684 karlanda.api.kunder.linpro.no 87.238.55.109 ECE_API
+MySQL thread id 160920, query id 257793684 karlanda.example.com 10.0.0.109 ECE_API
 ---TRANSACTION 1 2601503105, not started, process no 19730, OS thread id 1194760512
-MySQL thread id 160919, query id 257776762 karlanda.api.kunder.linpro.no 87.238.55.109 ECE_API
+MySQL thread id 160919, query id 257776762 karlanda.example.com 10.0.0.109 ECE_API
 ---TRANSACTION 1 2601496304, not started, process no 19730, OS thread id 1222449472
-MySQL thread id 160915, query id 257741800 ektorp.api.kunder.linpro.no 87.238.55.105 ECE_API
+MySQL thread id 160915, query id 257741800 ektorp.example.com 10.0.0.105 ECE_API
 ---TRANSACTION 1 2601500360, not started, process no 19730, OS thread id 1262651712
-MySQL thread id 160894, query id 257763858 lycksele.api.kunder.linpro.no 87.238.55.100 ECE_API
+MySQL thread id 160894, query id 257763858 lycksele.example.com 10.0.0.100 ECE_API
 ---TRANSACTION 1 2601502744, not started, process no 19730, OS thread id 1190234432
-MySQL thread id 160891, query id 257775183 lycksele.api.kunder.linpro.no 87.238.55.100 ECE_API
+MySQL thread id 160891, query id 257775183 lycksele.example.com 10.0.0.100 ECE_API
 ---TRANSACTION 1 2601494319, not started, process no 19730, OS thread id 1224046912
-MySQL thread id 160879, query id 257732350 lillberg.api.kunder.linpro.no 87.238.55.99 ECE_API
+MySQL thread id 160879, query id 257732350 lillberg.example.com 10.0.0.99 ECE_API
 ---TRANSACTION 1 2601494320, not started, process no 19730, OS thread id 1227774272
-MySQL thread id 160872, query id 257732357 lillberg.api.kunder.linpro.no 87.238.55.99 ECE_API
+MySQL thread id 160872, query id 257732357 lillberg.example.com 10.0.0.99 ECE_API
 ---TRANSACTION 1 2601507409, not started, process no 19730, OS thread id 1188903232
-MySQL thread id 160861, query id 257800172 klippan.api.kunder.linpro.no 87.238.55.118 ECE_API
+MySQL thread id 160861, query id 257800172 klippan.example.com 10.0.0.118 ECE_API
 ---TRANSACTION 1 2601481948, not started, process no 19730, OS thread id 1205676352
-MySQL thread id 160856, query id 257669238 karlanda.api.kunder.linpro.no 87.238.55.109 ECE_API
+MySQL thread id 160856, query id 257669238 karlanda.example.com 10.0.0.109 ECE_API
 ---TRANSACTION 1 2601481961, not started, process no 19730, OS thread id 1186240832
-MySQL thread id 160855, query id 257669321 karlanda.api.kunder.linpro.no 87.238.55.109 ECE_API
+MySQL thread id 160855, query id 257669321 karlanda.example.com 10.0.0.109 ECE_API
 ---TRANSACTION 1 2601489170, not started, process no 19730, OS thread id 1220053312
-MySQL thread id 160851, query id 257706632 klippan.api.kunder.linpro.no 87.238.55.118 ECE_API
+MySQL thread id 160851, query id 257706632 klippan.example.com 10.0.0.118 ECE_API
 ---TRANSACTION 1 2601507450, not started, process no 19730, OS thread id 1175058752
-MySQL thread id 160828, query id 257800346 lillberg.api.kunder.linpro.no 87.238.55.99 ECE_API
+MySQL thread id 160828, query id 257800346 lillberg.example.com 10.0.0.99 ECE_API
 ---TRANSACTION 1 2601506147, not started, process no 19730, OS thread id 1191299392
-MySQL thread id 160818, query id 257794034 fixhult.api.kunder.linpro.no 87.238.55.106 ECE_API
+MySQL thread id 160818, query id 257794034 fixhult.example.com 10.0.0.106 ECE_API
 ---TRANSACTION 1 2601507197, not started, process no 19730, OS thread id 1211799872
-MySQL thread id 160791, query id 257799274 klippan.api.kunder.linpro.no 87.238.55.118 ECE_API
+MySQL thread id 160791, query id 257799274 klippan.example.com 10.0.0.118 ECE_API
 ---TRANSACTION 1 2601496305, not started, process no 19730, OS thread id 1177188672
-MySQL thread id 160802, query id 257741811 ektorp.api.kunder.linpro.no 87.238.55.105 ECE_API
+MySQL thread id 160802, query id 257741811 ektorp.example.com 10.0.0.105 ECE_API
 ---TRANSACTION 1 2601506946, not started, process no 19730, OS thread id 1227508032
-MySQL thread id 160793, query id 257798106 klippan.api.kunder.linpro.no 87.238.55.118 ECE_API
+MySQL thread id 160793, query id 257798106 klippan.example.com 10.0.0.118 ECE_API
 ---TRANSACTION 1 2601502800, not started, process no 19730, OS thread id 1178519872
-MySQL thread id 160783, query id 257775431 lycksele.api.kunder.linpro.no 87.238.55.100 ECE_API
+MySQL thread id 160783, query id 257775431 lycksele.example.com 10.0.0.100 ECE_API
 ---TRANSACTION 1 2601481959, not started, process no 19730, OS thread id 1238956352
-MySQL thread id 160755, query id 257669307 karlanda.api.kunder.linpro.no 87.238.55.109 ECE_API
+MySQL thread id 160755, query id 257669307 karlanda.example.com 10.0.0.109 ECE_API
 ---TRANSACTION 1 2601503101, not started, process no 19730, OS thread id 1234430272
-MySQL thread id 160751, query id 257776744 karlanda.api.kunder.linpro.no 87.238.55.109 ECE_API
+MySQL thread id 160751, query id 257776744 karlanda.example.com 10.0.0.109 ECE_API
 ---TRANSACTION 1 2601506724, not started, process no 19730, OS thread id 1207007552
-MySQL thread id 160723, query id 257797042 karlanda.api.kunder.linpro.no 87.238.55.109 ECE_API
+MySQL thread id 160723, query id 257797042 karlanda.example.com 10.0.0.109 ECE_API
 ---TRANSACTION 1 2601503350, not started, process no 19730, OS thread id 1208604992
-MySQL thread id 160714, query id 257778134 karlanda.api.kunder.linpro.no 87.238.55.109 ECE_API
+MySQL thread id 160714, query id 257778134 karlanda.example.com 10.0.0.109 ECE_API
 ---TRANSACTION 1 2601507484, not started, process no 19730, OS thread id 1174526272
-MySQL thread id 160613, query id 257800550 ektorp.api.kunder.linpro.no 87.238.55.105 ECE_API
+MySQL thread id 160613, query id 257800550 ektorp.example.com 10.0.0.105 ECE_API
 ---TRANSACTION 1 2601507486, not started, process no 19730, OS thread id 1249605952
-MySQL thread id 160611, query id 257800562 ektorp.api.kunder.linpro.no 87.238.55.105 ECE_API
+MySQL thread id 160611, query id 257800562 ektorp.example.com 10.0.0.105 ECE_API
 ---TRANSACTION 1 2601507477, not started, process no 19730, OS thread id 1188104512 starting index read
 mysql tables in use 2, locked 0
-MySQL thread id 160526, query id 257800567 ektorp.api.kunder.linpro.no 87.238.55.105 ECE_API Sending data
+MySQL thread id 160526, query id 257800567 ektorp.example.com 10.0.0.105 ECE_API Sending data
 SELECT eceCatalog.referenceID,eceCatalog.catID,eceCatalog.name,eceCatalog.codeID,eceCatalog.isTopLevel,eceCatalog.inheritAccess FROM Catalog eceCatalog,EntityCatalog WHERE EntityCatalog.catID = eceCatalog.catID AND EntityCatalog.referenceID = 2060306
 --------
 FILE I/O
