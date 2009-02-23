@@ -18,6 +18,7 @@ test: mysql_
         done 
 	diff -q test/values.out test/values.out~ || true
 	diff -q test/config.out test/config.out~ || true
+	prove test
 
 
 links: mysql_
