@@ -1165,13 +1165,12 @@ USA.
 
 =head1 CHANGES
 
-=over
-
-=item 0.1.1
+=head2 2009-02-21: version 0.1.1
 
 =over
 
-=item Fixed bug in parsing of SHOW ENGINE INNODB STATUS
+=item Fixed bug that made parsing of SHOW ENGINE INNODB STATUS enter
+an infinite loop
 
 =item Removed dependency on Math::BigInt::GMP. Caused segfaults.
 
@@ -1180,5 +1179,12 @@ older versions of munin/rrdtool
 
 =back
 
+=head2 2009-02-13: version 0.1
+
+=over
+
+=item Initial release
+
+=back
 =cut
 
