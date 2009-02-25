@@ -1,13 +1,14 @@
-VERSION=$(shell grep -A2 '=head1 VERSION' mysql_ | tail -n1)
-PACKAGE=munin-mysql_$(VERSION)
+### Configuration
 
-.PHONY: all test links clean bundle
+CONFIG_DIR:=/etc/munin
+PLUGIN_DIR:=/usr/local/share/munin/plugins
+MUNIN_NODE:=/etc/init.d/munin-node
 
-all: mysql_ README
+### Don't edit below this line
 
+.PHONY: all test links clean install
 
-README: mysql_
-	perldoc -t mysql_ > README
+all: 
 
 test: mysql_
 	> test/values.out~
@@ -24,14 +25,16 @@ test: mysql_
 links: mysql_
 	./mysql_ suggest | while read X; do ln -s mysql_ $$X; done
 
+install:
+	mkdir -p $(PLUGIN_DIR)
+	install mysql_ $(PLUGIN_DIR)
+	install mysql_.conf $(CONFIG_DIR)/plugin-conf.d
+	./mysql_ suggest | while read X; do \
+          ln -sf $(PLUGIN_DIR)/mysql_ $(CONFIG_DIR)/plugins/$$X; \
+        done
+	$(MUNIN_NODE) restart
 
 clean:
-	rm -f test/values.out~ test/config.out~ README
+	rm -f test/values.out~ test/config.out~
 	find . -maxdepth 1 -name 'mysql_?*' -and -type l -exec rm {} \;
-	rm -rf $(PACKAGE) $(PACKAGE).tar.bz2
 
-
-bundle: all COPYING
-	mkdir -p $(PACKAGE)
-	cp mysql_ README COPYING $(PACKAGE)
-	tar cjf $(PACKAGE).tar.bz2 $(PACKAGE)

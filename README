@@ -1,0 +1,13 @@
+INSTALLATION
+------------
+
+Install dependencies
+
+ - munin-node
+ - Perl modules: DBI, DBD::mysql, and Cache::Cache
+
+Edit Makefile
+
+Edit mysql_.conf
+
+Run `make install'

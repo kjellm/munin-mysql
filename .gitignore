@@ -1,7 +1,5 @@
-README
-munin-mysql_0.1.1.tar.bz2
-munin-mysql_0.1.1/
 mysql_bin_relay_log
+mysql_commands
 mysql_connections
 mysql_files_tables
 mysql_innodb_bpool
@@ -17,7 +15,6 @@ mysql_myisam_indexes
 mysql_network_traffic
 mysql_qcache
 mysql_qcache_mem
-mysql_queries
 mysql_replication
 mysql_select_types
 mysql_slow
