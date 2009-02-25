@@ -31,6 +31,12 @@ use utf8;
 #
 # - Add documentation on minimum privileges needed (USAGE or SUPER
 #   depending on which tables are accessed)
+#
+# - Make suggest only list applicable graphs? E.g. Don't suggest
+#   InnoDB graphs if InnoDB is not used on the system,
+#
+# - Only gather the data necesarry for the graphs that are used
+
 
 use Cache::SharedMemoryCache;
 use DBI;
@@ -50,9 +56,7 @@ my %config = (
     'dsn'        => $ENV{'mysqlconnection'} || 'DBI:mysql:mysql',
     'user'       => $ENV{'mysqluser'}       || 'root',
     'password'   => $ENV{'mysqlpassword'}   || '',
-    'check'      => $ENV{'mysqlcheck'}      || 'vars,innodb,master,slave',
 );
-$config{check} = {map {$_ => 1} split(/,/, $config{check})};
 
 
 #---------------------------------------------------------------------
@@ -407,7 +411,7 @@ $graphs{network_traffic} = {
   
 #---------------------------------------------------------------------
 
-$graphs{queries} = {
+$graphs{commands} = {
     config => {
         global_attrs => {
             title  => 'Command Counters',
@@ -644,6 +648,25 @@ sub show {
 
 
 sub suggest {
+
+    # What is the best way to decide which graphs is applicable to a
+    # given system?
+    #
+    # Does the database use InnoDB? A zero count from:
+    #
+    #   SELECT COUNT(*) 
+    #     FROM tables
+    #    WHERE table_type = 'base table' 
+    #      AND engine     = 'innodb'
+    #
+    # Does the database use binary logs? 'OFF' as the result from:
+    #
+    #   SHOW GLOBAL variables LIKE 'log_bin'
+    #
+    # Is the database setup as a slave? Empty result from:
+    # 
+    #   SHOW SLAVE STATUS
+
     local $_;
     print "mysql_$_\n" for (sort keys(%graphs));
 }
@@ -709,10 +732,10 @@ sub update_data {
     # Set up defaults in case binlog is not enabled
     $data->{ma_binlog_size} = 0;
     
-    update_variables($data, $dbh)   if $config{check}{vars};
-    update_innodb($data, $dbh)      if $config{check}{innodb};
-    update_master($data, $dbh)      if $config{check}{master};
-    update_slave($data, $dbh)       if $config{check}{slave};
+    update_variables($data, $dbh);
+    update_innodb($data, $dbh);
+    update_master($data, $dbh);
+    update_slave($data, $dbh);
 
     $shared_memory_cache->set('data', $data);
 }
@@ -1086,14 +1109,7 @@ plugin configuration to override the defaults. For example
   env.mysqlconnection DBI:mysql:mysql;host=127.0.0.1;port=3306
   env.mysqluser root
   env.mysqlpassword geheim
-  env.mysqlcheck vars,innodb,master,slave
 
-If you don't use InnoDB and the server is not an replication slave:
-
-  env.mysqlcheck vars,master
-
-This will prevent the plugin from issuing SHOW ENGINE INNODB STATUS
-and SHOW SLAVE STATUS commands.
 
 =head1 DEPENDENCIES
 
