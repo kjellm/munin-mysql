@@ -1149,14 +1149,6 @@ when the SQL thread runs and the color of slave_stopped otherwise.
 
 =back
 
-=head1 AUTHOR
-
-Kjell-Magne Øierud <kjellm@acm.org>
-
-Inspired by the cacti graphs made by Xaprb
-http://code.google.com/p/mysql-cacti-templates/ as viewed on
-http://www.xaprb.com/blog/2008/05/25/screenshots-of-improved-mysql-cacti-templates/.
-
 =head1 LICENSE
 
 Copyright (C) 2008,2009 Kjell-Magne Øierud

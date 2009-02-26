@@ -1,13 +1,35 @@
+
+                       M U N I N  -  M Y S Q L
+                      =========================
+
+
+Munin plugin for showing graphs of MySQL resource usage.
+
+
 INSTALLATION
 ------------
 
-Install dependencies
+ 1) Install dependencies
+ 
+     - munin-node
+     - Perl modules: DBI, DBD::mysql, and Cache::Cache
+ 
+ 2) Edit Makefile
+ 
+ 3) Edit mysql_.conf
+ 
+ 4) Run `make install'
 
- - munin-node
- - Perl modules: DBI, DBD::mysql, and Cache::Cache
 
-Edit Makefile
+AUTHOR
+------
 
-Edit mysql_.conf
+Kjell-Magne Øierud <kjellm AT acm DOT org>
 
-Run `make install'
+Inspired by the cacti graphs made by Xaprb
+http://code.google.com/p/mysql-cacti-templates/ as viewed on
+http://www.xaprb.com/blog/2008/05/25/screenshots-of-improved-mysql-cacti-templates/.
+
+Initial version sponsored by Telenor <http://telenor.com/>
+
+Later versions sponsored by Redpill Linpro <http://redpill-linpro.com>
