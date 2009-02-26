@@ -1,0 +1,14 @@
+2009-02-21: version 0.1.1
+
+ - Fixed bug that made parsing of SHOW ENGINE INNODB STATUS enter an
+   infinite loop
+
+ - Removed dependency on Math::BigInt::GMP. Caused segfaults.
+ 
+ - Changed drawing type LINE to LINE1 for better compability with
+   older versions of munin/rrdtool
+
+
+2009-02-13: version 0.1
+
+ - Initial release
