@@ -132,6 +132,30 @@ $graphs{bin_relay_log} = {
 
 #---------------------------------------------------------------------
 
+$graphs{commands} = {
+    config => {
+        global_attrs => {
+            title  => 'Command Counters',
+            vlabel => 'commands / ${graph_period}',
+            total  => 'Questions',
+        },
+        data_source_attrs => {},
+    },
+    data_sources => [
+        {name => 'Com_delete',         label => 'Delete'},
+        {name => 'Com_insert',         label => 'Insert'},
+        {name => 'Com_insert_select',  label => 'Insert select'},
+        {name => 'Com_load',           label => 'Load Data'},
+        {name => 'Com_replace',        label => 'Replace'},
+        {name => 'Com_replace_select', label => 'Replace select'},
+        {name => 'Com_select',         label => 'Select'},
+        {name => 'Com_update',         label => 'Update'},
+        {name => 'Com_update_multi',   label => 'Update multi'},
+    ],
+};
+
+#---------------------------------------------------------------------
+
 $graphs{connections} = {
     config => {
         global_attrs => {
@@ -409,30 +433,6 @@ $graphs{network_traffic} = {
     ],
 };
   
-#---------------------------------------------------------------------
-
-$graphs{commands} = {
-    config => {
-        global_attrs => {
-            title  => 'Command Counters',
-            vlabel => 'commands / ${graph_period}',
-            total  => 'Questions',
-        },
-        data_source_attrs => {},
-    },
-    data_sources => [
-        {name => 'Com_delete',         label => 'Delete'},
-        {name => 'Com_insert',         label => 'Insert'},
-        {name => 'Com_insert_select',  label => 'Insert select'},
-        {name => 'Com_load',           label => 'Load Data'},
-        {name => 'Com_replace',        label => 'Replace'},
-        {name => 'Com_replace_select', label => 'Replace select'},
-        {name => 'Com_select',         label => 'Select'},
-        {name => 'Com_update',         label => 'Update'},
-        {name => 'Com_update_multi',   label => 'Update multi'},
-    ],
-};
-
 #---------------------------------------------------------------------
 
 $graphs{qcache} = {
