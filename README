@@ -21,6 +21,35 @@ INSTALLATION
  4) Run `make install'
 
 
+FURTHER INFORMATION
+-------------------
+
+The plugin documentation is contained in the plugin file as POD. View
+it with perldoc.
+
+View the project home page at
+<http://oierud.name/~kjellm/bliki/ImprovedMuninGraphsForMySQL.html>
+
+Mailing list 
+
+ - munin-mysql@googlegroups.com
+ - http://groups.google.com/group/munin-mysql
+
+Source code is hosted at github
+<http://github.com/kjellm/munin-mysql/>
+
+
+TROUBLESHOOTING
+---------------
+
+You can find some tips for debugging munin plugin problems here:
+<http://munin.projects.linpro.no/wiki/Debugging_Munin_plugins>
+
+If you still have problems, try asking on the mailing list.
+
+Bugs should be reported to the mailing list.
+
+
 AUTHOR
 ------
 
