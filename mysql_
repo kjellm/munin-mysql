@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #   Munin magick markers:
-#%# family=contrib
+#%# family=auto
 #%# capabilities=suggest
 
 
@@ -36,6 +36,9 @@ use utf8;
 #   InnoDB graphs if InnoDB is not used on the system,
 #
 # - Only gather the data necesarry for the graphs that are used
+#
+# - Cache results in a file if Cache::SharedMemoryCache is not
+#   installed?
 
 
 use Cache::SharedMemoryCache;
@@ -614,13 +617,11 @@ sub main {
     my $graph = $graphs{substr(basename($0), length('mysql_'))};
     my $command = $ARGV[0] || 'show';
 
-    die 'Unknown graph ' . ($graph ? $graph : '')
-        if !$graph && $command ne 'suggest';
-    
     my %command_map = (
-        'config'  => \&config,
-        'show'    => \&show,
-        'suggest' => \&suggest,
+        'autoconf' => \&autoconf,
+        'config'   => \&config,
+        'show'     => \&show,
+        'suggest'  => \&suggest,
     );
     
     die "Unknown command: $command" 
@@ -634,19 +635,26 @@ sub main {
 #  C O M M A N D   H A N D L E R S
 #---------------------------------------------------------------------
 
+# Each command handler should return an apropriate exit code
 
-sub show {
-    my $graph = shift;
 
-    update_data();
-
-    for my $ds (@{$graph->{data_sources}}) {
-        printf "%s.value %s\n", 
-            clean_fieldname($ds->{name}), $data->{$ds->{name}};
+# http://munin.projects.linpro.no/wiki/ConcisePlugins#autoconf
+sub autoconf {
+    eval {
+        db_connect();
+    };
+    if ($@) {
+        my $err = $@;
+        $err =~ s{\s at \s \S+ \s line .*}{}xms;
+        print "no ($err)\n"; 
+        return 1;
     }
+    print "yes\n";
+    return 0;
 }
 
 
+# http://munin.projects.linpro.no/wiki/ConcisePlugins#suggest
 sub suggest {
 
     # What is the best way to decide which graphs is applicable to a
@@ -669,12 +677,17 @@ sub suggest {
 
     local $_;
     print "mysql_$_\n" for (sort keys(%graphs));
+
+    return 0;
 }
 
 
 sub config {
     my $graph = shift;
 
+    die 'Unknown graph ' . ($graph ? $graph : '')
+        unless $graph;
+    
     my %conf = (%{$defaults{global_attrs}}, %{$graph->{config}{global_attrs}});
     while (my ($k, $v) = each %conf) {
         print "graph_$k $v\n";
@@ -705,12 +718,41 @@ sub config {
             $i++;
         }
     }
+
+    return 0;
 }
+
+sub show {
+    my $graph = shift;
+
+    die 'Unknown graph ' . ($graph ? $graph : '')
+        unless $graph;
+    
+    update_data();
+
+    for my $ds (@{$graph->{data_sources}}) {
+        printf "%s.value %s\n", 
+            clean_fieldname($ds->{name}), $data->{$ds->{name}};
+    }
+
+    return 0;
+}
+
 
 
 #---------------------------------------------------------------------
 #  U T I L I T Y   S U B S
 #---------------------------------------------------------------------
+
+
+sub db_connect {
+    my $dsn = "$config{dsn};mysql_connect_timeout=5";
+
+    return DBI->connect($dsn, $config{user}, $config{password}, {
+        RaiseError       => 1, 
+        FetchHashKeyName => 'NAME_lc',
+    });
+}
 
 
 sub update_data {
@@ -721,8 +763,7 @@ sub update_data {
 
     $data = {};
 
-    my $dbh = DBI->connect($config{dsn}, $config{user}, $config{password},
-                           {'RaiseError' => 1, FetchHashKeyName => 'NAME_lc'});
+    my $dbh = db_connect();
 
     # Set up defaults in case the server is not a slave
     $data->{relay_log_space} = 0;
@@ -1078,7 +1119,7 @@ sub parse_row_operations {
 }
 
 
-main() unless caller;
+exit main() unless caller;
 
 1;
 

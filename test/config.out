@@ -20,6 +20,48 @@ relay_log_space.min 0
 relay_log_space.label Relay Log Space
 relay_log_space.type DERIVE
 graph_args --base 1000
+graph_title Command Counters
+graph_vlabel commands / ${graph_period}
+graph_total Questions
+graph_category mysql2
+
+Com_delete.draw AREA
+Com_delete.min 0
+Com_delete.label Delete
+Com_delete.type DERIVE
+Com_insert.draw STACK
+Com_insert.min 0
+Com_insert.label Insert
+Com_insert.type DERIVE
+Com_insert_select.draw STACK
+Com_insert_select.min 0
+Com_insert_select.label Insert select
+Com_insert_select.type DERIVE
+Com_load.draw STACK
+Com_load.min 0
+Com_load.label Load Data
+Com_load.type DERIVE
+Com_replace.draw STACK
+Com_replace.min 0
+Com_replace.label Replace
+Com_replace.type DERIVE
+Com_replace_select.draw STACK
+Com_replace_select.min 0
+Com_replace_select.label Replace select
+Com_replace_select.type DERIVE
+Com_select.draw STACK
+Com_select.min 0
+Com_select.label Select
+Com_select.type DERIVE
+Com_update.draw STACK
+Com_update.min 0
+Com_update.label Update
+Com_update.type DERIVE
+Com_update_multi.draw STACK
+Com_update_multi.min 0
+Com_update_multi.label Update multi
+Com_update_multi.type DERIVE
+graph_args --base 1000
 graph_title Connections
 graph_vlabel connections / ${graph_period}
 graph_category mysql2
@@ -325,48 +367,6 @@ Qcache_free_memory.draw AREA
 Qcache_free_memory.min 0
 Qcache_free_memory.label Free mem
 Qcache_free_memory.type GAUGE
-graph_args --base 1000
-graph_title Command Counters
-graph_vlabel commands / ${graph_period}
-graph_total Questions
-graph_category mysql2
-
-Com_delete.draw AREA
-Com_delete.min 0
-Com_delete.label Delete
-Com_delete.type DERIVE
-Com_insert.draw STACK
-Com_insert.min 0
-Com_insert.label Insert
-Com_insert.type DERIVE
-Com_insert_select.draw STACK
-Com_insert_select.min 0
-Com_insert_select.label Insert select
-Com_insert_select.type DERIVE
-Com_load.draw STACK
-Com_load.min 0
-Com_load.label Load Data
-Com_load.type DERIVE
-Com_replace.draw STACK
-Com_replace.min 0
-Com_replace.label Replace
-Com_replace.type DERIVE
-Com_replace_select.draw STACK
-Com_replace_select.min 0
-Com_replace_select.label Replace select
-Com_replace_select.type DERIVE
-Com_select.draw STACK
-Com_select.min 0
-Com_select.label Select
-Com_select.type DERIVE
-Com_update.draw STACK
-Com_update.min 0
-Com_update.label Update
-Com_update.type DERIVE
-Com_update_multi.draw STACK
-Com_update_multi.min 0
-Com_update_multi.label Update multi
-Com_update_multi.type DERIVE
 graph_args --base 1000
 graph_title Replication
 graph_vlabel FIX
