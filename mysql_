@@ -942,16 +942,19 @@ sub skip_heading {
 sub skip {
     #warn substr($_, pos(), 20);
     for (;;) {
-        return if m/\G-+\n/gc;
+        return if match_dashes();
         m/\G.*\n/gc;
     }
 }
 
+sub match_dashes {
+    return m/\G-+\n/gc;
+}
 
 sub parse_semaphores {
     #warn substr($_, pos(), 10);
     for (;;) {
-        return if m/\G-+\n/gc;
+        return if match_dashes();
         m/\GMutex spin waits (\d+), rounds (\d+), OS waits (\d+)\n/gc && do {
             $data->{ib_spin_waits}  = $1;
             $data->{ib_spin_rounds} = $2;
@@ -967,7 +970,7 @@ sub parse_semaphores {
 sub parse_transactions {
     #warn substr($_, pos(), 10);
     for (;;) {
-        return if m/\G-+\n/gc;
+        return if match_dashes();
         m/\GTrx id counter (\d+) (\d+)\n/gc && do {
             $data->{ib_tnx} = innodb_bigint($1, $2);
             next;
@@ -989,7 +992,7 @@ sub parse_transactions {
 sub parse_file_io {
     #warn substr($_, pos(), 10);
     for (;;) {
-        return if m/\G-+\n/gc;
+        return if match_dashes();
         m/\GPending normal aio reads: (\d+), aio writes: (\d+),\n\s*ibuf aio reads: (\d+), log i\/o's: (\d+), sync i\/o's: (\d+)\n/gc && do {
             $data->{ib_iop_aioread}  = $1;
             $data->{ib_iop_aiowrite} = $2;
@@ -1017,7 +1020,7 @@ sub parse_file_io {
 sub parse_insert_buffer_and_adaptive_hash_index {
     #warn substr($_, pos(), 10);
     for (;;) {
-        return if m/\G-+\n/gc;
+        return if match_dashes();
         m/\G(\d+) inserts, (\d+) merged recs, (\d+) merges\n/gc && do {
             $data->{ib_ibuf_inserts}    = $1;
             $data->{ib_ibuf_merged_rec} = $2;
@@ -1032,7 +1035,7 @@ sub parse_insert_buffer_and_adaptive_hash_index {
 sub parse_log {
     #warn substr($_, pos(), 10);
     for (;;) {
-        return if m/\G-+\n/gc;
+        return if match_dashes();
         m/\GLog sequence number (\d+) (\d+)\n/gc && do {
             $data->{ib_log_written} = innodb_bigint($1, $2);
             next;
@@ -1052,7 +1055,7 @@ sub parse_log {
 sub parse_buffer_pool_and_memory {
     #warn substr($_, pos(), 10);
     for (;;) {
-        return if m/\G-+\n/gc;
+        return if match_dashes();
         m/\GBuffer pool size\s+(\d+)\n/gc && do {
             $data->{ib_bpool_size} = $1;
             next;
@@ -1083,7 +1086,7 @@ sub parse_buffer_pool_and_memory {
 sub parse_row_operations {
     #warn substr($_, pos(), 10);
     for (;;) {
-        return if m/\G-+\n/gc;
+        return if match_dashes();
         m/\G.*\n/gc;
     }
 }
