@@ -11,15 +11,17 @@ MUNIN_NODE:=/etc/init.d/munin-node
 all: 
 
 test: mysql_
-	> test/values.out~
-	> test/config.out~
-	for CMD in `find . -maxdepth 1 -name 'mysql_?*' -and -type l | sort`; do \
+	@ echo testing ...
+	@ > test/values.out~
+	@ > test/config.out~
+	@ for CMD in `find . -maxdepth 1 -name 'mysql_?*' -and -type l | sort`; do \
           perl -Itest/mock $$CMD >> test/values.out~; \
           perl -Itest/mock $$CMD config >> test/config.out~; \
         done 
 	diff -q test/values.out test/values.out~ || true
 	diff -q test/config.out test/config.out~ || true
-	prove test
+	@ echo ---------------------------------------------------------
+	@ prove test
 
 
 links: mysql_
