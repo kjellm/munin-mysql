@@ -912,7 +912,7 @@ sub parse_innodb_status {
         'LATEST DETECTED DEADLOCK' => \&skip,
         'LATEST FOREIGN KEY ERROR' => \&skip,
         'LOG'                      => \&parse_log,
-        'ROW OPERATIONS'           => \&parse_row_operations,
+        'ROW OPERATIONS'           => \&skip,
         'SEMAPHORES'               => \&parse_semaphores,
         'TRANSACTIONS'             => \&parse_transactions,
         
@@ -932,10 +932,13 @@ sub parse_innodb_status {
     }
 }
 
+sub match_dashes { return m/\G-+\n/gc; }
+sub skip_line    { return m/\G.*\n/gc; }
+
 sub skip_heading {
     # 6 lines
     for my $foo (1...6) {
-        m/\G.*\n/gc or die('Parse error'); 
+        skip_line or die('Parse error'); 
     }
 }
 
@@ -943,12 +946,8 @@ sub skip {
     #warn substr($_, pos(), 20);
     for (;;) {
         return if match_dashes();
-        m/\G.*\n/gc;
+        skip_line();
     }
-}
-
-sub match_dashes {
-    return m/\G-+\n/gc;
 }
 
 sub parse_semaphores {
@@ -961,7 +960,7 @@ sub parse_semaphores {
             $data->{ib_os_waits}    = $3;
             next;
         };
-        m/\G.*\n/gc;
+        skip_line();
     }
     
 }
@@ -983,7 +982,7 @@ sub parse_transactions {
             $data->{ib_tnx_hist} = $1;
             next;
         };
-        m/\G.*\n/gc;
+        skip_line();
     }
 
 }
@@ -1012,7 +1011,7 @@ sub parse_file_io {
             $data->{ib_io_fsync} = $3;
             next;
         };
-        m/\G.*\n/gc;
+        skip_line();
     }
 }
 
@@ -1027,7 +1026,7 @@ sub parse_insert_buffer_and_adaptive_hash_index {
             $data->{ib_ibuf_merges}     = $3;
             next;
         };
-        m/\G.*\n/gc;
+        skip_line();
     }
 }
 
@@ -1048,7 +1047,7 @@ sub parse_log {
             $data->{ib_io_log} = $1;
             next;
         };
-        m/\G.*\n/gc;
+        skip_line();
     }
 }
 
@@ -1078,16 +1077,7 @@ sub parse_buffer_pool_and_memory {
             $data->{ib_bpool_written} = $3;
             next;
         };
-        m/\G.*\n/gc;
-    }
-}
-
-
-sub parse_row_operations {
-    #warn substr($_, pos(), 10);
-    for (;;) {
-        return if match_dashes();
-        m/\G.*\n/gc;
+        skip_line();
     }
 }
 
