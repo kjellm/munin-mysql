@@ -874,13 +874,18 @@ sub clean_fieldname {
 
 
 #
-# In 'SHOW ENGINE INNODB STATUS' some 64 bit integers are split in two
-# and needs to be shifted together..
+# In 'SHOW ENGINE INNODB STATUS' 64 bit integers are formated not as
+# plain integers. They are either:
+#
+#   - split in two and needs to be shifted together,
+#   - or hexadecimal
 #
 sub innodb_bigint {
     my ($x, $y) = @_;
 
-    return Math::BigInt->new($x)->blsft(32) + $y;
+    return defined $y
+        ? Math::BigInt->new($x)->blsft(32) + $y
+        : Math::BigInt->new("0x$x");
 }
 
 
@@ -898,7 +903,6 @@ sub innodb_bigint {
 # block body ...
 # more lines ....
 # ----------
-
 
 sub parse_innodb_status {
     local $_ = shift;
@@ -932,15 +936,27 @@ sub parse_innodb_status {
     }
 }
 
+
+# This regular expression handles the different formating of 64-bit
+# integers in different versions of the innodb engine. Either two
+# decimal 32-bit integers seperated by a space, or a single
+# hexadecimal 64-bit integer.
+my $innodb_bigint_rx = qr{([[a-fA-F\d]+)(?: (\d+))?};
+
+
 sub match_dashes { return m/\G-+\n/gc; }
+
+
 sub skip_line    { return m/\G.*\n/gc; }
 
+
 sub skip_heading {
-    # 6 lines
+    # Heading is 6 lines
     for my $foo (1...6) {
         skip_line or die('Parse error'); 
     }
 }
+
 
 sub skip {
     #warn substr($_, pos(), 20);
@@ -949,6 +965,7 @@ sub skip {
         skip_line();
     }
 }
+
 
 sub parse_semaphores {
     #warn substr($_, pos(), 10);
@@ -970,12 +987,21 @@ sub parse_transactions {
     #warn substr($_, pos(), 10);
     for (;;) {
         return if match_dashes();
-        m/\GTrx id counter (\d+) (\d+)\n/gc && do {
+        m/\GTrx id counter $innodb_bigint_rx\n/gc && do {
             $data->{ib_tnx} = innodb_bigint($1, $2);
             next;
         };
-        m/\GPurge done for trx's n:o < (\d+) (\d+) undo n:o < (\d+) (\d+)\n/gc && do {
-            $data->{ib_tnx_prg} = innodb_bigint($1, $2);
+        m/\GPurge done for trx's n:o < $innodb_bigint_rx undo n:o < $innodb_bigint_rx\n/gc && do {
+            if (defined $3) {
+                # old format
+                $data->{ib_tnx_prg} = innodb_bigint($1, $2);
+                # FIX add to data? innodb_bigint($3, $4);
+            }
+            else {
+                # new format
+                $data->{ib_tnx_prg} = innodb_bigint($1);
+                # FIX add to data? innodb_bigint($2);
+            }
             next;
         };
         m/\GHistory list length (\d+)\n/gc && do {
@@ -1035,11 +1061,11 @@ sub parse_log {
     #warn substr($_, pos(), 10);
     for (;;) {
         return if match_dashes();
-        m/\GLog sequence number (\d+) (\d+)\n/gc && do {
+        m/\GLog sequence number $innodb_bigint_rx\n/gc && do {
             $data->{ib_log_written} = innodb_bigint($1, $2);
             next;
         };
-        m/\GLog flushed up to\s+(\d+) (\d+)\n/gc && do {
+        m/\GLog flushed up to\s+$innodb_bigint_rx\n/gc && do {
             $data->{ib_log_flush} = innodb_bigint($1, $2);
             next;
         };
