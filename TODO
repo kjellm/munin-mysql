@@ -26,8 +26,8 @@
  - Only gather the data necesarry for the graphs that are used
 
  - Cache results in a file if Cache::SharedMemoryCache is not
-   installed?
+   installed? Or implement our own shared memory cache?
 
  - Make autoconf look in the process list for å mysql server
 
-
+ - use InnoDBParser from innotop?
