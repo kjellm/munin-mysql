@@ -1,3 +1,24 @@
+2009-03-21: version 0.1.2
+
+ - Improved tests
+
+ - More robust InnoDB status parsing. Handle different order of the
+   sections. Handle 64 bit integers written in hexadecimal notation.
+
+ - Added autoconf capability.
+  
+ - More documentation
+  
+ - Renamed a graph: mysql_queries -> mysql_commands. This was done so
+   that you can have the original mysql graphs side-by-side with the
+   ones provided here.
+  
+ - Easier installation
+  
+ - Removed the 'check' configuration option -- it didn't really
+   work very well.
+
+
 2009-02-21: version 0.1.1
 
  - Fixed bug that made parsing of SHOW ENGINE INNODB STATUS enter an
