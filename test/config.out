@@ -3,10 +3,10 @@ graph_title Binary/Relay Logs
 graph_vlabel FIX
 graph_category mysql2
 
-Binlog_cache_disk_u.draw LINE1
-Binlog_cache_disk_u.min 0
-Binlog_cache_disk_u.label Binlog Cache Disk Use
-Binlog_cache_disk_u.type DERIVE
+nlog_cache_disk_use.draw LINE1
+nlog_cache_disk_use.min 0
+nlog_cache_disk_use.label Binlog Cache Disk Use
+nlog_cache_disk_use.type DERIVE
 Binlog_cache_use.draw LINE1
 Binlog_cache_use.min 0
 Binlog_cache_use.label Binlog Cache Use
@@ -71,11 +71,11 @@ max_connections.colour cdcfc4
 max_connections.min 0
 max_connections.label Max connections
 max_connections.type GAUGE
-Max_used_connection.draw AREA
-Max_used_connection.colour ffd660
-Max_used_connection.min 0
-Max_used_connection.label Max used
-Max_used_connection.type GAUGE
+ax_used_connections.draw AREA
+ax_used_connections.colour ffd660
+ax_used_connections.min 0
+ax_used_connections.label Max used
+ax_used_connections.type GAUGE
 Aborted_clients.draw LINE1
 Aborted_clients.min 0
 Aborted_clients.label Aborted clients
@@ -232,11 +232,11 @@ graph_title InnoDB Log
 graph_vlabel FIX
 graph_category mysql2
 
-innodb_log_buffer_s.draw AREA
-innodb_log_buffer_s.colour fafd9e
-innodb_log_buffer_s.min 0
-innodb_log_buffer_s.label Buffer Size
-innodb_log_buffer_s.type GAUGE
+odb_log_buffer_size.draw AREA
+odb_log_buffer_size.colour fafd9e
+odb_log_buffer_size.min 0
+odb_log_buffer_size.label Buffer Size
+odb_log_buffer_size.type GAUGE
 ib_log_flush.draw LINE1
 ib_log_flush.min 0
 ib_log_flush.label KB Flushed
@@ -255,10 +255,10 @@ Innodb_rows_deleted.draw AREA
 Innodb_rows_deleted.min 0
 Innodb_rows_deleted.label Deletes
 Innodb_rows_deleted.type DERIVE
-Innodb_rows_inserte.draw STACK
-Innodb_rows_inserte.min 0
-Innodb_rows_inserte.label Inserts
-Innodb_rows_inserte.type DERIVE
+nnodb_rows_inserted.draw STACK
+nnodb_rows_inserted.min 0
+nnodb_rows_inserted.label Inserts
+nnodb_rows_inserted.type DERIVE
 Innodb_rows_read.draw STACK
 Innodb_rows_read.min 0
 Innodb_rows_read.label Reads
@@ -334,10 +334,10 @@ graph_title Query Cache
 graph_vlabel FIX
 graph_category mysql2
 
-Qcache_queries_in_c.draw LINE1
-Qcache_queries_in_c.min 0
-Qcache_queries_in_c.label Queries in cache
-Qcache_queries_in_c.type DERIVE
+he_queries_in_cache.draw LINE1
+he_queries_in_cache.min 0
+he_queries_in_cache.label Queries in cache
+he_queries_in_cache.type DERIVE
 Qcache_hits.draw LINE1
 Qcache_hits.min 0
 Qcache_hits.label Cache hits
@@ -350,10 +350,10 @@ Qcache_not_cached.draw LINE1
 Qcache_not_cached.min 0
 Qcache_not_cached.label Not cached
 Qcache_not_cached.type DERIVE
-Qcache_lowmem_prune.draw LINE1
-Qcache_lowmem_prune.min 0
-Qcache_lowmem_prune.label Low-memory prunes
-Qcache_lowmem_prune.type DERIVE
+cache_lowmem_prunes.draw LINE1
+cache_lowmem_prunes.min 0
+cache_lowmem_prunes.label Low-memory prunes
+cache_lowmem_prunes.type DERIVE
 graph_args --base 1000
 graph_title Query Cache Memory
 graph_vlabel FIX
@@ -380,18 +380,18 @@ slave_stopped.draw AREA
 slave_stopped.min 0
 slave_stopped.label Slave Stopped
 slave_stopped.type GAUGE
-Slave_retried_trans.draw LINE1
-Slave_retried_trans.min 0
-Slave_retried_trans.label Retried Transactions
-Slave_retried_trans.type DERIVE
-Slave_open_temp_tab.draw LINE1
-Slave_open_temp_tab.min 0
-Slave_open_temp_tab.label Open Temp Tables
-Slave_open_temp_tab.type DERIVE
-seconds_behind_mast.draw LINE1
-seconds_behind_mast.min 0
-seconds_behind_mast.label Secs Behind Master
-seconds_behind_mast.type GAUGE
+etried_transactions.draw LINE1
+etried_transactions.min 0
+etried_transactions.label Retried Transactions
+etried_transactions.type DERIVE
+ve_open_temp_tables.draw LINE1
+ve_open_temp_tables.min 0
+ve_open_temp_tables.label Open Temp Tables
+ve_open_temp_tables.type DERIVE
+conds_behind_master.draw LINE1
+conds_behind_master.min 0
+conds_behind_master.label Secs Behind Master
+conds_behind_master.type GAUGE
 graph_args --base 1000
 graph_title Select types
 graph_vlabel commands / ${graph_period}
@@ -402,10 +402,10 @@ Select_full_join.draw AREA
 Select_full_join.min 0
 Select_full_join.label Full join
 Select_full_join.type DERIVE
-Select_full_range_j.draw STACK
-Select_full_range_j.min 0
-Select_full_range_j.label Full range
-Select_full_range_j.type DERIVE
+ect_full_range_join.draw STACK
+ect_full_range_join.min 0
+ect_full_range_join.label Full range
+ect_full_range_join.type DERIVE
 Select_range.draw STACK
 Select_range.min 0
 Select_range.label Range
@@ -453,10 +453,10 @@ graph_title Table locks
 graph_vlabel locks / ${graph_period}
 graph_category mysql2
 
-Table_locks_immedia.draw LINE2
-Table_locks_immedia.min 0
-Table_locks_immedia.label Table locks immed
-Table_locks_immedia.type DERIVE
+ble_locks_immediate.draw LINE2
+ble_locks_immediate.min 0
+ble_locks_immediate.label Table locks immed
+ble_locks_immediate.type DERIVE
 Table_locks_waited.draw LINE2
 Table_locks_waited.min 0
 Table_locks_waited.label Table locks waited
@@ -466,10 +466,10 @@ graph_title Temporary objects
 graph_vlabel objects / ${graph_period}
 graph_category mysql2
 
-Created_tmp_disk_ta.draw LINE2
-Created_tmp_disk_ta.min 0
-Created_tmp_disk_ta.label Temp disk tables
-Created_tmp_disk_ta.type DERIVE
+ted_tmp_disk_tables.draw LINE2
+ted_tmp_disk_tables.min 0
+ted_tmp_disk_tables.label Temp disk tables
+ted_tmp_disk_tables.type DERIVE
 Created_tmp_tables.draw LINE2
 Created_tmp_tables.min 0
 Created_tmp_tables.label Temp tables
