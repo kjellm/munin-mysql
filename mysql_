@@ -96,12 +96,8 @@ git-master
 
 =head1 MAGICK MARKERS
 
-  #%# family=manual
-  #%# capabilities=suggest
-
-=head1 BUGS
-
-Autoconf support to be completed
+  #%# family=auto
+  #%# capabilities=suggest autoconf
 
 =cut
 
@@ -109,7 +105,6 @@ use warnings;
 use strict;
 use utf8;
 
-use Cache::SharedMemoryCache;
 use DBI;
 use File::Basename;
 use Math::BigInt; # Used to append "=> lib 'GMP'" here, but GMP caused
@@ -117,6 +112,13 @@ use Math::BigInt; # Used to append "=> lib 'GMP'" here, but GMP caused
                   # think the tiny performance boost is worth the
                   # debugging effort.
 use Munin::Plugin qw(clean_fieldname);
+
+my $has_cache;
+
+BEGIN {
+    eval 'require Cache::SharedMemoryCache';
+    $has_cache = $@ ? 0 : 1;
+}
 
 
 #---------------------------------------------------------------------
@@ -689,6 +691,9 @@ sub main {
     
     die "Unknown command: $command" 
         unless exists $command_map{$command};
+
+    die "Missing dependency Cache::Cache"
+        unless $has_cache || $command eq 'autoconf';
     
     return $command_map{$command}->($graph);
 }
@@ -703,6 +708,11 @@ sub main {
 
 # http://munin.projects.linpro.no/wiki/ConcisePlugins#autoconf
 sub autoconf {
+    unless ($has_cache) {
+        print "no (Missing dependency Cache::Cache)\n";
+        return 1;
+    }
+
     eval {
         db_connect();
     };
