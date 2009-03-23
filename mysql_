@@ -907,6 +907,10 @@ sub innodb_bigint {
 sub parse_innodb_status {
     local $_ = shift;
 
+    # Add a dummy section to the end in case the innodb status output
+    # has been truncated (Happens for status > 64K characters)
+    $_ .= "\n----------\nDUMMY\n"; 
+
     my %section_map = (
 
         'BUFFER POOL AND MEMORY'   => \&parse_buffer_pool_and_memory,
@@ -919,7 +923,6 @@ sub parse_innodb_status {
         'ROW OPERATIONS'           => \&skip,
         'SEMAPHORES'               => \&parse_semaphores,
         'TRANSACTIONS'             => \&parse_transactions,
-        
     );
 
     skip_heading();
@@ -928,6 +931,10 @@ sub parse_innodb_status {
         my $sec = $1;
 
         last if $sec eq 'END OF INNODB MONITOR OUTPUT';
+        if ($sec eq 'DUMMY') {
+            handle_incomplete_innodb_status();
+            last;
+        }
 
         die "Unknown section: $1" unless exists $section_map{$sec};
         die "Parse error. Expected a section separator" unless m/\G-+\n/gc;
@@ -1105,6 +1112,13 @@ sub parse_buffer_pool_and_memory {
         };
         skip_line();
     }
+}
+
+
+sub handle_incomplete_innodb_status {
+    warn "Output from SHOW ENGINE INNDOB STATUS was truncated";
+    # Is it possible to find some of the missing values from SHOW
+    # STATUS?
 }
 
 

@@ -1,7 +1,5 @@
 
- - Parse transaction section of innodb status. This section gets
-   truncated when many transactions are running. Doesn't that make it
-   valueless for munin-purposes?
+ - Parse transaction section of innodb status.
 
  - Status from SHOW PROCESSLIST. How useful is this?
 
@@ -31,3 +29,10 @@
  - Make autoconf look in the process list for å mysql server
 
  - use InnoDBParser from innotop?
+
+ - What to do with truncated innodb status?
+
+   * http://innotop.sourceforge.net/innotop.html#item_d_3a_innodb_deadlocks
+   * http://bugs.mysql.com/bug.php?id=19825
+   * Use some values from SHOW STATUS
+
