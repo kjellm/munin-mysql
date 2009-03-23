@@ -36,3 +36,11 @@
    * http://bugs.mysql.com/bug.php?id=19825
    * Use some values from SHOW STATUS
 
+ - Fix autoconf. From janl:
+
+    The plugin supports "suggest" but did not have "autoconf" marked,
+    so the family has been set to manual.  If we want to support
+    automatic configuration we need "family=auto",
+    "capabilities=suggest autoconf" and for preference "use DBI" and
+    other non-core modules be protected by eval so that the plugin can
+    be autoconfigured and give good error messages.

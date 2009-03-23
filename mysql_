@@ -1,9 +1,109 @@
 #!/usr/bin/perl
 
-#   Munin magick markers:
-#%# family=auto
-#%# capabilities=suggest
+=head1 NAME
 
+mysql_ - Munin plugin to display misc MySQL server status 
+
+=head1 APPLICABLE SYSTEMS
+
+Any MySQL platform, tested on MySQL 5.1.29 and 5.0.51
+
+=head1 CONFIGURATION
+
+This script is used to generate data for several graphs. To generate
+data for one specific graph, you need to create a symbolic link with a
+name like mysql_<GRAPH> to this script. 
+
+To get a list of symlinks that can be created, run:
+
+  ./mysql_ suggest
+
+In addition you might need to specify connection parameters in the
+plugin configuration to override the defaults. These are the defaults:
+
+  [mysql*]
+    env.mysqlconnection DBI:mysql:mysql
+    env.mysqluser root
+
+Non-default example:
+
+  [mysql*]
+    env.mysqlconnection DBI:mysql:mysql;host=127.0.0.1;port=3306
+    env.mysqluser root
+    env.mysqlpassword geheim
+
+
+=head1 DEPENDENCIES
+
+=over
+
+=item Cache::Cache
+
+The plugin uses shared memory to cache the statistics gathered from
+MySQL. This ensures minimal inpact on the MySQL server.
+
+=item DBD::Mysql
+
+=back
+
+=head1 INTERPRETATION
+
+=head2 InnoDB
+
+The statistics from innodb are mainly collected from the command 
+
+  SHOW ENGINE INNODB STATUS
+
+A nice walk through is found at
+L<http://www.mysqlperformanceblog.com/2006/07/17/show-innodb-status-walk-through/>
+
+=head2 The graphs
+
+FIX point to relevant sections in the MySQL manual and other www
+resources for each graph
+
+=over
+
+=item mysql_replication
+
+slave_running and slave_stopped creates an alterning color under the
+seconds_behind_master line. It will have the color of slave_running
+when the SQL thread runs and the color of slave_stopped otherwise.
+
+=back
+
+=head1 LICENSE
+
+Copyright (C) 2008,2009 Kjell-Magne Øierud
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; version 2 dated June, 1991.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+USA.
+
+=head1 VERSION
+
+git-master
+
+=head1 MAGICK MARKERS
+
+  #%# family=manual
+  #%# capabilities=suggest
+
+=head1 BUGS
+
+Autoconf support to be completed
+
+=cut
 
 use warnings;
 use strict;
@@ -16,7 +116,7 @@ use Math::BigInt; # Used to append "=> lib 'GMP'" here, but GMP caused
                   # segfault on some occasions. Removed as I don't
                   # think the tiny performance boost is worth the
                   # debugging effort.
-
+use Munin::Plugin qw(clean_fieldname);
 
 
 #---------------------------------------------------------------------
@@ -648,6 +748,47 @@ sub suggest {
 sub config {
     my $graph = shift;
 
+    # Can't use variable names longer than 19 characters:
+    # http://munin.projects.linpro.no/wiki/notes_on_datasource_names
+    #
+    # Using Munin::Plugin::clean_fieldname() to truncate long names.
+    #
+    # In MySQL 5.1 (and probably erlier versions as well) status
+    # variables are unique when looking at the last 19 characters.
+    #
+    #   SELECT RIGHT(variable_name, 19), COUNT(*) 
+    #     FROM information_schema.global_status
+    #    GROUP BY RIGHT(variable_name, 19)
+    #   HAVING COUNT(*) > 1;
+    #
+    #   Empty set (0.06 sec)
+    #
+    # There is one duplicate when looking at server variables
+    #   
+    #   SELECT RIGHT(variable_name, 19), COUNT(*) 
+    #     FROM information_schema.global_variables
+    #    GROUP BY RIGHT(variable_name, 19)
+    #   HAVING COUNT(*) > 1;
+    #   
+    #   +--------------------------+----------+
+    #   | RIGHT(variable_name, 19) | COUNT(*) |
+    #   +--------------------------+----------+
+    #   | OW_PRIORITY_UPDATES      |        2 |
+    #   +--------------------------+----------+
+    #   1 row in set (0.05 sec)
+    #
+    #   show global variables like '%OW_PRIORITY_UPDATES';
+    #   
+    #   +--------------------------+-------+
+    #   | Variable_name            | Value |
+    #   +--------------------------+-------+
+    #   | low_priority_updates     | OFF   |
+    #   | sql_low_priority_updates | OFF   |
+    #   +--------------------------+-------+
+    #   2 rows in set (0.00 sec)
+    #   
+    # Not a problem since we don't graph these
+        
     die 'Unknown graph ' . ($graph ? $graph : '')
         unless $graph;
     
@@ -831,45 +972,6 @@ sub update_slave {
             ? 0 : $data->{seconds_behind_master};
 
 
-}
-
-#
-# Can't use variable names longer than 19 characters:
-# http://munin.projects.linpro.no/wiki/notes_on_datasource_names
-#
-sub clean_fieldname {
-    my $str = shift;
-
-    # In MySQL 5.1 (and probably erlier versions as well) status
-    # variables are not unique when looking at the first 19
-    # characters.
-    #
-    #   SELECT LEFT(variable_name, 19), COUNT(*) 
-    #     FROM global_status
-    #    GROUP BY LEFT(variable_name, 19)
-    #   HAVING COUNT(*) > 1;
-    #   
-    #   +-------------------------+----------+
-    #   | left(variable_name, 19) | count(*) |
-    #   +-------------------------+----------+
-    #   | INNODB_BUFFER_POOL_     |       12 |
-    #   | INNODB_DATA_PENDING     |        3 |
-    #   | INNODB_OS_LOG_PENDI     |        2 |
-    #   | INNODB_ROW_LOCK_TIM     |        3 |
-    #   +-------------------------+----------+
-    #   4 rows in set (0.05 sec)
-    #   
-    #   SELECT LEFT(variable_name, 19), COUNT(*) 
-    #     FROM global_variables
-    #    GROUP BY LEFT(variable_name, 19)
-    #   HAVING COUNT(*) > 1;
-    #   
-    #   Empty set (0.05 sec)
-    #
-    # Not a problem yet since we don't use any of the Innodb_ status
-    # variables ...
-    
-    return substr($str, 0, 19);
 }
 
 
@@ -1125,95 +1227,4 @@ sub handle_incomplete_innodb_status {
 exit main() unless caller;
 
 1;
-
-__END__
-
-=head1 NAME
-
-mysql_ - Munin plugin to display misc MySQL server status 
-
-=head1 APPLICABLE SYSTEMS
-
-Any MySQL platform, tested on MySQL 5.1.29 and 5.0.51
-
-=head1 CONFIGURATION
-
-This script is used to generate data for several graphs. To generate
-data for one specific graph, you need to create a symbolic link with a
-name like mysql_<GRAPH> to this script. 
-
-To get a list of symlinks that can be created, run:
-
-  ./mysql_ suggest
-
-In addition you might need to specify connection parameters in the
-plugin configuration to override the defaults. For example
-
-  [mysql*]
-  env.mysqlconnection DBI:mysql:mysql;host=127.0.0.1;port=3306
-  env.mysqluser root
-  env.mysqlpassword geheim
-
-
-=head1 DEPENDENCIES
-
-=over
-
-=item Cache::Cache
-
-The plugin uses shared memory to cache the statistics gathered from
-MySQL. This ensures minimal inpact on the MySQL server.
-
-=item DBD::Mysql
-
-=back
-
-=head1 INTERPRETATION
-
-=head2 InnoDB
-
-The statistics from innodb are mainly collected from the command 
-
-  SHOW ENGINE INNODB STATUS
-
-A nice walk through is found at http://www.mysqlperformanceblog.com/2006/07/17/show-innodb-status-walk-through/
-
-=head2 The graphs
-
-FIX point to relevant sections in the MySQL manual and other www
-resources for each graph
-
-=over
-
-=item mysql_replication
-
-slave_running and slave_stopped creates an alterning color under the
-seconds_behind_master line. It will have the color of slave_running
-when the SQL thread runs and the color of slave_stopped otherwise.
-
-=back
-
-=head1 LICENSE
-
-Copyright (C) 2008,2009 Kjell-Magne Øierud
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; version 2 dated June, 1991.
-
-This program is distributed in the hope that it will be useful, but
-WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
-USA.
-
-=head1 VERSION
-
-git-master
-
-=cut
 
