@@ -42,12 +42,19 @@ Source code is hosted at github
 TROUBLESHOOTING
 ---------------
 
-You can find some tips for debugging munin plugin problems here:
-<http://munin.projects.linpro.no/wiki/Debugging_Munin_plugins>
+- If you get warnings saying "Output from SHOW ENGINE INNDOB STATUS
+  was truncated" that means that a very large deadlock are causing the
+  output to be truncated. The consequence is that data for many of the
+  InnoDB related data sources will be missing. For solutions to this
+  problem see
+  http://www.xaprb.com/blog/2006/08/08/how-to-deliberately-cause-a-deadlock-in-mysql/
 
-If you still have problems, try asking on the mailing list.
+- You can find some tips for debugging munin plugin problems here:
+  <http://munin.projects.linpro.no/wiki/Debugging_Munin_plugins>
 
-Bugs should be reported to the mailing list.
+- If you still have problems, try asking on the mailing list.
+
+- Bugs should be reported to the mailing list.
 
 
 AUTHOR
