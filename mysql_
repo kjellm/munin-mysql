@@ -976,7 +976,7 @@ sub update_slave {
 
 
 #
-# In 'SHOW ENGINE INNODB STATUS' 64 bit integers are formated not as
+# In 'SHOW ENGINE INNODB STATUS' 64 bit integers are not formated as
 # plain integers. They are either:
 #
 #   - split in two and needs to be shifted together,
@@ -1067,153 +1067,153 @@ sub skip_heading {
 }
 
 
-sub skip {
-    #warn substr($_, pos(), 20);
+sub parse_section {
+    my ($parser) = @_;
+
+    #warn substr($_, pos(), 10);
     for (;;) {
         return if match_dashes();
+        next if $parser->();
         skip_line();
     }
 }
 
 
+sub skip { parse_section(sub {}); }
+
+
 sub parse_semaphores {
-    #warn substr($_, pos(), 10);
-    for (;;) {
-        return if match_dashes();
-        m/\GMutex spin waits (\d+), rounds (\d+), OS waits (\d+)\n/gc && do {
-            $data->{ib_spin_waits}  = $1;
-            $data->{ib_spin_rounds} = $2;
-            $data->{ib_os_waits}    = $3;
-            next;
-        };
-        skip_line();
-    }
-    
+    parse_section(
+        sub {
+            m/\GMutex spin waits (\d+), rounds (\d+), OS waits (\d+)\n/gc && do {
+                $data->{ib_spin_waits}  = $1;
+                $data->{ib_spin_rounds} = $2;
+                $data->{ib_os_waits}    = $3;
+                return 1;
+            };
+        }
+    );
 }
 
 
 sub parse_transactions {
-    #warn substr($_, pos(), 10);
-    for (;;) {
-        return if match_dashes();
-        m/\GTrx id counter $innodb_bigint_rx\n/gc && do {
-            $data->{ib_tnx} = innodb_bigint($1, $2);
-            next;
-        };
-        m/\GPurge done for trx's n:o < $innodb_bigint_rx undo n:o < $innodb_bigint_rx\n/gc && do {
-            if (defined $3) {
-                # old format
-                $data->{ib_tnx_prg} = innodb_bigint($1, $2);
-                # FIX add to data? innodb_bigint($3, $4);
-            }
-            else {
-                # new format
-                $data->{ib_tnx_prg} = innodb_bigint($1);
-                # FIX add to data? innodb_bigint($2);
-            }
-            next;
-        };
-        m/\GHistory list length (\d+)\n/gc && do {
-            $data->{ib_tnx_hist} = $1;
-            next;
-        };
-        skip_line();
-    }
+    parse_section(
+        sub {
+            m/\GTrx id counter $innodb_bigint_rx\n/gc && do {
+                $data->{ib_tnx} = innodb_bigint($1, $2);
+                return 1;
+            };
+            m/\GPurge done for trx's n:o < $innodb_bigint_rx undo n:o < $innodb_bigint_rx\n/gc && do {
+                if (defined $3) {
+                    # old format
+                    $data->{ib_tnx_prg} = innodb_bigint($1, $2);
+                    # FIX add to data? innodb_bigint($3, $4);
+                }
+                else {
+                    # new format
+                    $data->{ib_tnx_prg} = innodb_bigint($1);
+                    # FIX add to data? innodb_bigint($2);
+                }
+                return 1;
+            };
+            m/\GHistory list length (\d+)\n/gc && do {
+                $data->{ib_tnx_hist} = $1;
+                return 1;
+            };
+        }
+    );
 
 }
 
 
 sub parse_file_io {
-    #warn substr($_, pos(), 10);
-    for (;;) {
-        return if match_dashes();
-        m/\GPending normal aio reads: (\d+), aio writes: (\d+),\n\s*ibuf aio reads: (\d+), log i\/o's: (\d+), sync i\/o's: (\d+)\n/gc && do {
-            $data->{ib_iop_aioread}  = $1;
-            $data->{ib_iop_aiowrite} = $2;
-            $data->{ib_iop_ibuf_aio} = $3;
-            $data->{ib_iop_log}      = $4;
-            $data->{ib_iop_sync}     = $5;
-            next;
-        };
-        m/\GPending flushes \(fsync\) log: (\d+); buffer pool: (\d+)\n/gc && do {
-            $data->{ib_iop_flush_log}   = $1;
-            $data->{ib_iop_flush_bpool} = $2;
-            next;
-        };
-        m/\G(\d+) OS file reads, (\d+) OS file writes, (\d+) OS fsyncs\n/gc && do {
-            $data->{ib_io_read}  = $1;
-            $data->{ib_io_write} = $2;
-            $data->{ib_io_fsync} = $3;
-            next;
-        };
-        skip_line();
-    }
+    parse_section(
+        sub {
+            m/\GPending normal aio reads: (\d+), aio writes: (\d+),\n\s*ibuf aio reads: (\d+), log i\/o's: (\d+), sync i\/o's: (\d+)\n/gc && do {
+                $data->{ib_iop_aioread}  = $1;
+                $data->{ib_iop_aiowrite} = $2;
+                $data->{ib_iop_ibuf_aio} = $3;
+                $data->{ib_iop_log}      = $4;
+                $data->{ib_iop_sync}     = $5;
+                return 1;
+            };
+            m/\GPending flushes \(fsync\) log: (\d+); buffer pool: (\d+)\n/gc && do {
+                $data->{ib_iop_flush_log}   = $1;
+                $data->{ib_iop_flush_bpool} = $2;
+                return 1;
+            };
+            m/\G(\d+) OS file reads, (\d+) OS file writes, (\d+) OS fsyncs\n/gc && do {
+                $data->{ib_io_read}  = $1;
+                $data->{ib_io_write} = $2;
+                $data->{ib_io_fsync} = $3;
+                return 1;
+            };
+        }
+    );
 }
 
 
 sub parse_insert_buffer_and_adaptive_hash_index {
-    #warn substr($_, pos(), 10);
-    for (;;) {
-        return if match_dashes();
-        m/\G(\d+) inserts, (\d+) merged recs, (\d+) merges\n/gc && do {
-            $data->{ib_ibuf_inserts}    = $1;
-            $data->{ib_ibuf_merged_rec} = $2;
-            $data->{ib_ibuf_merges}     = $3;
-            next;
-        };
-        skip_line();
-    }
+    parse_section(
+        sub {
+            m/\G(\d+) inserts, (\d+) merged recs, (\d+) merges\n/gc && do {
+                $data->{ib_ibuf_inserts}    = $1;
+                $data->{ib_ibuf_merged_rec} = $2;
+                $data->{ib_ibuf_merges}     = $3;
+                return 1;
+            };
+        }
+    );
 }
 
 
 sub parse_log {
-    #warn substr($_, pos(), 10);
-    for (;;) {
-        return if match_dashes();
-        m/\GLog sequence number $innodb_bigint_rx\n/gc && do {
-            $data->{ib_log_written} = innodb_bigint($1, $2);
-            next;
-        };
-        m/\GLog flushed up to\s+$innodb_bigint_rx\n/gc && do {
-            $data->{ib_log_flush} = innodb_bigint($1, $2);
-            next;
-        };
-        m/\G(\d+) log i\/o's done.*\n/gc && do {
-            $data->{ib_io_log} = $1;
-            next;
-        };
-        skip_line();
-    }
+    parse_section(
+        sub {
+            m/\GLog sequence number $innodb_bigint_rx\n/gc && do {
+                $data->{ib_log_written} = innodb_bigint($1, $2);
+                return 1;
+            };
+            m/\GLog flushed up to\s+$innodb_bigint_rx\n/gc && do {
+                $data->{ib_log_flush} = innodb_bigint($1, $2);
+                return 1;
+            };
+            m/\G(\d+) log i\/o's done.*\n/gc && do {
+                $data->{ib_io_log} = $1;
+                return 1;
+            };
+        }
+    );
 }
 
+
 sub parse_buffer_pool_and_memory {
-    #warn substr($_, pos(), 10);
-    for (;;) {
-        return if match_dashes();
-        m/\GBuffer pool size\s+(\d+)\n/gc && do {
-            $data->{ib_bpool_size} = $1;
-            next;
-        };
-        m/\GFree buffers\s+(\d+)\n/gc && do {
-            $data->{ib_bpool_free} = $1;
-            next;
-        };
-        m/\GDatabase pages\s+(\d+)\n/gc && do {
-            $data->{ib_bpool_dbpages} = $1;
-            next;
-        };
-        m/\GModified db pages\s+(\d+)\n/gc && do {
-            $data->{ib_bpool_modpages} = $1;
-            next;
-        };
-        m/\GPages read (\d+), created (\d+), written (\d+)\n/gc && do {
-            $data->{ib_bpool_read}    = $1;
-            $data->{ib_bpool_created} = $2;
-            $data->{ib_bpool_written} = $3;
-            next;
-        };
-        skip_line();
-    }
+    parse_section(
+        sub {
+            m/\GBuffer pool size\s+(\d+)\n/gc && do {
+                $data->{ib_bpool_size} = $1;
+                return 1;
+            };
+            m/\GFree buffers\s+(\d+)\n/gc && do {
+                $data->{ib_bpool_free} = $1;
+                return 1;
+            };
+            m/\GDatabase pages\s+(\d+)\n/gc && do {
+                $data->{ib_bpool_dbpages} = $1;
+                return 1;
+            };
+            m/\GModified db pages\s+(\d+)\n/gc && do {
+                $data->{ib_bpool_modpages} = $1;
+                return 1;
+            };
+            m/\GPages read (\d+), created (\d+), written (\d+)\n/gc && do {
+                $data->{ib_bpool_read}    = $1;
+                $data->{ib_bpool_created} = $2;
+                $data->{ib_bpool_written} = $3;
+                return 1;
+            };
+        }
+    );
 }
 
 
