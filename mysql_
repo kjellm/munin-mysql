@@ -757,11 +757,6 @@ sub suggest {
 sub config {
     my $graph = shift;
 
-    # Can't use variable names longer than 19 characters:
-    # http://munin.projects.linpro.no/wiki/notes_on_datasource_names
-    #
-    # Using Munin::Plugin::clean_fieldname() to truncate long names.
-    #
     # In MySQL 5.1 (and probably erlier versions as well) status
     # variables are unique when looking at the last 19 characters.
     #
@@ -999,7 +994,10 @@ sub innodb_bigint {
         : Math::BigInt->new("0x$x");
 }
 
-
+#
+# Can't use variable names longer than 19 characters:
+# http://munin.projects.linpro.no/wiki/notes_on_datasource_names
+#
 sub clean_fieldname {
     my $name = shift;
 
