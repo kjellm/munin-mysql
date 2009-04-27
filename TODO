@@ -36,3 +36,6 @@
    * http://bugs.mysql.com/bug.php?id=19825
    * Use some values from SHOW STATUS
 
+ - SHOW ENGINE INNODB STATUS fails when server is started with
+   --skip-innodb and also
+   http://www.xaprb.com/blog/2007/03/08/what-to-do-when-mysql-says-skip-innodb-is-defined/
