@@ -111,7 +111,6 @@ use Math::BigInt; # Used to append "=> lib 'GMP'" here, but GMP caused
                   # segfault on some occasions. Removed as I don't
                   # think the tiny performance boost is worth the
                   # debugging effort.
-use Munin::Plugin qw(clean_fieldname);
 
 my $has_cache;
 
@@ -1000,6 +999,20 @@ sub innodb_bigint {
         : Math::BigInt->new("0x$x");
 }
 
+
+sub clean_fieldname {
+    my $name = shift;
+
+    # Replace a sequence of illegal leading chars with a single _
+    $name =~ s/^[^A-Za-z_]+/_/;
+    # Replace remaining illegals with _
+    $name =~ s/[^A-Za-z0-9_]/_/g;
+
+    # And use only the last 19 chars
+    $name = substr($name,-19);
+
+    return $name;
+}
 
 #---------------------------------------------------------------------
 #  P A R S E   'SHOW ENGINE INNODB STATUS'   O U T P U T
