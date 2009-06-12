@@ -858,7 +858,8 @@ sub db_connect {
     my $dsn = "$config{dsn};mysql_connect_timeout=5";
 
     return DBI->connect($dsn, $config{user}, $config{password}, {
-        RaiseError       => 1, 
+        RaiseError       => 1,
+        PrintError       => 0,
         FetchHashKeyName => 'NAME_lc',
     });
 }
@@ -1241,6 +1242,8 @@ sub parse_buffer_pool_and_memory {
 
 sub handle_incomplete_innodb_status {
     warn "Output from SHOW ENGINE INNDOB STATUS was truncated";
+    # FIX more user friendly warning
+    
     # Is it possible to find some of the missing values from SHOW
     # STATUS?
 }
