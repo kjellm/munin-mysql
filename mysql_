@@ -511,7 +511,7 @@ $graphs{qcache} = {
     config => {
         global_attrs => {
             title  => 'Query Cache',
-            vlabel => 'FIX',
+            vlabel => 'commands / second',
         },
         data_source_attrs => {
              draw => 'LINE1',
@@ -532,7 +532,8 @@ $graphs{qcache_mem} = {
     config => {
         global_attrs => {
             title  => 'Query Cache Memory',
-            vlabel => 'FIX',
+            vlabel => 'bytes',
+            args   => '--base 1024 --lower-limit 0',
         },
         data_source_attrs => {
             draw => 'AREA',
