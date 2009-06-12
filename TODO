@@ -1,40 +1,8 @@
-
- - Parse transaction section of innodb status.
-
- - Status from SHOW PROCESSLIST. How useful is this?
-
- - Document graph interpretation
-
- - Measure slave lag by using maatkit's mk-heartbeat if present
-
- - The Cacti 'Query Cache Memory Usage' graph includes
-   Qcache_total_blocks and Qcache_free_blocks in addition to
-   query_cache_size Qcache_free_memory. Can't see how these fit in
-   the same graph since they have different scale (blocks vs
-   bytes). Make a separate graph and include Qcache_lowmem_prunes?
-
- - Add vlabel on graphs. 
-
- - Add documentation on minimum privileges needed (USAGE or SUPER
-   depending on which tables are accessed)
-
- - Make suggest only list applicable graphs? E.g. Don't suggest
-   InnoDB graphs if InnoDB is not used on the system,
-
- - Only gather the data necesarry for the graphs that are used
-
- - Cache results in a file if Cache::SharedMemoryCache is not
-   installed? Or implement our own shared memory cache?
+Have moved most issues to: http://github.com/kjellm/munin-mysql/issues
 
  - Make autoconf look in the process list for å mysql server
 
  - use InnoDBParser from innotop?
-
- - What to do with truncated innodb status?
-
-   * http://innotop.sourceforge.net/innotop.html#item_d_3a_innodb_deadlocks
-   * http://bugs.mysql.com/bug.php?id=19825
-   * Use some values from SHOW STATUS
 
  - SHOW ENGINE INNODB STATUS fails when server is started with
    --skip-innodb and also
