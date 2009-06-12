@@ -2,7 +2,6 @@ graph_args --base 1000
 graph_title Binary/Relay Logs
 graph_vlabel FIX
 graph_category mysql2
-
 nlog_cache_disk_use.draw LINE1
 nlog_cache_disk_use.min 0
 nlog_cache_disk_use.label Binlog Cache Disk Use
@@ -24,7 +23,6 @@ graph_title Command Counters
 graph_vlabel commands / ${graph_period}
 graph_total Questions
 graph_category mysql2
-
 Com_delete.draw AREA
 Com_delete.min 0
 Com_delete.label Delete
@@ -65,7 +63,6 @@ graph_args --base 1000
 graph_title Connections
 graph_vlabel connections / ${graph_period}
 graph_category mysql2
-
 max_connections.draw AREA
 max_connections.colour cdcfc4
 max_connections.min 0
@@ -96,7 +93,6 @@ graph_args --base 1000
 graph_title Files and tables
 graph_vlabel tables
 graph_category mysql2
-
 table_open_cache.draw AREA
 table_open_cache.colour cdcfc4
 table_open_cache.min 0
@@ -119,7 +115,6 @@ graph_args --base 1000
 graph_title InnoDB Buffer Pool
 graph_vlabel pages
 graph_category mysql2
-
 ib_bpool_size.draw AREA
 ib_bpool_size.colour ffd660
 ib_bpool_size.min 0
@@ -143,7 +138,6 @@ graph_title InnoDB Buffer Pool Activity
 graph_vlabel actions / ${graph_period}
 graph_total Total
 graph_category mysql2
-
 ib_bpool_read.draw LINE2
 ib_bpool_read.min 0
 ib_bpool_read.label Pages read
@@ -160,7 +154,6 @@ graph_args --base 1000
 graph_title InnoDB Insert Buffer
 graph_vlabel FIX
 graph_category mysql2
-
 ib_ibuf_inserts.draw LINE1
 ib_ibuf_inserts.min 0
 ib_ibuf_inserts.label Inserts
@@ -177,7 +170,6 @@ graph_args --base 1000
 graph_title InnoDB IO
 graph_vlabel FIX
 graph_category mysql2
-
 ib_io_read.draw LINE1
 ib_io_read.min 0
 ib_io_read.label File reads
@@ -198,7 +190,6 @@ graph_args --base 1000
 graph_title InnoDB IO Pending
 graph_vlabel FIX
 graph_category mysql2
-
 ib_iop_log.draw LINE1
 ib_iop_log.min 0
 ib_iop_log.label AIO Log
@@ -231,7 +222,6 @@ graph_args --base 1000
 graph_title InnoDB Log
 graph_vlabel FIX
 graph_category mysql2
-
 odb_log_buffer_size.draw AREA
 odb_log_buffer_size.colour fafd9e
 odb_log_buffer_size.min 0
@@ -250,7 +240,6 @@ graph_title InnoDB Row Operations
 graph_vlabel operations / ${graph_period}
 graph_total Total
 graph_category mysql2
-
 Innodb_rows_deleted.draw AREA
 Innodb_rows_deleted.min 0
 Innodb_rows_deleted.label Deletes
@@ -271,7 +260,6 @@ graph_args --base 1000
 graph_title InnoDB Semaphores
 graph_vlabel FIX
 graph_category mysql2
-
 ib_spin_rounds.draw LINE1
 ib_spin_rounds.min 0
 ib_spin_rounds.label Spin Rounds
@@ -288,7 +276,6 @@ graph_args --base 1000
 graph_title InnoDB Transactions
 graph_vlabel FIX
 graph_category mysql2
-
 ib_tnx.draw LINE1
 ib_tnx.min 0
 ib_tnx.label Transactions created
@@ -297,7 +284,6 @@ graph_args --base 1000
 graph_title MyISAM Indexes
 graph_vlabel Requests per ${graph_period}
 graph_category mysql2
-
 Key_read_requests.draw LINE2
 Key_read_requests.min 0
 Key_read_requests.label Key read requests
@@ -318,7 +304,6 @@ graph_args --base 1024
 graph_title Network Traffic
 graph_vlabel bytes received (-) / sent (+) per ${graph_period}
 graph_category mysql2
-
 Bytes_received.draw LINE2
 Bytes_received.min 0
 Bytes_received.label Bytes transfered
@@ -331,9 +316,8 @@ Bytes_sent.negative Bytes_received
 Bytes_sent.type DERIVE
 graph_args --base 1000
 graph_title Query Cache
-graph_vlabel FIX
+graph_vlabel commands / second
 graph_category mysql2
-
 he_queries_in_cache.draw LINE1
 he_queries_in_cache.min 0
 he_queries_in_cache.label Queries in cache
@@ -354,11 +338,10 @@ cache_lowmem_prunes.draw LINE1
 cache_lowmem_prunes.min 0
 cache_lowmem_prunes.label Low-memory prunes
 cache_lowmem_prunes.type DERIVE
-graph_args --base 1000
+graph_args --base 1024 --lower-limit 0
 graph_title Query Cache Memory
-graph_vlabel FIX
+graph_vlabel bytes
 graph_category mysql2
-
 query_cache_size.draw AREA
 query_cache_size.min 0
 query_cache_size.label Cache size
@@ -371,7 +354,6 @@ graph_args --base 1000
 graph_title Replication
 graph_vlabel FIX
 graph_category mysql2
-
 slave_running.draw AREA
 slave_running.min 0
 slave_running.label Slave Running
@@ -397,7 +379,6 @@ graph_title Select types
 graph_vlabel commands / ${graph_period}
 graph_total Total
 graph_category mysql2
-
 Select_full_join.draw AREA
 Select_full_join.min 0
 Select_full_join.label Full join
@@ -422,7 +403,6 @@ graph_args --base 1000
 graph_title Slow Queries
 graph_vlabel slow queries / ${graph_period}
 graph_category mysql2
-
 Slow_queries.draw LINE2
 Slow_queries.min 0
 Slow_queries.label Slow queries
@@ -431,7 +411,6 @@ graph_args --base 1000
 graph_title Sorts
 graph_vlabel sorts / ${graph_period}
 graph_category mysql2
-
 Sort_rows.draw LINE2
 Sort_rows.min 0
 Sort_rows.label Rows sorted
@@ -452,7 +431,6 @@ graph_args --base 1000
 graph_title Table locks
 graph_vlabel locks / ${graph_period}
 graph_category mysql2
-
 ble_locks_immediate.draw LINE2
 ble_locks_immediate.min 0
 ble_locks_immediate.label Table locks immed
@@ -465,7 +443,6 @@ graph_args --base 1000
 graph_title Temporary objects
 graph_vlabel objects / ${graph_period}
 graph_category mysql2
-
 ted_tmp_disk_tables.draw LINE2
 ted_tmp_disk_tables.min 0
 ted_tmp_disk_tables.label Temp disk tables
