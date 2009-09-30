@@ -679,7 +679,7 @@ our $data; # Was 'my'. Changed to 'our' to facilitate testing.
 
 
 sub main {
-    my $graph = $graphs{substr(basename($0), length('mysql_'))};
+    my $graph = substr(basename($0), length('mysql_'));
     my $command = $ARGV[0] || 'show';
 
     my %command_map = (
@@ -756,7 +756,7 @@ sub suggest {
 
 
 sub config {
-    my $graph = shift;
+    my $graph_name = shift;
 
     # In MySQL 5.1 (and probably erlier versions as well) status
     # variables are unique when looking at the last 19 characters.
@@ -794,8 +794,10 @@ sub config {
     #   
     # Not a problem since we don't graph these
         
-    die 'Unknown graph ' . ($graph ? $graph : '')
-        unless $graph;
+    die 'Unknown graph ' . ($graph_name ? $graph_name : '')
+        unless $graphs{$graph_name};
+
+    my $graph = $graphs{$graph_name};
     
     my %conf = (%{$defaults{global_attrs}}, %{$graph->{config}{global_attrs}});
     while (my ($k, $v) = each %conf) {
@@ -832,12 +834,17 @@ sub config {
 }
 
 sub show {
-    my $graph = shift;
+    my $graph_name = shift;
 
-    die 'Unknown graph ' . ($graph ? $graph : '')
-        unless $graph;
+    die 'Unknown graph ' . ($graph_name ? $graph_name : '')
+        unless $graphs{$graph_name};
+
+    my $graph = $graphs{$graph_name};
     
     update_data();
+
+    die "Can't show data for '$graph_name' because InnoDB is disabled."
+        if $graph_name =~ /innodb_/ && $data->{_innodb_disabled};
 
     for my $ds (@{$graph->{data_sources}}) {
         printf "%s.value %s\n", 
@@ -883,17 +890,17 @@ sub update_data {
     # Set up defaults in case binlog is not enabled
     $data->{ma_binlog_size} = 0;
     
-    update_variables($data, $dbh);
-    update_innodb($data, $dbh);
-    update_master($data, $dbh);
-    update_slave($data, $dbh);
+    update_variables($dbh);
+    update_innodb($dbh);
+    update_master($dbh);
+    update_slave($dbh);
 
     $shared_memory_cache->set('data', $data);
 }
 
 
 sub update_variables {
-    my ($data, $dbh) = @_;
+    my ($dbh) = @_;
     my @queries = (
         'SHOW GLOBAL STATUS',
         'SHOW GLOBAL VARIABLES',
@@ -921,10 +928,19 @@ sub update_variables {
 
 
 sub update_innodb {
-    my ($data, $dbh) = @_;
+    my ($dbh) = @_;
 
     my $sth = $dbh->prepare('SHOW /*!50000 ENGINE*/ INNODB STATUS');
-    $sth->execute();
+    eval {
+        $sth->execute();
+    };
+    if ($@) {
+        if ($@ =~ /Cannot call SHOW INNODB STATUS because skip-innodb is defined/) {
+            $data->{_innodb_disabled} = 1;
+            return;
+        }
+        die $@;
+    }
     my $row = $sth->fetchrow_hashref();
     my $status = $row->{'status'};
     $sth->finish();
@@ -934,7 +950,7 @@ sub update_innodb {
 
 
 sub update_master {
-    my ($data, $dbh) = @_;
+    my ($dbh) = @_;
 
     my $sth = $dbh->prepare('SHOW MASTER LOGS');
     eval {
@@ -955,7 +971,7 @@ sub update_master {
 
 
 sub update_slave {
-    my ($data, $dbh) = @_;
+    my ($dbh) = @_;
 
     my $sth = $dbh->prepare('SHOW SLAVE STATUS');
     $sth->execute();
@@ -1013,6 +1029,7 @@ sub clean_fieldname {
 
     return $name;
 }
+
 
 #---------------------------------------------------------------------
 #  P A R S E   'SHOW ENGINE INNODB STATUS'   O U T P U T
