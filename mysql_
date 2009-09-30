@@ -1065,6 +1065,7 @@ sub parse_innodb_status {
         'ROW OPERATIONS'           => \&skip,
         'SEMAPHORES'               => \&parse_semaphores,
         'TRANSACTIONS'             => \&parse_transactions,
+        'BACKGROUND THREAD'        => \&skip,
     );
 
     skip_heading();
