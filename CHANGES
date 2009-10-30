@@ -1,3 +1,24 @@
+2009-10-30: version 0.2
+
+ - Made the plugin more fit for inclusion by the Munin project. Note
+   that this breaks backwards compatibility since some data_sources
+   have changed names.
+
+ - Handle new "BACKGROUND THREAD" section in SHOW ENGINE INNODB STATUS.
+
+ - The plugin did not work when InnoDB is disabled.
+
+ - Prevented that handled DBI errors from leaking to error messages.
+
+ - Added proper vlabels to the Query Cache graphs.
+
+ - Added a base and lower limit to the Query Cache Memory graph.
+
+ - Plugin now supports the autoconf capability
+
+ - Fixed infinite loop caused by truncated InnoDB status.
+
+
 2009-03-21: version 0.1.2
 
  - Improved tests
