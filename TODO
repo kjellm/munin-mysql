@@ -1,9 +1,0 @@
-Have moved most issues to: http://github.com/kjellm/munin-mysql/issues
-
- - Make autoconf look in the process list for å mysql server
-
- - use InnoDBParser from innotop?
-
- - SHOW ENGINE INNODB STATUS fails when server is started with
-   --skip-innodb and also
-   http://www.xaprb.com/blog/2007/03/08/what-to-do-when-mysql-says-skip-innodb-is-defined/
