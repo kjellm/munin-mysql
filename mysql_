@@ -883,9 +883,10 @@ sub update_data {
     my $dbh = db_connect();
 
     # Set up defaults in case the server is not a slave
-    $data->{relay_log_space} = 0;
-    $data->{slave_running}   = 0;
-    $data->{slave_stopped}   = 0;
+    $data->{relay_log_space}       = 0;
+    $data->{slave_running}         = 0;
+    $data->{slave_stopped}         = 0;
+    $data->{seconds_behind_master} = 0;
     
     # Set up defaults in case binlog is not enabled
     $data->{ma_binlog_size} = 0;
