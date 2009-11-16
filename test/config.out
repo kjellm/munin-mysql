@@ -1,6 +1,6 @@
 graph_args --base 1000
 graph_title Binary/Relay Logs
-graph_vlabel FIX
+graph_vlabel Log activity
 graph_category mysql2
 nlog_cache_disk_use.draw LINE1
 nlog_cache_disk_use.min 0
@@ -20,7 +20,7 @@ relay_log_space.label Relay Log Space
 relay_log_space.type DERIVE
 graph_args --base 1000
 graph_title Command Counters
-graph_vlabel commands / ${graph_period}
+graph_vlabel Commands per ${graph_period}
 graph_total Questions
 graph_category mysql2
 Com_delete.draw AREA
@@ -61,7 +61,7 @@ Com_update_multi.label Update multi
 Com_update_multi.type DERIVE
 graph_args --base 1000
 graph_title Connections
-graph_vlabel connections / ${graph_period}
+graph_vlabel Connections per ${graph_period}
 graph_category mysql2
 max_connections.draw AREA
 max_connections.colour cdcfc4
@@ -91,7 +91,7 @@ Connections.label New connections
 Connections.type DERIVE
 graph_args --base 1000
 graph_title Files and tables
-graph_vlabel tables
+graph_vlabel Tables
 graph_category mysql2
 table_open_cache.draw AREA
 table_open_cache.colour cdcfc4
@@ -110,10 +110,9 @@ Opened_tables.draw LINE1
 Opened_tables.min 0
 Opened_tables.label Opened tables
 Opened_tables.type GAUGE
-graph_base 1024
-graph_args --base 1000
+graph_args --base 1024
 graph_title InnoDB Buffer Pool
-graph_vlabel pages
+graph_vlabel Pages
 graph_category mysql2
 ib_bpool_size.draw AREA
 ib_bpool_size.colour ffd660
@@ -135,7 +134,7 @@ ib_bpool_modpages.label Modified pages
 ib_bpool_modpages.type GAUGE
 graph_args --base 1000
 graph_title InnoDB Buffer Pool Activity
-graph_vlabel actions / ${graph_period}
+graph_vlabel Activity per ${graph_period}
 graph_total Total
 graph_category mysql2
 ib_bpool_read.draw LINE2
@@ -152,7 +151,7 @@ ib_bpool_written.label Pages written
 ib_bpool_written.type DERIVE
 graph_args --base 1000
 graph_title InnoDB Insert Buffer
-graph_vlabel FIX
+graph_vlabel Activity per ${graph_period}
 graph_category mysql2
 ib_ibuf_inserts.draw LINE1
 ib_ibuf_inserts.min 0
@@ -168,7 +167,7 @@ ib_ibuf_merges.label Merges
 ib_ibuf_merges.type DERIVE
 graph_args --base 1000
 graph_title InnoDB IO
-graph_vlabel FIX
+graph_vlabel IO operations per ${graph_period}
 graph_category mysql2
 ib_io_read.draw LINE1
 ib_io_read.min 0
@@ -188,7 +187,7 @@ ib_io_fsync.label File syncs
 ib_io_fsync.type DERIVE
 graph_args --base 1000
 graph_title InnoDB IO Pending
-graph_vlabel FIX
+graph_vlabel Pending operations
 graph_category mysql2
 ib_iop_log.draw LINE1
 ib_iop_log.min 0
@@ -220,7 +219,7 @@ ib_iop_aiowrite.label Normal AIO Writes
 ib_iop_aiowrite.type DERIVE
 graph_args --base 1000
 graph_title InnoDB Log
-graph_vlabel FIX
+graph_vlabel Log activity per ${graph_period}
 graph_category mysql2
 odb_log_buffer_size.draw AREA
 odb_log_buffer_size.colour fafd9e
@@ -237,7 +236,7 @@ ib_log_written.label KB Written
 ib_log_written.type DERIVE
 graph_args --base 1000
 graph_title InnoDB Row Operations
-graph_vlabel operations / ${graph_period}
+graph_vlabel Operations per ${graph_period}
 graph_total Total
 graph_category mysql2
 Innodb_rows_deleted.draw AREA
@@ -258,7 +257,7 @@ Innodb_rows_updated.label Updates
 Innodb_rows_updated.type DERIVE
 graph_args --base 1000
 graph_title InnoDB Semaphores
-graph_vlabel FIX
+graph_vlabel Semaphores per ${graph_period}
 graph_category mysql2
 ib_spin_rounds.draw LINE1
 ib_spin_rounds.min 0
@@ -274,7 +273,7 @@ ib_os_waits.label OS Waits
 ib_os_waits.type DERIVE
 graph_args --base 1000
 graph_title InnoDB Transactions
-graph_vlabel FIX
+graph_vlabel Transactions per ${graph_period}
 graph_category mysql2
 ib_tnx.draw LINE1
 ib_tnx.min 0
@@ -302,7 +301,7 @@ Key_writes.label Key writes
 Key_writes.type DERIVE
 graph_args --base 1024
 graph_title Network Traffic
-graph_vlabel bytes received (-) / sent (+) per ${graph_period}
+graph_vlabel Bytes received (-) / sent (+) per ${graph_period}
 graph_category mysql2
 Bytes_received.draw LINE2
 Bytes_received.min 0
@@ -316,7 +315,7 @@ Bytes_sent.negative Bytes_received
 Bytes_sent.type DERIVE
 graph_args --base 1000
 graph_title Query Cache
-graph_vlabel commands / second
+graph_vlabel Commands per ${graph_period}
 graph_category mysql2
 he_queries_in_cache.draw LINE1
 he_queries_in_cache.min 0
@@ -340,7 +339,7 @@ cache_lowmem_prunes.label Low-memory prunes
 cache_lowmem_prunes.type DERIVE
 graph_args --base 1024 --lower-limit 0
 graph_title Query Cache Memory
-graph_vlabel bytes
+graph_vlabel Bytes
 graph_category mysql2
 query_cache_size.draw AREA
 query_cache_size.min 0
@@ -352,7 +351,7 @@ Qcache_free_memory.label Free mem
 Qcache_free_memory.type GAUGE
 graph_args --base 1000
 graph_title Replication
-graph_vlabel FIX
+graph_vlabel Activity
 graph_category mysql2
 slave_running.draw AREA
 slave_running.min 0
@@ -376,7 +375,7 @@ conds_behind_master.label Secs Behind Master
 conds_behind_master.type GAUGE
 graph_args --base 1000
 graph_title Select types
-graph_vlabel commands / ${graph_period}
+graph_vlabel Commands per ${graph_period}
 graph_total Total
 graph_category mysql2
 Select_full_join.draw AREA
@@ -401,7 +400,7 @@ Select_scan.label Scan
 Select_scan.type DERIVE
 graph_args --base 1000
 graph_title Slow Queries
-graph_vlabel slow queries / ${graph_period}
+graph_vlabel Slow queries per ${graph_period}
 graph_category mysql2
 Slow_queries.draw LINE2
 Slow_queries.min 0
@@ -409,7 +408,7 @@ Slow_queries.label Slow queries
 Slow_queries.type DERIVE
 graph_args --base 1000
 graph_title Sorts
-graph_vlabel sorts / ${graph_period}
+graph_vlabel Sorts / ${graph_period}
 graph_category mysql2
 Sort_rows.draw LINE2
 Sort_rows.min 0
@@ -429,7 +428,7 @@ Sort_scan.label Scan
 Sort_scan.type DERIVE
 graph_args --base 1000
 graph_title Table locks
-graph_vlabel locks / ${graph_period}
+graph_vlabel locks per ${graph_period}
 graph_category mysql2
 ble_locks_immediate.draw LINE2
 ble_locks_immediate.min 0
@@ -441,7 +440,7 @@ Table_locks_waited.label Table locks waited
 Table_locks_waited.type DERIVE
 graph_args --base 1000
 graph_title Temporary objects
-graph_vlabel objects / ${graph_period}
+graph_vlabel Objects per ${graph_period}
 graph_category mysql2
 ted_tmp_disk_tables.draw LINE2
 ted_tmp_disk_tables.min 0
