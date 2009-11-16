@@ -37,7 +37,6 @@ install:
 	$(MUNIN_NODE) restart
 
 
-# Could use 'git clean -fX'
 clean:
 	rm -f test/values.out~ test/config.out~
 	find . -maxdepth 1 -name 'mysql_?*' -and -type l -exec rm {} \;
