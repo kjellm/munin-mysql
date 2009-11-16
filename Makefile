@@ -25,7 +25,7 @@ test: mysql_
 
 
 links: mysql_
-	./mysql_ suggest | while read X; do ln -sf mysql_ $$X; done
+	./mysql_ suggest | while read X; do ln -sf mysql_ mysql_$$X; done
 
 install:
 	mkdir -p $(PLUGIN_DIR)
