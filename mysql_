@@ -507,6 +507,37 @@ $graphs{network_traffic} = {
   
 #---------------------------------------------------------------------
 
+$graphs{processlist} = {
+    config => {
+        global_attrs => {
+            title  => 'Processlist states',
+            vlabel => 'State count per ${graph_period}',
+        },
+        data_source_attrs => {
+        },
+    },
+    data_sources => [
+        {name => 'State_closing_tables',       label => 'Closing tables'},
+        {name => 'State_copying_to_tmp_table', label => 'Copying to tmp table'},
+        {name => 'State_end',                  label => 'End'},
+        {name => 'State_freeing_items',        label => 'Freeing items'},
+        {name => 'State_init',                 label => 'Init'},
+        {name => 'State_locked',               label => 'Locked'},
+        {name => 'State_login',                label => 'Login'},
+        {name => 'State_preparing',            label => 'Preparing'},
+        {name => 'State_reading_from_net',     label => 'Reading from net'},
+        {name => 'State_sending_data',         label => 'Sending data'},
+        {name => 'State_sorting_result',       label => 'Sorting result'},
+        {name => 'State_statistics',           label => 'Statistics'},
+        {name => 'State_updating',             label => 'Updating'},
+        {name => 'State_writing_to_net',       label => 'Writing to net'},
+        {name => 'State_none',                 label => 'None'},
+        {name => 'State_other',                label => 'Other'},
+    ],
+};
+
+#---------------------------------------------------------------------
+
 $graphs{qcache} = {
     config => {
         global_attrs => {
@@ -890,11 +921,12 @@ sub update_data {
     
     # Set up defaults in case binlog is not enabled
     $data->{ma_binlog_size} = 0;
-    
+
     update_variables($dbh);
     update_innodb($dbh);
     update_master($dbh);
     update_slave($dbh);
+    update_process_list($dbh);
 
     $shared_memory_cache->set('data', $data);
 }
@@ -995,6 +1027,45 @@ sub update_slave {
             ? 0 : $data->{seconds_behind_master};
 
 
+}
+
+
+sub update_process_list {
+    my ($dbh) = @_;
+
+    $data->{State_closing_tables}       = 0;
+    $data->{State_copying_to_tmp_table} = 0;
+    $data->{State_end}                  = 0;
+    $data->{State_freeing_items}        = 0;
+    $data->{State_init}                 = 0;
+    $data->{State_locked}               = 0;
+    $data->{State_login}                = 0;
+    $data->{State_preparing}            = 0;
+    $data->{State_reading_from_net}     = 0;
+    $data->{State_sending_data}         = 0;
+    $data->{State_sorting_result}       = 0;
+    $data->{State_statistics}           = 0;
+    $data->{State_updating}             = 0;
+    $data->{State_writing_to_net}       = 0;
+    $data->{State_none}                 = 0;
+    $data->{State_other}                = 0;
+
+    my $sth = $dbh->prepare('SHOW PROCESSLIST');
+    $sth->execute();
+    while (my $row = $sth->fetchrow_hashref()) {
+        my $state = $row->{state};
+        if (! defined $state) {
+            $state = 'NULL';
+        }
+        elsif ($state eq '') {
+            $state = 'none';
+        }
+        $state = lc $state;
+        $state =~ tr/ /_/;
+        my $state_key = exists($data->{"State_$state"}) ? "State_$state" : 'State_other';
+        $data->{$state_key}++;
+    }
+    $sth->finish();
 }
 
 
