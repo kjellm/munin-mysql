@@ -102,3 +102,4 @@ Table_locks_waited.value 1012946
 ted_tmp_disk_tables.value 2
 Created_tmp_tables.value 1800
 Created_tmp_files.value 29
+Uptime_days.value 3

@@ -111,6 +111,7 @@ use Math::BigInt; # Used to append "=> lib 'GMP'" here, but GMP caused
                   # segfault on some occasions. Removed as I don't
                   # think the tiny performance boost is worth the
                   # debugging effort.
+use POSIX qw(floor);
 
 my $has_cache;
 
@@ -697,6 +698,23 @@ $graphs{tmp_tables} = {
     ],
 };
 
+#---------------------------------------------------------------------
+
+$graphs{uptime} = {
+    config => {
+        global_attrs => {
+            title  => 'Uptime',
+            vlabel => 'Uptime in days',
+        },
+        data_source_attrs => {
+            draw  => 'AREA',
+        },
+    },
+    data_sources => [
+        {name => 'Uptime_days', label => 'Uptime'},
+    ],
+};
+
 
 #---------------------------------------------------------------------
 #  M A I N
@@ -957,6 +975,9 @@ sub update_variables {
         }
         $sth->finish();
     }
+
+    my $seconds_in_a_day = 86400;
+    $data->{Uptime_days} = floor($data->{Uptime} / $seconds_in_a_day);
 }
 
 

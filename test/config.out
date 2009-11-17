@@ -522,3 +522,11 @@ Created_tmp_files.draw LINE2
 Created_tmp_files.min 0
 Created_tmp_files.label Temp files
 Created_tmp_files.type DERIVE
+graph_args --base 1000
+graph_title Uptime
+graph_vlabel Uptime in days
+graph_category mysql2
+Uptime_days.draw AREA
+Uptime_days.min 0
+Uptime_days.label Uptime
+Uptime_days.type DERIVE
