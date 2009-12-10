@@ -119,15 +119,15 @@ ib_bpool_size.colour ffd660
 ib_bpool_size.min 0
 ib_bpool_size.label Buffer pool size
 ib_bpool_size.type GAUGE
-ib_bpool_free.draw LINE2
-ib_bpool_free.min 0
-ib_bpool_free.label Free pages
-ib_bpool_free.type GAUGE
 ib_bpool_dbpages.draw AREA
 ib_bpool_dbpages.colour cdcfc4
 ib_bpool_dbpages.min 0
 ib_bpool_dbpages.label Database pages
 ib_bpool_dbpages.type GAUGE
+ib_bpool_free.draw LINE2
+ib_bpool_free.min 0
+ib_bpool_free.label Free pages
+ib_bpool_free.type GAUGE
 ib_bpool_modpages.draw LINE2
 ib_bpool_modpages.min 0
 ib_bpool_modpages.label Modified pages

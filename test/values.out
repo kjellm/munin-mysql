@@ -22,8 +22,8 @@ Open_files.value 157
 Open_tables.value 42
 Opened_tables.value 119
 ib_bpool_size.value 851968
-ib_bpool_free.value 775719
 ib_bpool_dbpages.value 74532
+ib_bpool_free.value 775719
 ib_bpool_modpages.value 22831
 ib_bpool_read.value 94
 ib_bpool_created.value 74438
