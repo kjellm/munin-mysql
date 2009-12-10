@@ -711,6 +711,7 @@ $graphs{uptime} = {
         },
         data_source_attrs => {
             draw  => 'AREA',
+            type  => 'GAUGE',
         },
     },
     data_sources => [

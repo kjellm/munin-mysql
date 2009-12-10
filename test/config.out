@@ -529,4 +529,4 @@ graph_category mysql2
 Uptime_days.draw AREA
 Uptime_days.min 0
 Uptime_days.label Uptime
-Uptime_days.type DERIVE
+Uptime_days.type GAUGE
