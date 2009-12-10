@@ -29,7 +29,8 @@ links: mysql_
 
 install:
 	mkdir -p $(PLUGIN_DIR)
-	install mysql_ $(PLUGIN_DIR)
+	./server-status-variable-descriptions > mysql_~
+	install mysql_~ $(PLUGIN_DIR)/mysql_
 	install mysql_.conf $(CONFIG_DIR)/plugin-conf.d
 	./mysql_ suggest | while read X; do \
           ln -sf $(PLUGIN_DIR)/mysql_ $(CONFIG_DIR)/plugins/mysql_$$X; \

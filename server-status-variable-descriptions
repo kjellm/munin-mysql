@@ -1,0 +1,99 @@
+#!/usr/bin/perl
+
+use warnings;
+use strict;
+
+use LWP::Simple;
+use Readonly;
+
+Readonly my $URL => 
+    'http://dev.mysql.com/doc/refman/5.1/en/server-status-variables.html';
+
+
+my %variable_info = ();
+
+
+sub main {
+    build_status_variable_info();
+
+    open my $fh, '<', 'mysql_';
+    while (my $line = <$fh>) {
+        if ($line !~ /@@\w+@@/) {
+            print $line;
+            next;
+        }
+
+        $line =~ s/@@(\w+)@@/$variable_info{$1}/e;
+        print $line;
+    }
+    
+    return 0;
+}
+
+
+sub build_status_variable_info {
+    my $content = get($URL)
+        or die "Failed to get $URL";
+    
+    for (;;) {
+        $content =~ m{
+            <a[^>]+></a>\s*
+            <a \s+ href="[^#]+([^"]+)">
+              <[^>]+>([^<]+)</[^>]+>\s*
+            </a>\s*
+          </p>\s*
+          <p>\s*
+            (.*?)
+          </p>
+        }gsmx or last;
+        handle_section($2, $URL.$1, $3);
+    }
+
+
+}
+
+
+sub handle_section {
+    my ($variable, $url, $paragraph) = @_;
+
+    $paragraph   = remove_markup_and_unwanted_whitespace($paragraph);
+    my $sentence = get_first_sentence($paragraph);
+    $url =~ s/#/%23/g; # Did not work :(
+    my $info     = "$sentence <$url>";
+    $info =~ s/'/\\'/g;
+    #print "$variable - $info\n\n";
+
+    $variable_info{$variable} = $info;
+}
+
+
+sub remove_markup_and_unwanted_whitespace {
+    my ($text) = @_;
+
+    $text =~ s{</?[^>]+>}{}gxms;
+    $text =~ s{\s+}{ }gxms;
+    
+    return $text;
+}
+
+
+sub get_first_sentence {
+    my ($text) = @_;
+
+    return substr $text, 0, index($text, '. ')+1;
+}
+
+exit main() unless caller;
+
+1;
+__END__
+
+
+=head1 NAME
+
+server-status-variable-descriptions - FIX
+
+=head1 SYNOPSIS
+
+FIX
+
