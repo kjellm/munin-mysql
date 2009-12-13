@@ -409,6 +409,8 @@ $graphs{innodb_log} = {
 
 #---------------------------------------------------------------------
 
+# FIX The Innodb_rows_* variables are not defined in MySQL 4.1
+
 $graphs{innodb_rows} = {
     config => {
         global_attrs => {
