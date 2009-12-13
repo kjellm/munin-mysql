@@ -978,7 +978,7 @@ sub update_data {
 sub update_variables {
     my ($dbh) = @_;
     my @queries = (
-        'SHOW /*!50000 GLOBAL */ STATUS',
+        'SHOW /*!50000 GLOBAL*/ STATUS',
         'SHOW GLOBAL VARIABLES',
     );
 
