@@ -113,7 +113,16 @@ use Math::BigInt; # Used to append "=> lib 'GMP'" here, but GMP caused
                   # debugging effort.
 use POSIX qw(floor);
 
+
+#
+# Global hash holding the data collected from mysql.
+#
+our $data; # Was 'my'. Changed to 'our' to facilitate testing.
+
 my $has_cache;
+my $instance;
+my $shared_memory_cache;
+
 
 BEGIN {
     eval 'require Cache::SharedMemoryCache';
@@ -130,22 +139,6 @@ my %config = (
     'user'       => $ENV{'mysqluser'}       || 'root',
     'password'   => $ENV{'mysqlpassword'}   || '',
 );
-
-
-#---------------------------------------------------------------------
-#  C A C H E
-#---------------------------------------------------------------------
-
-my %cache_options = ( 
-    'namespace'          => 'munin_mysql',
-    'default_expires_in' => 60,
-);
-
-my $shared_memory_cache;
-if ($has_cache) {
-    $shared_memory_cache = Cache::SharedMemoryCache->new(\%cache_options)
-        or die("Couldn't instantiate SharedMemoryCache");
-}
 
 
 #---------------------------------------------------------------------
@@ -725,14 +718,11 @@ $graphs{uptime} = {
 #---------------------------------------------------------------------
 
 
-#
-# Global hash holding the data collected from mysql.
-#
-our $data; # Was 'my'. Changed to 'our' to facilitate testing.
-
-
 sub main {
-    my $graph = substr(basename($0), length('mysql_'));
+    my $graph = basename($0);
+    # remove prefix and instance number from command name
+    $graph =~ s/^mysql_([0-9]+_)?//;
+
     my $command = $ARGV[0] || 'show';
 
     my %command_map = (
@@ -747,7 +737,13 @@ sub main {
 
     die "Missing dependency Cache::Cache"
         unless $has_cache || $command eq 'autoconf';
-    
+
+    build_instance();
+
+    if ($has_cache) {
+        build_shared_memory_cache();
+    }
+
     return $command_map{$command}->($graph);
 }
 
@@ -856,7 +852,7 @@ sub config {
     while (my ($k, $v) = each %conf) {
         print "graph_$k $v\n";
     }
-    print "graph_category mysql2\n";
+    print "graph_category mysql2$instance\n";
 
     my $i = 0;
     for my $ds (@{$graph->{data_sources}}) {
@@ -912,6 +908,28 @@ sub show {
 #---------------------------------------------------------------------
 #  U T I L I T Y   S U B S
 #---------------------------------------------------------------------
+
+
+sub build_instance {
+    $instance = basename($0);
+    if($instance =~ /^mysql_([0-9]+)_/) {
+        $instance = "-$1";
+    }
+    else {
+        $instance = "";
+    }
+}
+
+
+sub build_shared_memory_cache {
+    my %cache_options = ( 
+        'namespace'          => "munin_mysql$instance",
+        'default_expires_in' => 60,
+    );
+    
+    $shared_memory_cache = Cache::SharedMemoryCache->new(\%cache_options)
+        or die("Couldn't instantiate SharedMemoryCache");
+}
 
 
 sub db_connect {
