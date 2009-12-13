@@ -6,7 +6,8 @@ mysql_ - Munin plugin to display misc MySQL server status
 
 =head1 APPLICABLE SYSTEMS
 
-Any MySQL platform, tested by the author on MySQL 5.1.29 and 5.0.51
+Should work on most MySQL platforms, tested by the author on MySQL
+versions 5.1.41, 5.0.87, and 4.1.22.
 
 =head1 CONFIGURATION
 
@@ -975,7 +976,7 @@ sub update_data {
 sub update_variables {
     my ($dbh) = @_;
     my @queries = (
-        'SHOW GLOBAL STATUS',
+        'SHOW /*!50000 GLOBAL */ STATUS',
         'SHOW GLOBAL VARIABLES',
     );
 
@@ -1028,16 +1029,10 @@ sub update_innodb {
 sub update_master {
     my ($dbh) = @_;
 
+    return if $data->{log_bin} eq 'OFF';
+
     my $sth = $dbh->prepare('SHOW MASTER LOGS');
-    eval {
-        $sth->execute();
-    };
-    if ($@) {
-        # SHOW MASTER LOGS failed becuase binlog is not enabled
-        return if $@ =~ /You are not using binary logging/;
-        die $@;
-    }
-        
+    $sth->execute();
     while (my $row = $sth->fetch) {
         $data->{ma_binlog_size} += $row->[1];
     }
