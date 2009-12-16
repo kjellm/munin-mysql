@@ -105,7 +105,7 @@ $results1 = {
         [qw(status)],
         { status => $INNODB_STATUS},
     ],
-    'SHOW GLOBAL STATUS' => [
+    'SHOW /*!50000 GLOBAL*/ STATUS' => [
         [qw(variable_name value)],
         {variable_name => 'Aborted_clients',                   value => 30},
         {variable_name => 'Aborted_connects',                  value => 0},
