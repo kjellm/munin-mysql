@@ -6,8 +6,7 @@ mysql_ - Munin plugin to display misc MySQL server status
 
 =head1 APPLICABLE SYSTEMS
 
-Should work on most MySQL platforms, tested by the author on MySQL
-versions 5.1.41, 5.0.87, and 4.1.22.
+Any MySQL platform, tested by the author on MySQL 5.1.29 and 5.0.51
 
 =head1 CONFIGURATION
 
@@ -33,12 +32,6 @@ Non-default example:
     env.mysqluser root
     env.mysqlpassword geheim
 
-
-=head2 Multiple instances
-
-This plugin can monitor many instances of MySQL. See
-L<http://github.com/kjellm/munin-mysql/issues#issue/22> for a hint on
-how this can be configured.
 
 =head1 DEPENDENCIES
 
@@ -120,16 +113,7 @@ use Math::BigInt; # Used to append "=> lib 'GMP'" here, but GMP caused
                   # debugging effort.
 use POSIX qw(floor);
 
-
-#
-# Global hash holding the data collected from mysql.
-#
-our $data; # Was 'my'. Changed to 'our' to facilitate testing.
-
 my $has_cache;
-my $instance;
-my $shared_memory_cache;
-
 
 BEGIN {
     eval 'require Cache::SharedMemoryCache';
@@ -146,6 +130,22 @@ my %config = (
     'user'       => $ENV{'mysqluser'}       || 'root',
     'password'   => $ENV{'mysqlpassword'}   || '',
 );
+
+
+#---------------------------------------------------------------------
+#  C A C H E
+#---------------------------------------------------------------------
+
+my %cache_options = ( 
+    'namespace'          => 'munin_mysql',
+    'default_expires_in' => 60,
+);
+
+my $shared_memory_cache;
+if ($has_cache) {
+    $shared_memory_cache = Cache::SharedMemoryCache->new(\%cache_options)
+        or die("Couldn't instantiate SharedMemoryCache");
+}
 
 
 #---------------------------------------------------------------------
@@ -199,8 +199,10 @@ $graphs{bin_relay_log} = {
         },
     },
     data_sources => [
-        {name => 'Binlog_cache_disk_use', label => 'Binlog Cache Disk Use'},
-        {name => 'Binlog_cache_use',      label => 'Binlog Cache Use'},
+        {name => 'Binlog_cache_disk_use', label => 'Binlog Cache Disk Use',
+                                          info  => 'The number of transactions that used the temporary binary log cache but that exceeded the value of binlog_cache_size and used a temporary file to store statements from the transaction.'},
+        {name => 'Binlog_cache_use',      label => 'Binlog Cache Use',
+                                          info  => 'The number of transactions that used the temporary binary log cache.'},
         {name => 'ma_binlog_size',        label => 'Binary Log Space'},
         {name => 'relay_log_space',       label => 'Relay Log Space'},
     ],
@@ -218,15 +220,16 @@ $graphs{commands} = {
         data_source_attrs => {},
     },
     data_sources => [
-        {name => 'Com_delete',         label => 'Delete'},
-        {name => 'Com_insert',         label => 'Insert'},
-        {name => 'Com_insert_select',  label => 'Insert select'},
-        {name => 'Com_load',           label => 'Load Data'},
-        {name => 'Com_replace',        label => 'Replace'},
-        {name => 'Com_replace_select', label => 'Replace select'},
-        {name => 'Com_select',         label => 'Select'},
-        {name => 'Com_update',         label => 'Update'},
-        {name => 'Com_update_multi',   label => 'Update multi'},
+        {name => 'Com_delete',         label => 'Delete',
+                                       info  => 'The Com_xxx  statement counter variables indicate the number of times each xxx statement has been executed.'},
+        {name => 'Com_insert',         label => 'Insert',
+        {name => 'Com_insert_select',  label => 'Insert select',
+        {name => 'Com_load',           label => 'Load Data',
+        {name => 'Com_replace',        label => 'Replace',
+        {name => 'Com_replace_select', label => 'Replace select',
+        {name => 'Com_select',         label => 'Select',
+        {name => 'Com_update',         label => 'Update',
+        {name => 'Com_update_multi',   label => 'Update multi',
     ],
 };
 
@@ -246,16 +249,22 @@ $graphs{connections} = {
         {name => 'max_connections',      label  => 'Max connections', 
                                          type   => 'GAUGE',
                                          draw   => 'AREA',
-                                         colour => 'cdcfc4'},
+                                         colour => 'cdcfc4',
+                                         info   => 'The number of simultaneous client connections allowed.'},
         {name => 'Max_used_connections', label  => 'Max used',
                                          type   => 'GAUGE',
                                          draw   => 'AREA',
-                                         colour => 'ffd660'},
-        {name => 'Aborted_clients',      label => 'Aborted clients'},
-        {name => 'Aborted_connects',     label => 'Aborted connects'},
-        {name => 'Threads_connected',    label => 'Threads connected',
-                                         type  => 'GAUGE'},
-        {name => 'Connections',          label => 'New connections'},
+                                         colour => 'ffd660',
+                                         info   => 'The maximum number of connections that have been in use simultaneously since the server started.'},
+        {name => 'Aborted_clients',      label  => 'Aborted clients',
+                                         info   => 'The number of connections that were aborted because the client died without closing the connection properly.'},
+        {name => 'Aborted_connects',     label  => 'Aborted connects',
+                                         info   => 'The number of failed attempts to connect to the MySQL server.'},
+        {name => 'Threads_connected',    label  => 'Threads connected',
+                                         type   => 'GAUGE',
+                                         info   => 'The number of currently open connections.'},
+        {name => 'Connections',          label  => 'New connections',
+                                         info   => 'The number of connection attempts (successful or not) to the MySQL server.'},
     ],
 };
 
@@ -275,11 +284,15 @@ $graphs{files_tables} = {
     data_sources => [
         {name => 'table_open_cache', label  => 'Table cache',
                                      draw   => 'AREA',
-                                     colour => 'cdcfc4'},
-        {name => 'Open_files',       label => 'Open files'},
-        {name => 'Open_tables',      label => 'Open tables'},
-        {name => 'Opened_tables',    label => 'Opened tables',
-                                     type  => 'DERIVE'},
+                                     colour => 'cdcfc4',
+                                     info   => 'The number of open tables for all threads.'},
+        {name => 'Open_files',       label  => 'Open files',
+                                     info   => 'The number of files that are open.'},
+        {name => 'Open_tables',      label  => 'Open tables',
+                                     info   => 'The number of tables that are open.'},
+        {name => 'Opened_tables',    label  => 'Opened tables',
+                                     type   => 'GAUGE',
+                                     info   => 'The number of tables that have been opened.'},
     ],
 };
 
@@ -407,15 +420,14 @@ $graphs{innodb_log} = {
         {name => 'innodb_log_buffer_size', label  => 'Buffer Size',
                                            type   => 'GAUGE',
                                            draw   => 'AREA',
-                                           colour => 'fafd9e'},
+                                           colour => 'fafd9e',
+                                           info   => 'The size in bytes of the buffer that InnoDB  uses to write to the log files on disk.'},
         {name => 'ib_log_flush',           label => 'KB Flushed'},
         {name => 'ib_log_written',         label => 'KB Written'},
     ],
 };
 
 #---------------------------------------------------------------------
-
-# FIX The Innodb_rows_* variables are not defined in MySQL 4.1
 
 $graphs{innodb_rows} = {
     config => {
@@ -427,10 +439,14 @@ $graphs{innodb_rows} = {
         data_source_attrs => {},
     },
     data_sources => [
-        {name => 'Innodb_rows_deleted',  label => 'Deletes'},
-        {name => 'Innodb_rows_inserted', label => 'Inserts'},
-        {name => 'Innodb_rows_read',     label => 'Reads'},
-        {name => 'Innodb_rows_updated',  label => 'Updates'},
+        {name => 'Innodb_rows_deleted',  label => 'Deletes',
+                                         info  => 'The number of rows deleted from InnoDB tables.'},
+        {name => 'Innodb_rows_inserted', label => 'Inserts',
+                                         info  => 'The number of rows inserted into InnoDB tables.'},
+        {name => 'Innodb_rows_read',     label => 'Reads',
+                                         info  => 'The number of rows read from InnoDB tables.'},
+        {name => 'Innodb_rows_updated',  label => 'Updates',
+                                         info  => 'The number of rows updated in InnoDB tables.'},
     ],
 };
 
@@ -483,10 +499,14 @@ $graphs{myisam_indexes} = {
         },
     },
     data_sources => [
-        {name => 'Key_read_requests',  label => 'Key read requests'},
-        {name => 'Key_reads',          label => 'Key reads'}, 
-        {name => 'Key_write_requests', label => 'Key write requests'},
-        {name => 'Key_writes',         label => 'Key writes'},
+        {name => 'Key_read_requests',  label => 'Key read requests',
+                                       info  => 'The number of requests to read a key block from the cache.'},
+        {name => 'Key_reads',          label => 'Key reads', 
+                                       info  => 'The number of physical reads of a key block from disk.'},
+        {name => 'Key_write_requests', label => 'Key write requests',
+                                       info  => 'The number of requests to write a key block to the cache.'},
+        {name => 'Key_writes',         label => 'Key writes',
+                                       info  => 'The number of physical writes of a key block to disk.'},
    ],
 };
   
@@ -505,9 +525,11 @@ $graphs{network_traffic} = {
     },
     data_sources => [
         {name => 'Bytes_received', label => 'Bytes transfered',
-                                   graph => 'no'},
+                                   graph => 'no',
+                                   info  => 'The number of bytes received from all clients.'},
         {name => 'Bytes_sent',     label    => 'Bytes transfered',
-                                   negative => 'Bytes_received'},
+                                   negative => 'Bytes_received',
+                                   info     => 'The number of bytes sent to all clients.'},
     ],
 };
   
@@ -555,11 +577,16 @@ $graphs{qcache} = {
         },
     },
     data_sources => [
-        {name => 'Qcache_queries_in_cache', label => 'Queries in cache'},
-        {name => 'Qcache_hits',             label => 'Cache hits'},
-        {name => 'Qcache_inserts',          label => 'Inserts'},
-        {name => 'Qcache_not_cached',       label => 'Not cached'},
-        {name => 'Qcache_lowmem_prunes',    label => 'Low-memory prunes'},
+        {name => 'Qcache_queries_in_cache', label => 'Queries in cache'
+                                            info  => 'The number of queries registered in the query cache.'},
+        {name => 'Qcache_hits',             label => 'Cache hits',
+                                            info  => 'The number of query cache hits.'},
+        {name => 'Qcache_inserts',          label => 'Inserts',
+                                            info  => 'The number of queries added to the query cache.'},
+        {name => 'Qcache_not_cached',       label => 'Not cached',
+                                            info  => 'The number of noncached queries (not cacheable, or not cached due to the query_cache_type setting).'},
+        {name => 'Qcache_lowmem_prunes',    label => 'Low-memory prunes',
+                                            info  => 'The number of queries that were deleted from the query cache because of low memory.'},
     ],
 };
 
@@ -578,8 +605,10 @@ $graphs{qcache_mem} = {
         },
     },
     data_sources => [
-        {name => 'query_cache_size',    label => 'Cache size'},
-        {name => 'Qcache_free_memory',  label => 'Free mem'},
+        {name => 'query_cache_size',    label => 'Cache size',
+                                        info  => 'The amount of memory allocated for caching query results.'},
+        {name => 'Qcache_free_memory',  label => 'Free mem',
+                                        info  => 'The amount of free memory for the query cache.'},
     ],
 };
 
@@ -602,10 +631,13 @@ $graphs{replication} = {
         {name => 'slave_stopped',              label => 'Slave Stopped',
                                                type  => 'GAUGE',
                                                draw  => 'AREA'},
-        {name => 'Slave_retried_transactions', label => 'Retried Transactions'},
-        {name => 'Slave_open_temp_tables',     label => 'Open Temp Tables'},
+        {name => 'Slave_retried_transactions', label => 'Retried Transactions',
+                                               info  => 'The total number of times since startup that the replication slave SQL thread has retried transactions.'},
+        {name => 'Slave_open_temp_tables',     label => 'Open Temp Tables',
+                                               info  => 'The number of temporary tables that the slave SQL thread currently has open.'},
         {name => 'seconds_behind_master',      label => 'Secs Behind Master', 
-                                               type  => 'GAUGE'},
+                                               type  => 'GAUGE',
+                                               info  => 'http://dev.mysql.com/doc/refman/5.1/en/show-slave-status.html'},
     ],
 };
 
@@ -621,11 +653,16 @@ $graphs{select_types} = {
         data_source_attrs => {},
     },
     data_sources => [
-        {name => 'Select_full_join',       label => 'Full join'},
-        {name => 'Select_full_range_join', label => 'Full range'},
-        {name => 'Select_range',           label => 'Range'},
-        {name => 'Select_range_check',     label => 'Range check'},
-        {name => 'Select_scan',            label => 'Scan'},
+        {name => 'Select_full_join',       label => 'Full join',
+                                           info  => 'The number of joins that perform table scans because they do not use indexes.'},
+        {name => 'Select_full_range_join', label => 'Full range',
+                                           info  => 'The number of joins that used a range search on a reference table.'},
+        {name => 'Select_range',           label => 'Range',
+                                           info  => 'The number of joins that used ranges on the first table.'},
+        {name => 'Select_range_check',     label => 'Range check',
+                                           info  => 'The number of joins without keys that check for key usage after each row.'},
+        {name => 'Select_scan',            label => 'Scan',
+                                           info  => 'The number of joins that did a full scan of the first table.'},
     ],
 };
 
@@ -642,7 +679,8 @@ $graphs{slow} = {
         },
     },
     data_sources => [
-        {name => 'Slow_queries', label => 'Slow queries'},
+        {name => 'Slow_queries', label => 'Slow queries',
+                                 info  => 'The number of queries that have taken more than long_query_time seconds.'},
     ],
 };
 
@@ -659,10 +697,14 @@ $graphs{sorts} = {
         },
     },
     data_sources => [
-        {name => 'Sort_rows',         label => 'Rows sorted'},
-        {name => 'Sort_range',        label => 'Range'},
-        {name => 'Sort_merge_passes', label => 'Merge passes'},
-        {name => 'Sort_scan',         label => 'Scan'},
+        {name => 'Sort_rows',         label => 'Rows sorted',
+                                      info  => 'The number of sorted rows.'},
+        {name => 'Sort_range',        label => 'Range',
+                                      info  => 'The number of sorts that were done using ranges.'},
+        {name => 'Sort_merge_passes', label => 'Merge passes',
+                                      info  => 'The number of merge passes that the sort algorithm has had to do.'},
+        {name => 'Sort_scan',         label => 'Scan',
+                                      info  => 'The number of sorts that were done by scanning the table.'},
     ],
 };
 
@@ -679,8 +721,10 @@ $graphs{table_locks} = {
         },
     },
     data_sources => [
-        {name => 'Table_locks_immediate', label => 'Table locks immed'},
-        {name => 'Table_locks_waited',    label => 'Table locks waited'},
+        {name => 'Table_locks_immediate', label => 'Table locks immed',
+                                          info  => 'The number of times that a request for a table lock could be granted immediately.'},
+        {name => 'Table_locks_waited',    label => 'Table locks waited',
+                                          info  => 'The number of times that a request for a table lock could not be granted immediately and a wait was needed.'},
     ],
 };
 
@@ -697,9 +741,12 @@ $graphs{tmp_tables} = {
         },
     },
     data_sources => [
-        {name => 'Created_tmp_disk_tables', label => 'Temp disk tables'},
-        {name => 'Created_tmp_tables',      label => 'Temp tables'},
-        {name => 'Created_tmp_files',       label => 'Temp files'},
+        {name => 'Created_tmp_disk_tables', label => 'Temp disk tables',
+                                            info  => 'The number of internal on-disk temporary tables created by the server while executing statements.'},
+        {name => 'Created_tmp_tables',      label => 'Temp tables',
+                                            info  => 'The number of internal temporary tables created by the server while executing statements.'},
+        {name => 'Created_tmp_files',       label => 'Temp files',
+                                            info  => 'How many temporary files mysqld has created.'},
     ],
 };
 
@@ -727,11 +774,14 @@ $graphs{uptime} = {
 #---------------------------------------------------------------------
 
 
-sub main {
-    my $graph = basename($0);
-    # remove prefix and instance number from command name
-    $graph =~ s/^mysql_([0-9]+_)?//;
+#
+# Global hash holding the data collected from mysql.
+#
+our $data; # Was 'my'. Changed to 'our' to facilitate testing.
 
+
+sub main {
+    my $graph = substr(basename($0), length('mysql_'));
     my $command = $ARGV[0] || 'show';
 
     my %command_map = (
@@ -746,13 +796,7 @@ sub main {
 
     die "Missing dependency Cache::Cache"
         unless $has_cache || $command eq 'autoconf';
-
-    build_instance();
-
-    if ($has_cache) {
-        build_shared_memory_cache();
-    }
-
+    
     return $command_map{$command}->($graph);
 }
 
@@ -861,7 +905,7 @@ sub config {
     while (my ($k, $v) = each %conf) {
         print "graph_$k $v\n";
     }
-    print "graph_category mysql2$instance\n";
+    print "graph_category mysql2\n";
 
     my $i = 0;
     for my $ds (@{$graph->{data_sources}}) {
@@ -919,28 +963,6 @@ sub show {
 #---------------------------------------------------------------------
 
 
-sub build_instance {
-    $instance = basename($0);
-    if($instance =~ /^mysql_([0-9]+)_/) {
-        $instance = "-$1";
-    }
-    else {
-        $instance = "";
-    }
-}
-
-
-sub build_shared_memory_cache {
-    my %cache_options = ( 
-        'namespace'          => "munin_mysql$instance",
-        'default_expires_in' => 60,
-    );
-    
-    $shared_memory_cache = Cache::SharedMemoryCache->new(\%cache_options)
-        or die("Couldn't instantiate SharedMemoryCache");
-}
-
-
 sub db_connect {
     my $dsn = "$config{dsn};mysql_connect_timeout=5";
 
@@ -984,7 +1006,7 @@ sub update_data {
 sub update_variables {
     my ($dbh) = @_;
     my @queries = (
-        'SHOW /*!50000 GLOBAL*/ STATUS',
+        'SHOW GLOBAL STATUS',
         'SHOW GLOBAL VARIABLES',
     );
 
@@ -1037,10 +1059,16 @@ sub update_innodb {
 sub update_master {
     my ($dbh) = @_;
 
-    return if $data->{log_bin} eq 'OFF';
-
     my $sth = $dbh->prepare('SHOW MASTER LOGS');
-    $sth->execute();
+    eval {
+        $sth->execute();
+    };
+    if ($@) {
+        # SHOW MASTER LOGS failed becuase binlog is not enabled
+        return if $@ =~ /You are not using binary logging/;
+        die $@;
+    }
+        
     while (my $row = $sth->fetch) {
         $data->{ma_binlog_size} += $row->[1];
     }
