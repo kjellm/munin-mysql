@@ -12,10 +12,12 @@ Binlog_cache_use.draw LINE1
 Binlog_cache_use.min 0
 Binlog_cache_use.label Binlog Cache Use
 Binlog_cache_use.type DERIVE
+ma_binlog_size.info The total combined size of all existing binary logs.
 ma_binlog_size.draw LINE1
 ma_binlog_size.min 0
 ma_binlog_size.label Binary Log Space
 ma_binlog_size.type DERIVE
+relay_log_space.info The total combined size of all existing relay logs.
 relay_log_space.draw LINE1
 relay_log_space.min 0
 relay_log_space.label Relay Log Space
@@ -127,20 +129,24 @@ graph_args --base 1024
 graph_title InnoDB Buffer Pool
 graph_vlabel Pages
 graph_category mysql2
+ib_bpool_size.info The total number of buffer pool pages
 ib_bpool_size.draw AREA
 ib_bpool_size.colour ffd660
 ib_bpool_size.min 0
 ib_bpool_size.label Buffer pool size
 ib_bpool_size.type GAUGE
+ib_bpool_dbpages.info The number of used buffer pool pages
 ib_bpool_dbpages.draw AREA
 ib_bpool_dbpages.colour cdcfc4
 ib_bpool_dbpages.min 0
 ib_bpool_dbpages.label Database pages
 ib_bpool_dbpages.type GAUGE
+ib_bpool_free.info The number of unused buffer pool pages
 ib_bpool_free.draw LINE2
 ib_bpool_free.min 0
 ib_bpool_free.label Free pages
 ib_bpool_free.type GAUGE
+ib_bpool_modpages.info The number of "dirty" database pages
 ib_bpool_modpages.draw LINE2
 ib_bpool_modpages.min 0
 ib_bpool_modpages.label Modified pages
@@ -150,14 +156,17 @@ graph_title InnoDB Buffer Pool Activity
 graph_vlabel Activity per ${graph_period}
 graph_total Total
 graph_category mysql2
+ib_bpool_read.info Pages read into the buffer pool from disk.
 ib_bpool_read.draw LINE2
 ib_bpool_read.min 0
 ib_bpool_read.label Pages read
 ib_bpool_read.type DERIVE
+ib_bpool_created.info Pages created in the buffer pool without reading the corresponding disk page.
 ib_bpool_created.draw LINE2
 ib_bpool_created.min 0
 ib_bpool_created.label Pages created
 ib_bpool_created.type DERIVE
+ib_bpool_written.info Pages written to disk from the buffer pool.
 ib_bpool_written.draw LINE2
 ib_bpool_written.min 0
 ib_bpool_written.label Pages written
@@ -166,6 +175,7 @@ graph_args --base 1000
 graph_title InnoDB Insert Buffer
 graph_vlabel Activity per ${graph_period}
 graph_category mysql2
+ib_ibuf_inserts.info These values shows statistics about how many buffer operations InnoDB has done. The ratio of merges to inserts gives a good idea of how efficient the buffer is.
 ib_ibuf_inserts.draw LINE1
 ib_ibuf_inserts.min 0
 ib_ibuf_inserts.label Inserts
@@ -182,18 +192,22 @@ graph_args --base 1000
 graph_title InnoDB IO
 graph_vlabel IO operations per ${graph_period}
 graph_category mysql2
+ib_io_read.info The number of calls to the OS read function.
 ib_io_read.draw LINE1
 ib_io_read.min 0
 ib_io_read.label File reads
 ib_io_read.type DERIVE
+ib_io_write.info The number of calls to the OS write function.
 ib_io_write.draw LINE1
 ib_io_write.min 0
 ib_io_write.label File writes
 ib_io_write.type DERIVE
+ib_io_log.info The number of calls to the OS write function that is caused by the log subsystem.
 ib_io_log.draw LINE1
 ib_io_log.min 0
 ib_io_log.label Log writes
 ib_io_log.type DERIVE
+ib_io_fsync.info The number of calls to the OS fsync function.
 ib_io_fsync.draw LINE1
 ib_io_fsync.min 0
 ib_io_fsync.label File syncs
@@ -240,10 +254,12 @@ odb_log_buffer_size.colour fafd9e
 odb_log_buffer_size.min 0
 odb_log_buffer_size.label Buffer Size
 odb_log_buffer_size.type GAUGE
+ib_log_flush.info Number of bytes flushed to the transaction log file.
 ib_log_flush.draw LINE1
 ib_log_flush.min 0
 ib_log_flush.label KB Flushed
 ib_log_flush.type DERIVE
+ib_log_written.info Number of bytes written to the transaction log buffer.
 ib_log_written.draw LINE1
 ib_log_written.min 0
 ib_log_written.label KB Written
@@ -293,6 +309,7 @@ graph_args --base 1000
 graph_title InnoDB Transactions
 graph_vlabel Transactions per ${graph_period}
 graph_category mysql2
+ib_tnx.info Number of transactions created.
 ib_tnx.draw LINE1
 ib_tnx.min 0
 ib_tnx.label Transactions created
@@ -341,66 +358,82 @@ graph_args --base 1000
 graph_title Processlist states
 graph_vlabel State count per ${graph_period}
 graph_category mysql2
+tate_closing_tables.info The thread is flushing the changed table data to disk and closing the used tables.
 tate_closing_tables.draw AREA
 tate_closing_tables.min 0
 tate_closing_tables.label Closing tables
 tate_closing_tables.type DERIVE
+opying_to_tmp_table.info The thread is processing an ALTER TABLE statement. This state occurs after the table with the new structure has been created but before rows are copied into it.
 opying_to_tmp_table.draw STACK
 opying_to_tmp_table.min 0
 opying_to_tmp_table.label Copying to tmp table
 opying_to_tmp_table.type DERIVE
+State_end.info This occurs at the end but before the cleanup of ALTER TABLE, CREATE VIEW, DELETE, INSERT, SELECT, or UPDATE statements.
 State_end.draw STACK
 State_end.min 0
 State_end.label End
 State_end.type DERIVE
+State_freeing_items.info The thread has executed a command. This state is usually followed by cleaning up.
 State_freeing_items.draw STACK
 State_freeing_items.min 0
 State_freeing_items.label Freeing items
 State_freeing_items.type DERIVE
+State_init.info This occurs before the initialization of ALTER TABLE, DELETE, INSERT, SELECT, or UPDATE statements.
 State_init.draw STACK
 State_init.min 0
 State_init.label Init
 State_init.type DERIVE
+State_locked.info The query is locked by another query.
 State_locked.draw STACK
 State_locked.min 0
 State_locked.label Locked
 State_locked.type DERIVE
+State_login.info The initial state for a connection thread until the client has been authenticated successfully.
 State_login.draw STACK
 State_login.min 0
 State_login.label Login
 State_login.type DERIVE
+State_preparing.info This state occurs during query optimization.
 State_preparing.draw STACK
 State_preparing.min 0
 State_preparing.label Preparing
 State_preparing.type DERIVE
+te_reading_from_net.info The server is reading a packet from the network.
 te_reading_from_net.draw STACK
 te_reading_from_net.min 0
 te_reading_from_net.label Reading from net
 te_reading_from_net.type DERIVE
+State_sending_data.info The thread is processing rows for a SELECT statement and also is sending data to the client.
 State_sending_data.draw STACK
 State_sending_data.min 0
 State_sending_data.label Sending data
 State_sending_data.type DERIVE
+tate_sorting_result.info For a SELECT statement, this is similar to Creating sort index, but for nontemporary tables.
 tate_sorting_result.draw STACK
 tate_sorting_result.min 0
 tate_sorting_result.label Sorting result
 tate_sorting_result.type DERIVE
+State_statistics.info The server is calculating statistics to develop a query execution plan. If a thread is in this state for a long time, the server is probably disk-bound performing other work.
 State_statistics.draw STACK
 State_statistics.min 0
 State_statistics.label Statistics
 State_statistics.type DERIVE
+State_updating.info The thread is searching for rows to update and is updating them.
 State_updating.draw STACK
 State_updating.min 0
 State_updating.label Updating
 State_updating.type DERIVE
+tate_writing_to_net.info The server is writing a packet to the network.
 tate_writing_to_net.draw STACK
 tate_writing_to_net.min 0
 tate_writing_to_net.label Writing to net
 tate_writing_to_net.type DERIVE
+State_none.info 
 State_none.draw STACK
 State_none.min 0
 State_none.label None
 State_none.type DERIVE
+State_other.info 
 State_other.draw STACK
 State_other.min 0
 State_other.label Other
@@ -575,6 +608,7 @@ graph_args --base 1000
 graph_title Uptime
 graph_vlabel Uptime in days
 graph_category mysql2
+Uptime_days.info Server uptime in days.
 Uptime_days.draw AREA
 Uptime_days.min 0
 Uptime_days.label Uptime
