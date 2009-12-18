@@ -6,7 +6,8 @@ mysql_ - Munin plugin to display misc MySQL server status
 
 =head1 APPLICABLE SYSTEMS
 
-Any MySQL platform, tested by the author on MySQL 5.1.29 and 5.0.51
+Should work on most MySQL platforms, tested by the author on MySQL
+versions 5.1.41, 5.0.87, and 4.1.22.
 
 =head1 CONFIGURATION
 
@@ -32,6 +33,12 @@ Non-default example:
     env.mysqluser root
     env.mysqlpassword geheim
 
+
+=head2 Multiple instances
+
+This plugin can monitor many instances of MySQL. See 
+L<http://github.com/kjellm/munin-mysql/issues#issue/22> for a hint on
+how this can be configured.
 
 =head1 DEPENDENCIES
 
@@ -113,7 +120,16 @@ use Math::BigInt; # Used to append "=> lib 'GMP'" here, but GMP caused
                   # debugging effort.
 use POSIX qw(floor);
 
+#
+# Global hash holding the data collected from mysql.
+#
+our $data; # Was 'my'. Changed to 'our' to facilitate testing.
+
+
 my $has_cache;
+my $instance;
+my $shared_memory_cache;
+
 
 BEGIN {
     eval 'require Cache::SharedMemoryCache';
@@ -130,22 +146,6 @@ my %config = (
     'user'       => $ENV{'mysqluser'}       || 'root',
     'password'   => $ENV{'mysqlpassword'}   || '',
 );
-
-
-#---------------------------------------------------------------------
-#  C A C H E
-#---------------------------------------------------------------------
-
-my %cache_options = ( 
-    'namespace'          => 'munin_mysql',
-    'default_expires_in' => 60,
-);
-
-my $shared_memory_cache;
-if ($has_cache) {
-    $shared_memory_cache = Cache::SharedMemoryCache->new(\%cache_options)
-        or die("Couldn't instantiate SharedMemoryCache");
-}
 
 
 #---------------------------------------------------------------------
@@ -222,14 +222,14 @@ $graphs{commands} = {
     data_sources => [
         {name => 'Com_delete',         label => 'Delete',
                                        info  => 'The Com_xxx  statement counter variables indicate the number of times each xxx statement has been executed.'},
-        {name => 'Com_insert',         label => 'Insert',
-        {name => 'Com_insert_select',  label => 'Insert select',
-        {name => 'Com_load',           label => 'Load Data',
-        {name => 'Com_replace',        label => 'Replace',
-        {name => 'Com_replace_select', label => 'Replace select',
-        {name => 'Com_select',         label => 'Select',
-        {name => 'Com_update',         label => 'Update',
-        {name => 'Com_update_multi',   label => 'Update multi',
+        {name => 'Com_insert',         label => 'Insert'},
+        {name => 'Com_insert_select',  label => 'Insert select'},
+        {name => 'Com_load',           label => 'Load Data'},
+        {name => 'Com_replace',        label => 'Replace'},
+        {name => 'Com_replace_select', label => 'Replace select'},
+        {name => 'Com_select',         label => 'Select'},
+        {name => 'Com_update',         label => 'Update'},
+        {name => 'Com_update_multi',   label => 'Update multi'},
     ],
 };
 
@@ -577,7 +577,7 @@ $graphs{qcache} = {
         },
     },
     data_sources => [
-        {name => 'Qcache_queries_in_cache', label => 'Queries in cache'
+        {name => 'Qcache_queries_in_cache', label => 'Queries in cache',
                                             info  => 'The number of queries registered in the query cache.'},
         {name => 'Qcache_hits',             label => 'Cache hits',
                                             info  => 'The number of query cache hits.'},
@@ -774,14 +774,11 @@ $graphs{uptime} = {
 #---------------------------------------------------------------------
 
 
-#
-# Global hash holding the data collected from mysql.
-#
-our $data; # Was 'my'. Changed to 'our' to facilitate testing.
-
-
 sub main {
-    my $graph = substr(basename($0), length('mysql_'));
+    my $graph = basename($0);
+    # remove prefix and instance number from command name
+    $graph =~ s/^mysql_([0-9]+_)?//;
+
     my $command = $ARGV[0] || 'show';
 
     my %command_map = (
@@ -797,6 +794,12 @@ sub main {
     die "Missing dependency Cache::Cache"
         unless $has_cache || $command eq 'autoconf';
     
+    build_instance();
+
+    if ($has_cache) {
+        build_shared_memory_cache();
+    }
+
     return $command_map{$command}->($graph);
 }
 
@@ -905,7 +908,7 @@ sub config {
     while (my ($k, $v) = each %conf) {
         print "graph_$k $v\n";
     }
-    print "graph_category mysql2\n";
+    print "graph_category mysql2$instance\n";
 
     my $i = 0;
     for my $ds (@{$graph->{data_sources}}) {
@@ -924,11 +927,11 @@ sub config {
             if ($k eq 'draw' && $v eq 'AREASTACK') {
                 printf("%s.%s %s\n", 
                        clean_fieldname($ds->{name}), $k, ($i ? 'STACK' : 'AREA'));
+                $i++;
             }
             else {
                 printf("%s.%s %s\n", clean_fieldname($ds->{name}), $k, $v);
             }
-            $i++;
         }
     }
 
@@ -961,6 +964,28 @@ sub show {
 #---------------------------------------------------------------------
 #  U T I L I T Y   S U B S
 #---------------------------------------------------------------------
+
+
+sub build_instance {
+    $instance = basename($0);
+    if($instance =~ /^mysql_([0-9]+)_/) {
+        $instance = "-$1";
+    }
+    else {
+        $instance = "";
+    }
+}
+
+
+sub build_shared_memory_cache {
+    my %cache_options = ( 
+        'namespace'          => "munin_mysql$instance",
+        'default_expires_in' => 60,
+    );
+
+    $shared_memory_cache = Cache::SharedMemoryCache->new(\%cache_options)
+        or die("Couldn't instantiate SharedMemoryCache");
+}
 
 
 sub db_connect {
@@ -1006,7 +1031,7 @@ sub update_data {
 sub update_variables {
     my ($dbh) = @_;
     my @queries = (
-        'SHOW GLOBAL STATUS',
+        'SHOW /*!50000 GLOBAL*/ STATUS',
         'SHOW GLOBAL VARIABLES',
     );
 
@@ -1059,16 +1084,10 @@ sub update_innodb {
 sub update_master {
     my ($dbh) = @_;
 
+    return if $data->{log_bin} eq 'OFF';
+
     my $sth = $dbh->prepare('SHOW MASTER LOGS');
-    eval {
-        $sth->execute();
-    };
-    if ($@) {
-        # SHOW MASTER LOGS failed becuase binlog is not enabled
-        return if $@ =~ /You are not using binary logging/;
-        die $@;
-    }
-        
+    $sth->execute();
     while (my $row = $sth->fetch) {
         $data->{ma_binlog_size} += $row->[1];
     }

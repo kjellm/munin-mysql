@@ -2,10 +2,12 @@ graph_args --base 1000
 graph_title Binary/Relay Logs
 graph_vlabel Log activity
 graph_category mysql2
+nlog_cache_disk_use.info The number of transactions that used the temporary binary log cache but that exceeded the value of binlog_cache_size and used a temporary file to store statements from the transaction.
 nlog_cache_disk_use.draw LINE1
 nlog_cache_disk_use.min 0
 nlog_cache_disk_use.label Binlog Cache Disk Use
 nlog_cache_disk_use.type DERIVE
+Binlog_cache_use.info The number of transactions that used the temporary binary log cache.
 Binlog_cache_use.draw LINE1
 Binlog_cache_use.min 0
 Binlog_cache_use.label Binlog Cache Use
@@ -23,6 +25,7 @@ graph_title Command Counters
 graph_vlabel Commands per ${graph_period}
 graph_total Questions
 graph_category mysql2
+Com_delete.info The Com_xxx  statement counter variables indicate the number of times each xxx statement has been executed.
 Com_delete.draw AREA
 Com_delete.min 0
 Com_delete.label Delete
@@ -63,28 +66,34 @@ graph_args --base 1000
 graph_title Connections
 graph_vlabel Connections per ${graph_period}
 graph_category mysql2
+max_connections.info The number of simultaneous client connections allowed.
 max_connections.draw AREA
 max_connections.colour cdcfc4
 max_connections.min 0
 max_connections.label Max connections
 max_connections.type GAUGE
+ax_used_connections.info The maximum number of connections that have been in use simultaneously since the server started.
 ax_used_connections.draw AREA
 ax_used_connections.colour ffd660
 ax_used_connections.min 0
 ax_used_connections.label Max used
 ax_used_connections.type GAUGE
+Aborted_clients.info The number of connections that were aborted because the client died without closing the connection properly.
 Aborted_clients.draw LINE1
 Aborted_clients.min 0
 Aborted_clients.label Aborted clients
 Aborted_clients.type DERIVE
+Aborted_connects.info The number of failed attempts to connect to the MySQL server.
 Aborted_connects.draw LINE1
 Aborted_connects.min 0
 Aborted_connects.label Aborted connects
 Aborted_connects.type DERIVE
+Threads_connected.info The number of currently open connections.
 Threads_connected.draw LINE1
 Threads_connected.min 0
 Threads_connected.label Threads connected
 Threads_connected.type GAUGE
+Connections.info The number of connection attempts (successful or not) to the MySQL server.
 Connections.draw LINE1
 Connections.min 0
 Connections.label New connections
@@ -93,19 +102,23 @@ graph_args --base 1000
 graph_title Files and tables
 graph_vlabel Tables
 graph_category mysql2
+table_open_cache.info The number of open tables for all threads.
 table_open_cache.draw AREA
 table_open_cache.colour cdcfc4
 table_open_cache.min 0
 table_open_cache.label Table cache
 table_open_cache.type GAUGE
+Open_files.info The number of files that are open.
 Open_files.draw LINE1
 Open_files.min 0
 Open_files.label Open files
 Open_files.type GAUGE
+Open_tables.info The number of tables that are open.
 Open_tables.draw LINE1
 Open_tables.min 0
 Open_tables.label Open tables
 Open_tables.type GAUGE
+Opened_tables.info The number of tables that have been opened.
 Opened_tables.draw LINE1
 Opened_tables.min 0
 Opened_tables.label Opened tables
@@ -221,6 +234,7 @@ graph_args --base 1000
 graph_title InnoDB Log
 graph_vlabel Log activity per ${graph_period}
 graph_category mysql2
+odb_log_buffer_size.info The size in bytes of the buffer that InnoDB  uses to write to the log files on disk.
 odb_log_buffer_size.draw AREA
 odb_log_buffer_size.colour fafd9e
 odb_log_buffer_size.min 0
@@ -239,18 +253,22 @@ graph_title InnoDB Row Operations
 graph_vlabel Operations per ${graph_period}
 graph_total Total
 graph_category mysql2
+Innodb_rows_deleted.info The number of rows deleted from InnoDB tables.
 Innodb_rows_deleted.draw AREA
 Innodb_rows_deleted.min 0
 Innodb_rows_deleted.label Deletes
 Innodb_rows_deleted.type DERIVE
+nnodb_rows_inserted.info The number of rows inserted into InnoDB tables.
 nnodb_rows_inserted.draw STACK
 nnodb_rows_inserted.min 0
 nnodb_rows_inserted.label Inserts
 nnodb_rows_inserted.type DERIVE
+Innodb_rows_read.info The number of rows read from InnoDB tables.
 Innodb_rows_read.draw STACK
 Innodb_rows_read.min 0
 Innodb_rows_read.label Reads
 Innodb_rows_read.type DERIVE
+Innodb_rows_updated.info The number of rows updated in InnoDB tables.
 Innodb_rows_updated.draw STACK
 Innodb_rows_updated.min 0
 Innodb_rows_updated.label Updates
@@ -283,18 +301,22 @@ graph_args --base 1000
 graph_title MyISAM Indexes
 graph_vlabel Requests per ${graph_period}
 graph_category mysql2
+Key_read_requests.info The number of requests to read a key block from the cache.
 Key_read_requests.draw LINE2
 Key_read_requests.min 0
 Key_read_requests.label Key read requests
 Key_read_requests.type DERIVE
+Key_reads.info The number of physical reads of a key block from disk.
 Key_reads.draw LINE2
 Key_reads.min 0
 Key_reads.label Key reads
 Key_reads.type DERIVE
+Key_write_requests.info The number of requests to write a key block to the cache.
 Key_write_requests.draw LINE2
 Key_write_requests.min 0
 Key_write_requests.label Key write requests
 Key_write_requests.type DERIVE
+Key_writes.info The number of physical writes of a key block to disk.
 Key_writes.draw LINE2
 Key_writes.min 0
 Key_writes.label Key writes
@@ -303,11 +325,13 @@ graph_args --base 1024
 graph_title Network Traffic
 graph_vlabel Bytes received (-) / sent (+) per ${graph_period}
 graph_category mysql2
+Bytes_received.info The number of bytes received from all clients.
 Bytes_received.draw LINE2
 Bytes_received.min 0
 Bytes_received.label Bytes transfered
 Bytes_received.type DERIVE
 Bytes_received.graph no
+Bytes_sent.info The number of bytes sent to all clients.
 Bytes_sent.draw LINE2
 Bytes_sent.min 0
 Bytes_sent.label Bytes transfered
@@ -385,22 +409,27 @@ graph_args --base 1000
 graph_title Query Cache
 graph_vlabel Commands per ${graph_period}
 graph_category mysql2
+he_queries_in_cache.info The number of queries registered in the query cache.
 he_queries_in_cache.draw LINE1
 he_queries_in_cache.min 0
 he_queries_in_cache.label Queries in cache
 he_queries_in_cache.type DERIVE
+Qcache_hits.info The number of query cache hits.
 Qcache_hits.draw LINE1
 Qcache_hits.min 0
 Qcache_hits.label Cache hits
 Qcache_hits.type DERIVE
+Qcache_inserts.info The number of queries added to the query cache.
 Qcache_inserts.draw LINE1
 Qcache_inserts.min 0
 Qcache_inserts.label Inserts
 Qcache_inserts.type DERIVE
+Qcache_not_cached.info The number of noncached queries (not cacheable, or not cached due to the query_cache_type setting).
 Qcache_not_cached.draw LINE1
 Qcache_not_cached.min 0
 Qcache_not_cached.label Not cached
 Qcache_not_cached.type DERIVE
+cache_lowmem_prunes.info The number of queries that were deleted from the query cache because of low memory.
 cache_lowmem_prunes.draw LINE1
 cache_lowmem_prunes.min 0
 cache_lowmem_prunes.label Low-memory prunes
@@ -409,10 +438,12 @@ graph_args --base 1024 --lower-limit 0
 graph_title Query Cache Memory
 graph_vlabel Bytes
 graph_category mysql2
+query_cache_size.info The amount of memory allocated for caching query results.
 query_cache_size.draw AREA
 query_cache_size.min 0
 query_cache_size.label Cache size
 query_cache_size.type GAUGE
+Qcache_free_memory.info The amount of free memory for the query cache.
 Qcache_free_memory.draw AREA
 Qcache_free_memory.min 0
 Qcache_free_memory.label Free mem
@@ -429,14 +460,17 @@ slave_stopped.draw AREA
 slave_stopped.min 0
 slave_stopped.label Slave Stopped
 slave_stopped.type GAUGE
+etried_transactions.info The total number of times since startup that the replication slave SQL thread has retried transactions.
 etried_transactions.draw LINE1
 etried_transactions.min 0
 etried_transactions.label Retried Transactions
 etried_transactions.type DERIVE
+ve_open_temp_tables.info The number of temporary tables that the slave SQL thread currently has open.
 ve_open_temp_tables.draw LINE1
 ve_open_temp_tables.min 0
 ve_open_temp_tables.label Open Temp Tables
 ve_open_temp_tables.type DERIVE
+conds_behind_master.info http://dev.mysql.com/doc/refman/5.1/en/show-slave-status.html
 conds_behind_master.draw LINE1
 conds_behind_master.min 0
 conds_behind_master.label Secs Behind Master
@@ -446,22 +480,27 @@ graph_title Select types
 graph_vlabel Commands per ${graph_period}
 graph_total Total
 graph_category mysql2
+Select_full_join.info The number of joins that perform table scans because they do not use indexes.
 Select_full_join.draw AREA
 Select_full_join.min 0
 Select_full_join.label Full join
 Select_full_join.type DERIVE
+ect_full_range_join.info The number of joins that used a range search on a reference table.
 ect_full_range_join.draw STACK
 ect_full_range_join.min 0
 ect_full_range_join.label Full range
 ect_full_range_join.type DERIVE
+Select_range.info The number of joins that used ranges on the first table.
 Select_range.draw STACK
 Select_range.min 0
 Select_range.label Range
 Select_range.type DERIVE
+Select_range_check.info The number of joins without keys that check for key usage after each row.
 Select_range_check.draw STACK
 Select_range_check.min 0
 Select_range_check.label Range check
 Select_range_check.type DERIVE
+Select_scan.info The number of joins that did a full scan of the first table.
 Select_scan.draw STACK
 Select_scan.min 0
 Select_scan.label Scan
@@ -470,6 +509,7 @@ graph_args --base 1000
 graph_title Slow Queries
 graph_vlabel Slow queries per ${graph_period}
 graph_category mysql2
+Slow_queries.info The number of queries that have taken more than long_query_time seconds.
 Slow_queries.draw LINE2
 Slow_queries.min 0
 Slow_queries.label Slow queries
@@ -478,18 +518,22 @@ graph_args --base 1000
 graph_title Sorts
 graph_vlabel Sorts / ${graph_period}
 graph_category mysql2
+Sort_rows.info The number of sorted rows.
 Sort_rows.draw LINE2
 Sort_rows.min 0
 Sort_rows.label Rows sorted
 Sort_rows.type DERIVE
+Sort_range.info The number of sorts that were done using ranges.
 Sort_range.draw LINE2
 Sort_range.min 0
 Sort_range.label Range
 Sort_range.type DERIVE
+Sort_merge_passes.info The number of merge passes that the sort algorithm has had to do.
 Sort_merge_passes.draw LINE2
 Sort_merge_passes.min 0
 Sort_merge_passes.label Merge passes
 Sort_merge_passes.type DERIVE
+Sort_scan.info The number of sorts that were done by scanning the table.
 Sort_scan.draw LINE2
 Sort_scan.min 0
 Sort_scan.label Scan
@@ -498,10 +542,12 @@ graph_args --base 1000
 graph_title Table locks
 graph_vlabel locks per ${graph_period}
 graph_category mysql2
+ble_locks_immediate.info The number of times that a request for a table lock could be granted immediately.
 ble_locks_immediate.draw LINE2
 ble_locks_immediate.min 0
 ble_locks_immediate.label Table locks immed
 ble_locks_immediate.type DERIVE
+Table_locks_waited.info The number of times that a request for a table lock could not be granted immediately and a wait was needed.
 Table_locks_waited.draw LINE2
 Table_locks_waited.min 0
 Table_locks_waited.label Table locks waited
@@ -510,14 +556,17 @@ graph_args --base 1000
 graph_title Temporary objects
 graph_vlabel Objects per ${graph_period}
 graph_category mysql2
+ted_tmp_disk_tables.info The number of internal on-disk temporary tables created by the server while executing statements.
 ted_tmp_disk_tables.draw LINE2
 ted_tmp_disk_tables.min 0
 ted_tmp_disk_tables.label Temp disk tables
 ted_tmp_disk_tables.type DERIVE
+Created_tmp_tables.info The number of internal temporary tables created by the server while executing statements.
 Created_tmp_tables.draw LINE2
 Created_tmp_tables.min 0
 Created_tmp_tables.label Temp tables
 Created_tmp_tables.type DERIVE
+Created_tmp_files.info How many temporary files mysqld has created.
 Created_tmp_files.draw LINE2
 Created_tmp_files.min 0
 Created_tmp_files.label Temp files
