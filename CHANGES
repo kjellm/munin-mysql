@@ -1,3 +1,22 @@
+2010-02-02: version 0.3
+
+ - Added info to a lot of data sources
+
+ - Changed data source type for Opened_tables to DERIVE
+
+ - Support for monitoring multiple mysql instances
+
+ - Improved compatibility with MySQL 4.1
+
+ - Added graphs: uptime, processlist status
+
+ - Fixed issues with the munin protocol commands autoconf and suggest
+
+ - Fixed the "InnoDB Buffer Pool" graph config.
+
+ - Updated vlabels for consistency
+
+
 2009-10-30: version 0.2
 
  - Made the plugin more fit for inclusion by the Munin project. Note
