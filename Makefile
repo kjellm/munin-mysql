@@ -4,7 +4,9 @@ CONFIG_DIR:=/etc/munin
 PLUGIN_DIR:=/usr/local/share/munin/plugins
 MUNIN_NODE:=/etc/init.d/munin-node
 
-INSTANCES:="" # Instance numbers space separated
+# Instance numbers, space separated. Leave empty if you only want to
+# monitor one instance.
+INSTANCES:=""
 
 ### Don't edit below this line
 
