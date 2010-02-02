@@ -6,7 +6,8 @@ mysql_ - Munin plugin to display misc MySQL server status
 
 =head1 APPLICABLE SYSTEMS
 
-Any MySQL platform, tested by the author on MySQL 5.1.29 and 5.0.51
+Should work on most MySQL platforms, tested by the author on MySQL
+versions 5.1.41, 5.0.87, and 4.1.22.
 
 =head1 CONFIGURATION
 
@@ -32,6 +33,12 @@ Non-default example:
     env.mysqluser root
     env.mysqlpassword geheim
 
+
+=head2 Multiple instances
+
+This plugin can monitor many instances of MySQL. See 
+L<http://github.com/kjellm/munin-mysql/issues#issue/22> for a hint on
+how this can be configured.
 
 =head1 DEPENDENCIES
 
@@ -113,7 +120,16 @@ use Math::BigInt; # Used to append "=> lib 'GMP'" here, but GMP caused
                   # debugging effort.
 use POSIX qw(floor);
 
+#
+# Global hash holding the data collected from mysql.
+#
+our $data; # Was 'my'. Changed to 'our' to facilitate testing.
+
+
 my $has_cache;
+my $instance;
+my $shared_memory_cache;
+
 
 BEGIN {
     eval 'require Cache::SharedMemoryCache';
@@ -130,22 +146,6 @@ my %config = (
     'user'       => $ENV{'mysqluser'}       || 'root',
     'password'   => $ENV{'mysqlpassword'}   || '',
 );
-
-
-#---------------------------------------------------------------------
-#  C A C H E
-#---------------------------------------------------------------------
-
-my %cache_options = ( 
-    'namespace'          => 'munin_mysql',
-    'default_expires_in' => 60,
-);
-
-my $shared_memory_cache;
-if ($has_cache) {
-    $shared_memory_cache = Cache::SharedMemoryCache->new(\%cache_options)
-        or die("Couldn't instantiate SharedMemoryCache");
-}
 
 
 #---------------------------------------------------------------------
@@ -203,8 +203,10 @@ $graphs{bin_relay_log} = {
                                           info  => 'The number of transactions that used the temporary binary log cache but that exceeded the value of binlog_cache_size and used a temporary file to store statements from the transaction.'},
         {name => 'Binlog_cache_use',      label => 'Binlog Cache Use',
                                           info  => 'The number of transactions that used the temporary binary log cache.'},
-        {name => 'ma_binlog_size',        label => 'Binary Log Space'},
-        {name => 'relay_log_space',       label => 'Relay Log Space'},
+        {name => 'ma_binlog_size',        label => 'Binary Log Space',
+                                          info  => 'The total combined size of all existing binary logs.'},
+        {name => 'relay_log_space',       label => 'Relay Log Space',
+                                          info  => 'The total combined size of all existing relay logs.'},
     ],
 };
 
@@ -222,14 +224,14 @@ $graphs{commands} = {
     data_sources => [
         {name => 'Com_delete',         label => 'Delete',
                                        info  => 'The Com_xxx  statement counter variables indicate the number of times each xxx statement has been executed.'},
-        {name => 'Com_insert',         label => 'Insert',
-        {name => 'Com_insert_select',  label => 'Insert select',
-        {name => 'Com_load',           label => 'Load Data',
-        {name => 'Com_replace',        label => 'Replace',
-        {name => 'Com_replace_select', label => 'Replace select',
-        {name => 'Com_select',         label => 'Select',
-        {name => 'Com_update',         label => 'Update',
-        {name => 'Com_update_multi',   label => 'Update multi',
+        {name => 'Com_insert',         label => 'Insert'},
+        {name => 'Com_insert_select',  label => 'Insert select'},
+        {name => 'Com_load',           label => 'Load Data'},
+        {name => 'Com_replace',        label => 'Replace'},
+        {name => 'Com_replace_select', label => 'Replace select'},
+        {name => 'Com_select',         label => 'Select'},
+        {name => 'Com_update',         label => 'Update'},
+        {name => 'Com_update_multi',   label => 'Update multi'},
     ],
 };
 
@@ -313,12 +315,16 @@ $graphs{innodb_bpool} = {
     data_sources => [
         {name => 'ib_bpool_size',     label  => 'Buffer pool size',
                                       draw   => 'AREA',
-                                      colour => 'ffd660'},
+                                      colour => 'ffd660',
+                                      info   => 'The total number of buffer pool pages'},
         {name => 'ib_bpool_dbpages',  label  => 'Database pages',
                                       draw   => 'AREA',
-                                      colour => 'cdcfc4'},
-        {name => 'ib_bpool_free',     label => 'Free pages'},
-        {name => 'ib_bpool_modpages', label => 'Modified pages'},
+                                      colour => 'cdcfc4',
+                                      info   => 'The number of used buffer pool pages'},
+        {name => 'ib_bpool_free',     label => 'Free pages',
+                                      info  => 'The number of unused buffer pool pages'},
+        {name => 'ib_bpool_modpages', label => 'Modified pages',
+                                      info  => 'The number of "dirty" database pages'},
     ],
 };
 
@@ -336,9 +342,12 @@ $graphs{innodb_bpool_act} = {
         },
     },
     data_sources => [
-        {name => 'ib_bpool_read',    label => 'Pages read'},
-        {name => 'ib_bpool_created', label => 'Pages created'},
-        {name => 'ib_bpool_written', label => 'Pages written'},
+        {name => 'ib_bpool_read',    label => 'Pages read',
+                                     info  => 'Pages read into the buffer pool from disk.'},
+        {name => 'ib_bpool_created', label => 'Pages created',
+                                     info  => 'Pages created in the buffer pool without reading the corresponding disk page.'},
+        {name => 'ib_bpool_written', label => 'Pages written',
+                                     info  => 'Pages written to disk from the buffer pool.'},
     ],
 };
 
@@ -355,7 +364,8 @@ $graphs{innodb_insert_buf} = {
         },
     },
     data_sources => [
-        {name => 'ib_ibuf_inserts',    label => 'Inserts'},
+        {name => 'ib_ibuf_inserts',    label => 'Inserts',
+                                       info  => 'These values shows statistics about how many buffer operations InnoDB has done. The ratio of merges to inserts gives a good idea of how efficient the buffer is.'},
         {name => 'ib_ibuf_merged_rec', label => 'Merged Records'},
         {name => 'ib_ibuf_merges',     label => 'Merges'},
     ],
@@ -374,10 +384,14 @@ $graphs{innodb_io} = {
         },
     },
     data_sources => [
-        {name => 'ib_io_read',  label => 'File reads'},
-        {name => 'ib_io_write', label => 'File writes'},
-        {name => 'ib_io_log',   label => 'Log writes'},
-        {name => 'ib_io_fsync', label => 'File syncs'},
+        {name => 'ib_io_read',  label => 'File reads',
+                                info  => 'The number of calls to the OS read function.'},
+        {name => 'ib_io_write', label => 'File writes',
+                                info  => 'The number of calls to the OS write function.'},
+        {name => 'ib_io_log',   label => 'Log writes',
+                                info  => 'The number of calls to the OS write function that is caused by the log subsystem.'},
+        {name => 'ib_io_fsync', label => 'File syncs',
+                                info  => 'The number of calls to the OS fsync function.'},
     ],
 };
 
@@ -422,8 +436,10 @@ $graphs{innodb_log} = {
                                            draw   => 'AREA',
                                            colour => 'fafd9e',
                                            info   => 'The size in bytes of the buffer that InnoDB  uses to write to the log files on disk.'},
-        {name => 'ib_log_flush',           label => 'KB Flushed'},
-        {name => 'ib_log_written',         label => 'KB Written'},
+        {name => 'ib_log_flush',           label => 'KB Flushed',
+                                           info  => 'Number of bytes flushed to the transaction log file.'},
+        {name => 'ib_log_written',         label => 'KB Written',
+                                           info  => 'Number of bytes written to the transaction log buffer.'},
     ],
 };
 
@@ -482,7 +498,8 @@ $graphs{innodb_tnx} = {
         },
     },
     data_sources => [
-        {name => 'ib_tnx', label => 'Transactions created'},
+        {name => 'ib_tnx', label => 'Transactions created',
+                           info  => 'Number of transactions created.'},
     ],
 };
 
@@ -545,22 +562,38 @@ $graphs{processlist} = {
         },
     },
     data_sources => [
-        {name => 'State_closing_tables',       label => 'Closing tables'},
-        {name => 'State_copying_to_tmp_table', label => 'Copying to tmp table'},
-        {name => 'State_end',                  label => 'End'},
-        {name => 'State_freeing_items',        label => 'Freeing items'},
-        {name => 'State_init',                 label => 'Init'},
-        {name => 'State_locked',               label => 'Locked'},
-        {name => 'State_login',                label => 'Login'},
-        {name => 'State_preparing',            label => 'Preparing'},
-        {name => 'State_reading_from_net',     label => 'Reading from net'},
-        {name => 'State_sending_data',         label => 'Sending data'},
-        {name => 'State_sorting_result',       label => 'Sorting result'},
-        {name => 'State_statistics',           label => 'Statistics'},
-        {name => 'State_updating',             label => 'Updating'},
-        {name => 'State_writing_to_net',       label => 'Writing to net'},
-        {name => 'State_none',                 label => 'None'},
-        {name => 'State_other',                label => 'Other'},
+        {name => 'State_closing_tables',       label => 'Closing tables',
+                                               info  => 'The thread is flushing the changed table data to disk and closing the used tables.'},
+        {name => 'State_copying_to_tmp_table', label => 'Copying to tmp table',
+                                               info  => 'The thread is processing an ALTER TABLE statement. This state occurs after the table with the new structure has been created but before rows are copied into it.'},
+        {name => 'State_end',                  label => 'End',
+                                               info  => 'This occurs at the end but before the cleanup of ALTER TABLE, CREATE VIEW, DELETE, INSERT, SELECT, or UPDATE statements.'},
+        {name => 'State_freeing_items',        label => 'Freeing items',
+                                               info  => 'The thread has executed a command. This state is usually followed by cleaning up.'},
+        {name => 'State_init',                 label => 'Init',
+                                               info  => 'This occurs before the initialization of ALTER TABLE, DELETE, INSERT, SELECT, or UPDATE statements.'},
+        {name => 'State_locked',               label => 'Locked',
+                                               info  => 'The query is locked by another query.'},
+        {name => 'State_login',                label => 'Login',
+                                               info  => 'The initial state for a connection thread until the client has been authenticated successfully.'},
+        {name => 'State_preparing',            label => 'Preparing',
+                                               info  => 'This state occurs during query optimization.'},
+        {name => 'State_reading_from_net',     label => 'Reading from net',
+                                               info  => 'The server is reading a packet from the network.'},
+        {name => 'State_sending_data',         label => 'Sending data',
+                                               info  => 'The thread is processing rows for a SELECT statement and also is sending data to the client.'},
+        {name => 'State_sorting_result',       label => 'Sorting result',
+                                               info  => 'For a SELECT statement, this is similar to Creating sort index, but for nontemporary tables.'},
+        {name => 'State_statistics',           label => 'Statistics',
+                                               info  => 'The server is calculating statistics to develop a query execution plan. If a thread is in this state for a long time, the server is probably disk-bound performing other work.'},
+        {name => 'State_updating',             label => 'Updating',
+                                               info  => 'The thread is searching for rows to update and is updating them.'},
+        {name => 'State_writing_to_net',       label => 'Writing to net',
+                                               info  => 'The server is writing a packet to the network.'},
+        {name => 'State_none',                 label => 'None',
+                                               info  => ''},
+        {name => 'State_other',                label => 'Other',
+                                               info  => ''},
     ],
 };
 
@@ -577,7 +610,7 @@ $graphs{qcache} = {
         },
     },
     data_sources => [
-        {name => 'Qcache_queries_in_cache', label => 'Queries in cache'
+        {name => 'Qcache_queries_in_cache', label => 'Queries in cache',
                                             info  => 'The number of queries registered in the query cache.'},
         {name => 'Qcache_hits',             label => 'Cache hits',
                                             info  => 'The number of query cache hits.'},
@@ -764,7 +797,8 @@ $graphs{uptime} = {
         },
     },
     data_sources => [
-        {name => 'Uptime_days', label => 'Uptime'},
+        {name => 'Uptime_days', label => 'Uptime',
+                                info  => 'Server uptime in days.'},
     ],
 };
 
@@ -774,14 +808,11 @@ $graphs{uptime} = {
 #---------------------------------------------------------------------
 
 
-#
-# Global hash holding the data collected from mysql.
-#
-our $data; # Was 'my'. Changed to 'our' to facilitate testing.
-
-
 sub main {
-    my $graph = substr(basename($0), length('mysql_'));
+    my $graph = basename($0);
+    # remove prefix and instance number from command name
+    $graph =~ s/^mysql_([0-9]+_)?//;
+
     my $command = $ARGV[0] || 'show';
 
     my %command_map = (
@@ -797,6 +828,12 @@ sub main {
     die "Missing dependency Cache::Cache"
         unless $has_cache || $command eq 'autoconf';
     
+    build_instance();
+
+    if ($has_cache) {
+        build_shared_memory_cache();
+    }
+
     return $command_map{$command}->($graph);
 }
 
@@ -905,7 +942,7 @@ sub config {
     while (my ($k, $v) = each %conf) {
         print "graph_$k $v\n";
     }
-    print "graph_category mysql2\n";
+    print "graph_category mysql2$instance\n";
 
     my $i = 0;
     for my $ds (@{$graph->{data_sources}}) {
@@ -924,11 +961,11 @@ sub config {
             if ($k eq 'draw' && $v eq 'AREASTACK') {
                 printf("%s.%s %s\n", 
                        clean_fieldname($ds->{name}), $k, ($i ? 'STACK' : 'AREA'));
+                $i++;
             }
             else {
                 printf("%s.%s %s\n", clean_fieldname($ds->{name}), $k, $v);
             }
-            $i++;
         }
     }
 
@@ -961,6 +998,28 @@ sub show {
 #---------------------------------------------------------------------
 #  U T I L I T Y   S U B S
 #---------------------------------------------------------------------
+
+
+sub build_instance {
+    $instance = basename($0);
+    if($instance =~ /^mysql_([0-9]+)_/) {
+        $instance = "-$1";
+    }
+    else {
+        $instance = "";
+    }
+}
+
+
+sub build_shared_memory_cache {
+    my %cache_options = ( 
+        'namespace'          => "munin_mysql$instance",
+        'default_expires_in' => 60,
+    );
+
+    $shared_memory_cache = Cache::SharedMemoryCache->new(\%cache_options)
+        or die("Couldn't instantiate SharedMemoryCache");
+}
 
 
 sub db_connect {
@@ -1006,7 +1065,7 @@ sub update_data {
 sub update_variables {
     my ($dbh) = @_;
     my @queries = (
-        'SHOW GLOBAL STATUS',
+        'SHOW /*!50000 GLOBAL*/ STATUS',
         'SHOW GLOBAL VARIABLES',
     );
 
@@ -1059,16 +1118,10 @@ sub update_innodb {
 sub update_master {
     my ($dbh) = @_;
 
+    return if $data->{log_bin} eq 'OFF';
+
     my $sth = $dbh->prepare('SHOW MASTER LOGS');
-    eval {
-        $sth->execute();
-    };
-    if ($@) {
-        # SHOW MASTER LOGS failed becuase binlog is not enabled
-        return if $@ =~ /You are not using binary logging/;
-        die $@;
-    }
-        
+    $sth->execute();
     while (my $row = $sth->fetch) {
         $data->{ma_binlog_size} += $row->[1];
     }
