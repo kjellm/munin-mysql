@@ -34,8 +34,10 @@ links: mysql_
 install:
 	mkdir -p $(PLUGIN_DIR)
 	install mysql_ $(PLUGIN_DIR)
-	install mysql_.conf $(CONFIG_DIR)/plugin-conf.d
 
+	if [ ! -e $(CONFIG_DIR)/plugin-conf.d/mysql_.conf ]; then \
+          install mysql_.conf $(CONFIG_DIR)/plugin-conf.d; \
+        fi; \
 	if [ $(INSTANCES) = "" ]; then \
 	  ./mysql_ suggest | while read X; do \
             ln -sf $(PLUGIN_DIR)/mysql_ $(CONFIG_DIR)/plugins/mysql_$$X; \
