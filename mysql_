@@ -293,7 +293,7 @@ $graphs{files_tables} = {
         {name => 'Open_tables',      label  => 'Open tables',
                                      info   => 'The number of tables that are open.'},
         {name => 'Opened_tables',    label  => 'Opened tables',
-                                     type   => 'GAUGE',
+                                     type   => 'DERIVE',
                                      info   => 'The number of tables that have been opened.'},
     ],
 };
