@@ -351,6 +351,56 @@ $graphs{innodb_bpool_act} = {
     ],
 };
 
+
+#---------------------------------------------------------------------
+
+$graphs{innodb_checkpoint_age} = {
+    config => {
+        global_attrs => {
+            title  => 'InnoDB Checkpoint Age',
+            vlabel => 'Bytes',
+            args   => '--base 1024 -l 0',
+        },
+        data_source_attrs => {
+            draw  => 'AREA',
+            type  => 'GAUGE',
+        },
+    },
+    data_sources => [
+        {name => 'innodb_log_size',  label  => 'InnoDB log size',
+                                     colour => 'cdcfc4',
+                                     info   => 'The size in bytes of InnoDB log space.',
+                                     value  => sub {
+                                         $_[0]->{innodb_log_file_size} * $_[0]->{innodb_log_files_in_group}
+                                     }},
+        {name => 'ib_log_chkpt_age', label  => 'Uncheckpointed bytes',
+                                     colour => 'ffd660',
+                                     info   => 'The age in bytes of InnoDB checkpoint.',
+                                     value  => sub {
+                                         $_[0]->{ib_log_flush} - $_[0]->{ib_log_checkpoint}
+                                     }},
+    ],
+};
+
+#---------------------------------------------------------------------
+
+$graphs{innodb_history_length} = {
+    config => {
+        global_attrs => {
+            title  => 'InnoDB History List',
+            vlabel => 'Transactions',
+        },
+        data_source_attrs => {
+            draw  => 'LINE1',
+            type  => 'GAUGE',
+        },
+    },
+    data_sources => [
+        {name => 'ib_tnx_hist', label => 'History list length',
+                                info  => 'Number of unpurged transactions in undo space.'},
+    ],
+};
+
 #---------------------------------------------------------------------
 
 $graphs{innodb_insert_buf} = {
@@ -824,11 +874,11 @@ $graphs{uptime} = {
         },
     },
     data_sources => [
-        {name => 'Uptime_days',             label => 'Uptime',
-                                            info  => 'Server uptime in days.',
-                                            value => sub {
-                                                floor($_[0]->{Uptime} / 86400); # seconds in a day
-                                            },
+        {name => 'Uptime_days', label => 'Uptime',
+                                info  => 'Server uptime in days.',
+                                value => sub {
+                                    floor($_[0]->{Uptime} / 86400); # seconds in a day
+                                },
         },
     ],
 };
@@ -1456,6 +1506,10 @@ sub parse_log {
             };
             m/\GLog flushed up to\s+$innodb_bigint_rx\n/gc && do {
                 $data->{ib_log_flush} = innodb_bigint($1, $2);
+                return 1;
+            };
+            m/\GLast checkpoint at\s+$innodb_bigint_rx\n/gc && do {
+                $data->{ib_log_checkpoint} = innodb_bigint($1, $2);
                 return 1;
             };
             m/\G(\d+) log i\/o's done.*\n/gc && do {

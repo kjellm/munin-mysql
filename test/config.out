@@ -171,6 +171,31 @@ ib_bpool_written.draw LINE2
 ib_bpool_written.min 0
 ib_bpool_written.label Pages written
 ib_bpool_written.type DERIVE
+graph_args --base 1024 -l 0
+graph_title InnoDB Checkpoint Age
+graph_vlabel Bytes
+graph_category mysql2
+innodb_log_size.info The size in bytes of InnoDB log space.
+innodb_log_size.draw AREA
+innodb_log_size.colour cdcfc4
+innodb_log_size.min 0
+innodb_log_size.type GAUGE
+innodb_log_size.label InnoDB log size
+ib_log_chkpt_age.info The age in bytes of InnoDB checkpoint.
+ib_log_chkpt_age.draw AREA
+ib_log_chkpt_age.colour ffd660
+ib_log_chkpt_age.min 0
+ib_log_chkpt_age.label Uncheckpointed bytes
+ib_log_chkpt_age.type GAUGE
+graph_args --base 1000
+graph_title InnoDB History List
+graph_vlabel Transactions
+graph_category mysql2
+ib_tnx_hist.info Number of unpurged transactions in undo space.
+ib_tnx_hist.draw LINE1
+ib_tnx_hist.min 0
+ib_tnx_hist.label History list length
+ib_tnx_hist.type GAUGE
 graph_args --base 1000
 graph_title InnoDB Insert Buffer
 graph_vlabel Activity per ${graph_period}

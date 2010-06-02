@@ -4,6 +4,8 @@ mysql_connections
 mysql_files_tables
 mysql_innodb_bpool
 mysql_innodb_bpool_act
+mysql_innodb_checkpoint_age
+mysql_innodb_history_length
 mysql_innodb_insert_buf
 mysql_innodb_insert_buf_size
 mysql_innodb_io

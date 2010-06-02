@@ -28,6 +28,9 @@ ib_bpool_modpages.value 22831
 ib_bpool_read.value 94
 ib_bpool_created.value 74438
 ib_bpool_written.value 1330485
+innodb_log_size.value 2147483648
+ib_log_chkpt_age.value 127716864
+ib_tnx_hist.value 117
 ib_ibuf_inserts.value 0
 ib_ibuf_merged_rec.value 0
 ib_ibuf_merges.value 0
