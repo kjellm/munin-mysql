@@ -5,6 +5,7 @@ mysql_files_tables
 mysql_innodb_bpool
 mysql_innodb_bpool_act
 mysql_innodb_insert_buf
+mysql_innodb_insert_buf_size
 mysql_innodb_io
 mysql_innodb_io_pend
 mysql_innodb_log

@@ -31,6 +31,9 @@ ib_bpool_written.value 1330485
 ib_ibuf_inserts.value 0
 ib_ibuf_merged_rec.value 0
 ib_ibuf_merges.value 0
+ib_ibuf_seg_size.value 94
+ib_ibuf_size.value 1
+ib_ibuf_free_len.value 92
 ib_io_read.value 66
 ib_io_write.value 17209444
 ib_io_log.value 16813492

@@ -373,6 +373,33 @@ $graphs{innodb_insert_buf} = {
   
 #---------------------------------------------------------------------
 
+$graphs{innodb_insert_buf_size} = {
+    config => {
+        global_attrs => {
+            title  => 'InnoDB Insert Buffer Size',
+            vlabel => 'Pages',
+            args   => '-l 0',
+        },
+        data_source_attrs => {
+            draw  => 'LINE1',
+            type  => 'GAUGE',
+        },
+    },
+    data_sources => [
+        {name => 'ib_ibuf_seg_size', label  => 'Segment size',
+                                     draw   => 'AREA',
+                                     colour => 'cdcfc4',
+                                     info   => 'Allocated size of insert buffer segment.'},
+        {name => 'ib_ibuf_size',     label  => 'Unmerged pages',
+                                     colour => '0022ff',
+                                     info   => 'Number of pages containing unmerged records.'},
+        {name => 'ib_ibuf_free_len', label  => 'Free pages',
+                                     info   => 'Number of pages which are free.'},
+    ],
+};
+
+#---------------------------------------------------------------------
+
 $graphs{innodb_io} = {
     config => {
         global_attrs => {
@@ -1400,6 +1427,12 @@ sub parse_insert_buffer_and_adaptive_hash_index {
                 $data->{ib_ibuf_inserts}    = $1;
                 $data->{ib_ibuf_merged_rec} = $2;
                 $data->{ib_ibuf_merges}     = $3;
+                return 1;
+            };
+            m/\GIbuf: size (\d+), free list len (\d+), seg size (\d+),\n/gc && do {
+                $data->{ib_ibuf_size}     = $1;
+                $data->{ib_ibuf_free_len} = $2;
+                $data->{ib_ibuf_seg_size} = $3;
                 return 1;
             };
         }
