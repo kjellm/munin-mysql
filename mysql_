@@ -852,7 +852,6 @@ $graphs{threads} = {
     data_sources => [
         {name => 'thread_cache_size', label => 'Thread cache size',
                                       draw  => 'AREA',
-                                      type  => 'DERIVE',
                                       info  => 'How many threads the server should cache for reuse'},
         {name => 'Threads_created',   label => 'Threads created',
                                       draw  => 'LINE1',
