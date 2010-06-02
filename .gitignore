@@ -24,6 +24,7 @@ mysql_select_types
 mysql_slow
 mysql_sorts
 mysql_table_locks
+mysql_threads
 mysql_tmp_tables
 mysql_uptime
 test/config.out~

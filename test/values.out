@@ -105,6 +105,8 @@ Sort_merge_passes.value 0
 Sort_scan.value 0
 ble_locks_immediate.value 155740409
 Table_locks_waited.value 1012946
+thread_cache_size.value 0
+Threads_created.value 979
 ted_tmp_disk_tables.value 2
 Created_tmp_tables.value 1800
 Created_tmp_files.value 29

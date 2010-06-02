@@ -840,6 +840,29 @@ $graphs{table_locks} = {
 
 #---------------------------------------------------------------------
 
+$graphs{threads} = {
+    config => {
+        global_attrs => {
+            title  => 'Threads',
+            vlabel => 'Threads created per ${graph_period}',
+        },
+        data_source_attrs => {
+        },
+    },
+    data_sources => [
+        {name => 'thread_cache_size', label => 'Thread cache size',
+                                      draw  => 'AREA',
+                                      type  => 'DERIVE',
+                                      info  => 'How many threads the server should cache for reuse'},
+        {name => 'Threads_created',   label => 'Threads created',
+                                      draw  => 'LINE1',
+                                      type  => 'GAUGE',
+                                      info  => 'The number of threads created to handle connections'},
+    ],
+};
+
+#---------------------------------------------------------------------
+
 $graphs{tmp_tables} = {
     config => {
         global_attrs => {
