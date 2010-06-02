@@ -824,8 +824,12 @@ $graphs{uptime} = {
         },
     },
     data_sources => [
-        {name => 'Uptime_days', label => 'Uptime',
-                                info  => 'Server uptime in days.'},
+        {name => 'Uptime_days',             label => 'Uptime',
+                                            info  => 'Server uptime in days.',
+                                            value => sub {
+                                                floor($_[0]->{Uptime} / 86400); # seconds in a day
+                                            },
+        },
     ],
 };
 
@@ -983,6 +987,9 @@ sub config {
             # understood by munin.
             next if ($k eq 'name');
 
+            # 'value' should not be used in config context.
+            next if ($k eq 'value');
+
             # AREASTACK is part of munin as of version 1.3.3 (not
             # released yet). Until then ...
             if ($k eq 'draw' && $v eq 'AREASTACK') {
@@ -1013,8 +1020,11 @@ sub show {
         if $graph_name =~ /innodb_/ && $data->{_innodb_disabled};
 
     for my $ds (@{$graph->{data_sources}}) {
-        printf "%s.value %s\n", 
-            clean_fieldname($ds->{name}), $data->{$ds->{name}};
+        my $value = exists $ds->{value} 
+            ? $ds->{value}($data) 
+                : $data->{$ds->{name}};
+
+        printf "%s.value %s\n", clean_fieldname($ds->{name}), $value;
     }
 
     return 0;
@@ -1114,9 +1124,6 @@ sub update_variables {
         }
         $sth->finish();
     }
-
-    my $seconds_in_a_day = 86400;
-    $data->{Uptime_days} = floor($data->{Uptime} / $seconds_in_a_day);
 }
 
 
