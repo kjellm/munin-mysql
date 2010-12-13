@@ -1174,7 +1174,7 @@ sub update_data {
 sub update_variables {
     my ($dbh) = @_;
     my @queries = (
-        'SHOW /*!40003 GLOBAL*/ STATUS',
+        'SHOW /*!50002 GLOBAL*/ STATUS',
         'SHOW /*!40003 GLOBAL*/ VARIABLES',
     );
 
