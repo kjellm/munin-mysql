@@ -105,7 +105,7 @@ $results1 = {
         [qw(status)],
         { status => $INNODB_STATUS},
     ],
-    'SHOW /*!50000 GLOBAL*/ STATUS' => [
+    'SHOW /*!50002 GLOBAL*/ STATUS' => [
         [qw(variable_name value)],
         {variable_name => 'Aborted_clients',                   value => 30},
         {variable_name => 'Aborted_connects',                  value => 0},
@@ -375,7 +375,7 @@ $results1 = {
         {variable_name => 'Uptime',                            value => 267027},
         {variable_name => 'Uptime_since_flush_status',         value => 267027},
     ],
-    'SHOW GLOBAL VARIABLES' => [
+    'SHOW /*!40003 GLOBAL*/ VARIABLES' => [
         [qw(variable_name value)],
         {variable_name => 'auto_increment_increment',        value => '1'},
         {variable_name => 'auto_increment_offset',           value => '1'},
