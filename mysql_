@@ -1144,42 +1144,6 @@ sub suggest {
 sub config {
     my $graph_name = shift;
 
-    # In MySQL 5.1 (and probably erlier versions as well) status
-    # variables are unique when looking at the last 19 characters.
-    #
-    #   SELECT RIGHT(variable_name, 19), COUNT(*) 
-    #     FROM information_schema.global_status
-    #    GROUP BY RIGHT(variable_name, 19)
-    #   HAVING COUNT(*) > 1;
-    #
-    #   Empty set (0.06 sec)
-    #
-    # There is one duplicate when looking at server variables
-    #   
-    #   SELECT RIGHT(variable_name, 19), COUNT(*) 
-    #     FROM information_schema.global_variables
-    #    GROUP BY RIGHT(variable_name, 19)
-    #   HAVING COUNT(*) > 1;
-    #   
-    #   +--------------------------+----------+
-    #   | RIGHT(variable_name, 19) | COUNT(*) |
-    #   +--------------------------+----------+
-    #   | OW_PRIORITY_UPDATES      |        2 |
-    #   +--------------------------+----------+
-    #   1 row in set (0.05 sec)
-    #
-    #   show global variables like '%OW_PRIORITY_UPDATES';
-    #   
-    #   +--------------------------+-------+
-    #   | Variable_name            | Value |
-    #   +--------------------------+-------+
-    #   | low_priority_updates     | OFF   |
-    #   | sql_low_priority_updates | OFF   |
-    #   +--------------------------+-------+
-    #   2 rows in set (0.00 sec)
-    #   
-    # Not a problem since we don't graph these
-        
     die 'Unknown graph ' . ($graph_name ? $graph_name : '')
         unless $graphs{$graph_name};
 
