@@ -1298,7 +1298,7 @@ sub update_slave {
     $sth->finish();
 
     # undef when slave is stopped, or when MySQL fails to calculate
-    # the lag (which happens depresingly often). (mk-heartbeat fixes
+    # the lag (which happens depressingly often). (mk-heartbeat fixes
     # this problem.)
     $data->{seconds_behind_master} ||= 0;
 
