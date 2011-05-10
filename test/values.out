@@ -22,6 +22,15 @@ table_open_cache.value 1800
 Open_files.value 157
 Open_tables.value 42
 Opened_tables.value 119
+Handler_write.value 553921509
+Handler_update.value 0
+Handler_delete.value 0
+Handler_read_first.value 31
+Handler_read_key.value 195957566
+Handler_read_next.value 6337002
+Handler_read_prev.value 0
+Handler_read_rnd.value 0
+ndler_read_rnd_next.value 477487
 ib_bpool_size.value 851968
 ib_bpool_dbpages.value 74532
 ib_bpool_free.value 775719
@@ -64,6 +73,9 @@ Key_read_requests.value 5384999053
 Key_reads.value 153
 Key_write_requests.value 1130475636
 Key_writes.value 49967776
+key_buffer_size.value 4194304000
+Key_buf_unused.value 0
+Key_buf_unflush.value 0
 Bytes_received.value 162368494765
 Bytes_sent.value 188482967756
 tate_closing_tables.value 0

@@ -140,6 +140,63 @@ Opened_tables.draw LINE1
 Opened_tables.min 0
 Opened_tables.label Opened tables
 Opened_tables.type DERIVE
+graph_args --base 1000 --no-gridfit --slope-mode
+graph_title Handlers
+graph_category mysql
+Handler_write.info The number of requests to insert a row in a table.
+Handler_write.draw AREASTACK
+Handler_write.colour 4D4A47
+Handler_write.min 0
+Handler_write.label Handler write
+Handler_write.type DERIVE
+Handler_update.info The number of requests to update a row in a table.
+Handler_update.draw AREASTACK
+Handler_update.colour C79F71
+Handler_update.min 0
+Handler_update.label Handler update
+Handler_update.type DERIVE
+Handler_delete.info The number of requests to delete a row in a table.
+Handler_delete.draw AREASTACK
+Handler_delete.colour BDB8B3
+Handler_delete.min 0
+Handler_delete.label Handler delete
+Handler_delete.type DERIVE
+Handler_read_first.info The number of times the first entry was read from an index. If this is high, it suggests that the server is doing a lot of full index scans.
+Handler_read_first.draw AREASTACK
+Handler_read_first.colour 8C286E
+Handler_read_first.min 0
+Handler_read_first.label Handler Read First
+Handler_read_first.type DERIVE
+Handler_read_key.info The number of requests to read a row based on a key. If this is high, it is a good indication that your queries and tables are properly indexed.
+Handler_read_key.draw AREASTACK
+Handler_read_key.colour BAB27F
+Handler_read_key.min 0
+Handler_read_key.label Handler Read Key
+Handler_read_key.type DERIVE
+Handler_read_next.info The number of requests to read the next row in key order. This is incremented if you are querying an index column with a range constraint or if you are doing an index scan.
+Handler_read_next.draw AREASTACK
+Handler_read_next.colour C02942
+Handler_read_next.min 0
+Handler_read_next.label Handler Read Next
+Handler_read_next.type DERIVE
+Handler_read_prev.info The number of requests to read the previous row in key order. This read method is mainly used to optimize ORDER BY ... DESC.
+Handler_read_prev.draw AREASTACK
+Handler_read_prev.colour FA6900
+Handler_read_prev.min 0
+Handler_read_prev.label Handler Read Prev
+Handler_read_prev.type DERIVE
+Handler_read_rnd.info The number of requests to read a row based on a fixed position. This is high if you are doing a lot of queries that require sorting of the result. You probably have a lot of queries that require MySQL to scan whole tables or you have joins that don't use keys properly.
+Handler_read_rnd.draw AREASTACK
+Handler_read_rnd.colour 5A3D31
+Handler_read_rnd.min 0
+Handler_read_rnd.label Handler Read Random
+Handler_read_rnd.type DERIVE
+ndler_read_rnd_next.info RThe number of requests to read the next row in the data file. This is high if you are doing a lot of table scans. Generally this suggests that your tables are not properly indexed or that your queries are not written to take advantage of the indexes you have.
+ndler_read_rnd_next.draw AREASTACK
+ndler_read_rnd_next.colour 69D2E7
+ndler_read_rnd_next.min 0
+ndler_read_rnd_next.label Handler Read Random Next
+ndler_read_rnd_next.type DERIVE
 graph_args --base 1024 --no-gridfit --slope-mode
 graph_title InnoDB Buffer Pool
 graph_vlabel Pages
@@ -403,6 +460,25 @@ Key_writes.draw LINE1
 Key_writes.colour FF0000
 Key_writes.label Key writes
 Key_writes.type DERIVE
+graph_args --base 1000 --no-gridfit --slope-mode
+graph_title MyISAM Key Cache
+graph_vlabel Bytes
+graph_category mysql
+key_buffer_size.draw AREA
+key_buffer_size.colour 99B898
+key_buffer_size.min 0
+key_buffer_size.label Key buffer size
+key_buffer_size.type GAUGE
+Key_buf_unused.draw AREA
+Key_buf_unused.colour 2A363B
+Key_buf_unused.min 0
+Key_buf_unused.label Key buffer bytes unused
+Key_buf_unused.type GAUGE
+Key_buf_unflush.draw AREA
+Key_buf_unflush.colour FECEA8
+Key_buf_unflush.min 0
+Key_buf_unflush.label Key buffer bytes unflushed
+Key_buf_unflush.type GAUGE
 graph_args --base 1024 --no-gridfit --slope-mode
 graph_title Network Traffic
 graph_vlabel Bytes received (-) / sent (+) per ${graph_period}
