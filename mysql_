@@ -302,6 +302,49 @@ $graphs{files_tables} = {
 
 #---------------------------------------------------------------------
 
+$graphs{handlers} = {
+    config => {
+        global_attrs => {
+            title  => 'Handlers',
+        },
+        data_source_attrs => {
+            draw  => 'AREASTACK',
+        },
+    },
+    data_sources => [
+        {name => 'Handler_write',        label  => 'Handler write',
+                                         colour => '4D4A47',
+                                         info   => 'The number of requests to insert a row in a table.'},
+        {name => 'Handler_update',       label  => 'Handler update',
+                                         colour => 'C79F71',
+                                         info   => 'The number of requests to update a row in a table.'},
+        {name => 'Handler_delete',       label  => 'Handler delete',
+                                         colour => 'BDB8B3',
+                                         info   => 'The number of requests to delete a row in a table.'},
+        {name => 'Handler_read_first',   label  => 'Handler Read First',
+                                         colour => '8C286E',
+                                         info   => 'The number of times the first entry was read from an index. If this is high, it suggests that the server is doing a lot of full index scans.'},
+        {name => 'Handler_read_key',     label  => 'Handler Read Key',
+                                         colour => 'BAB27F',
+                                         info   => 'The number of requests to read a row based on a key. If this is high, it is a good indication that your queries and tables are properly indexed.'},
+        {name => 'Handler_read_next',    label  => 'Handler Read Next',
+                                         colour => 'C02942',
+                                         info   => 'The number of requests to read the next row in key order. This is incremented if you are querying an index column with a range constraint or if you are doing an index scan.'},
+        {name => 'Handler_read_prev',    label  => 'Handler Read Prev',
+                                         colour => 'FA6900',
+                                         info   => 'The number of requests to read the previous row in key order. This read method is mainly used to optimize ORDER BY ... DESC.'},
+        {name => 'Handler_read_rnd',     label  => 'Handler Read Random',
+                                         colour => '5A3D31',
+                                         info   => 'The number of requests to read a row based on a fixed position. This is high if you are doing a lot of queries that require sorting of the result. You probably have a lot of queries that require MySQL to scan whole tables or you have joins that don\'t use keys properly.'},
+        {name => 'Handler_read_rnd_next',label  => 'Handler Read Random Next',
+                                         colour => '69D2E7',
+                                         info   => 'RThe number of requests to read the next row in the data file. This is high if you are doing a lot of table scans. Generally this suggests that your tables are not properly indexed or that your queries are not written to take advantage of the indexes you have.'},
+
+    ],
+};
+
+#---------------------------------------------------------------------
+
 $graphs{innodb_bpool} = {
     config => {
         global_attrs => {
