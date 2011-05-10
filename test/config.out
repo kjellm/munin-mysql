@@ -1,7 +1,7 @@
-graph_args --base 1000
+graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Binary/Relay Logs
 graph_vlabel Log activity
-graph_category mysql2
+graph_category mysql
 nlog_cache_disk_use.info The number of transactions that used the temporary binary log cache but that exceeded the value of binlog_cache_size and used a temporary file to store statements from the transaction.
 nlog_cache_disk_use.draw LINE1
 nlog_cache_disk_use.min 0
@@ -12,62 +12,77 @@ Binlog_cache_use.draw LINE1
 Binlog_cache_use.min 0
 Binlog_cache_use.label Binlog Cache Use
 Binlog_cache_use.type DERIVE
-ma_binlog_size.info The total combined size of all existing binary logs.
+ma_binlog_size.info The total combined size of all existing binary logs in GB
+ma_binlog_size.cdef ma_binlog_size,1024,/,1024,/,1024,/
 ma_binlog_size.draw LINE1
 ma_binlog_size.min 0
-ma_binlog_size.label Binary Log Space
-ma_binlog_size.type DERIVE
-relay_log_space.info The total combined size of all existing relay logs.
+ma_binlog_size.label Binary Log Space (GB)
+ma_binlog_size.type GAUGE
+relay_log_space.info The total combined size of all existing relay logs in GB.
+relay_log_space.cdef relay_log_space,1024,/,1024,/,1024,/
 relay_log_space.draw LINE1
 relay_log_space.min 0
-relay_log_space.label Relay Log Space
-relay_log_space.type DERIVE
-graph_args --base 1000
+relay_log_space.label Relay Log Space (GB)
+relay_log_space.type GAUGE
+graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Command Counters
 graph_vlabel Commands per ${graph_period}
 graph_total Questions
-graph_category mysql2
-Com_delete.info The Com_xxx  statement counter variables indicate the number of times each xxx statement has been executed.
-Com_delete.draw AREA
-Com_delete.min 0
-Com_delete.label Delete
-Com_delete.type DERIVE
-Com_insert.draw STACK
-Com_insert.min 0
-Com_insert.label Insert
-Com_insert.type DERIVE
-Com_insert_select.draw STACK
-Com_insert_select.min 0
-Com_insert_select.label Insert select
-Com_insert_select.type DERIVE
-Com_load.draw STACK
-Com_load.min 0
-Com_load.label Load Data
-Com_load.type DERIVE
-Com_replace.draw STACK
-Com_replace.min 0
-Com_replace.label Replace
-Com_replace.type DERIVE
-Com_replace_select.draw STACK
+graph_category mysql
+Com_replace_select.draw AREASTACK
+Com_replace_select.colour 00B99B
 Com_replace_select.min 0
 Com_replace_select.label Replace select
 Com_replace_select.type DERIVE
-Com_select.draw STACK
-Com_select.min 0
-Com_select.label Select
-Com_select.type DERIVE
-Com_update.draw STACK
-Com_update.min 0
-Com_update.label Update
-Com_update.type DERIVE
-Com_update_multi.draw STACK
+Com_update_multi.draw AREASTACK
+Com_update_multi.colour D8ACE0
 Com_update_multi.min 0
 Com_update_multi.label Update multi
 Com_update_multi.type DERIVE
-graph_args --base 1000
+Com_insert_select.draw AREASTACK
+Com_insert_select.colour AAABA1
+Com_insert_select.min 0
+Com_insert_select.label Insert select
+Com_insert_select.type DERIVE
+Com_delete_multi.draw AREASTACK
+Com_delete_multi.colour 942D0C
+Com_delete_multi.min 0
+Com_delete_multi.label Delete multi
+Com_delete_multi.type DERIVE
+Com_load.draw AREASTACK
+Com_load.colour 55009D
+Com_load.min 0
+Com_load.label Load Data
+Com_load.type DERIVE
+Com_delete.draw AREASTACK
+Com_delete.colour FF7D00
+Com_delete.min 0
+Com_delete.label Delete
+Com_delete.type DERIVE
+Com_replace.draw AREASTACK
+Com_replace.colour 2175D9
+Com_replace.min 0
+Com_replace.label Replace
+Com_replace.type DERIVE
+Com_update.draw AREASTACK
+Com_update.colour 00CF00
+Com_update.min 0
+Com_update.label Update
+Com_update.type DERIVE
+Com_insert.draw AREASTACK
+Com_insert.colour FFF200
+Com_insert.min 0
+Com_insert.label Insert
+Com_insert.type DERIVE
+Com_select.draw AREASTACK
+Com_select.colour FF0000
+Com_select.min 0
+Com_select.label Select
+Com_select.type DERIVE
+graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Connections
 graph_vlabel Connections per ${graph_period}
-graph_category mysql2
+graph_category mysql
 max_connections.info The number of simultaneous client connections allowed.
 max_connections.draw AREA
 max_connections.colour cdcfc4
@@ -100,10 +115,10 @@ Connections.draw LINE1
 Connections.min 0
 Connections.label New connections
 Connections.type DERIVE
-graph_args --base 1000
+graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Files and tables
 graph_vlabel Tables
-graph_category mysql2
+graph_category mysql
 table_open_cache.info The number of open tables for all threads.
 table_open_cache.draw AREA
 table_open_cache.colour cdcfc4
@@ -125,10 +140,10 @@ Opened_tables.draw LINE1
 Opened_tables.min 0
 Opened_tables.label Opened tables
 Opened_tables.type DERIVE
-graph_args --base 1024
+graph_args --base 1024 --no-gridfit --slope-mode
 graph_title InnoDB Buffer Pool
 graph_vlabel Pages
-graph_category mysql2
+graph_category mysql
 ib_bpool_size.info The total number of buffer pool pages
 ib_bpool_size.draw AREA
 ib_bpool_size.colour ffd660
@@ -142,39 +157,39 @@ ib_bpool_dbpages.min 0
 ib_bpool_dbpages.label Database pages
 ib_bpool_dbpages.type GAUGE
 ib_bpool_free.info The number of unused buffer pool pages
-ib_bpool_free.draw LINE2
+ib_bpool_free.draw LINE1
 ib_bpool_free.min 0
 ib_bpool_free.label Free pages
 ib_bpool_free.type GAUGE
 ib_bpool_modpages.info The number of "dirty" database pages
-ib_bpool_modpages.draw LINE2
+ib_bpool_modpages.draw LINE1
 ib_bpool_modpages.min 0
 ib_bpool_modpages.label Modified pages
 ib_bpool_modpages.type GAUGE
-graph_args --base 1000
+graph_args --base 1000 --no-gridfit --slope-mode
 graph_title InnoDB Buffer Pool Activity
 graph_vlabel Activity per ${graph_period}
 graph_total Total
-graph_category mysql2
+graph_category mysql
 ib_bpool_read.info Pages read into the buffer pool from disk.
-ib_bpool_read.draw LINE2
+ib_bpool_read.draw LINE1
 ib_bpool_read.min 0
 ib_bpool_read.label Pages read
 ib_bpool_read.type DERIVE
 ib_bpool_created.info Pages created in the buffer pool without reading the corresponding disk page.
-ib_bpool_created.draw LINE2
+ib_bpool_created.draw LINE1
 ib_bpool_created.min 0
 ib_bpool_created.label Pages created
 ib_bpool_created.type DERIVE
 ib_bpool_written.info Pages written to disk from the buffer pool.
-ib_bpool_written.draw LINE2
+ib_bpool_written.draw LINE1
 ib_bpool_written.min 0
 ib_bpool_written.label Pages written
 ib_bpool_written.type DERIVE
-graph_args --base 1024 -l 0
+graph_args --base 1024 -l 0 --no-gridfit --slope-mode
 graph_title InnoDB Checkpoint Age
 graph_vlabel Bytes
-graph_category mysql2
+graph_category mysql
 innodb_log_size.info The size in bytes of InnoDB log space.
 innodb_log_size.draw AREA
 innodb_log_size.colour cdcfc4
@@ -187,19 +202,19 @@ ib_log_chkpt_age.colour ffd660
 ib_log_chkpt_age.min 0
 ib_log_chkpt_age.label Uncheckpointed bytes
 ib_log_chkpt_age.type GAUGE
-graph_args --base 1000
+graph_args --base 1000 --no-gridfit --slope-mode
 graph_title InnoDB History List
 graph_vlabel Transactions
-graph_category mysql2
+graph_category mysql
 ib_tnx_hist.info Number of unpurged transactions in undo space.
 ib_tnx_hist.draw LINE1
 ib_tnx_hist.min 0
 ib_tnx_hist.label History list length
 ib_tnx_hist.type GAUGE
-graph_args --base 1000
+graph_args --base 1000 --no-gridfit --slope-mode
 graph_title InnoDB Insert Buffer
 graph_vlabel Activity per ${graph_period}
-graph_category mysql2
+graph_category mysql
 ib_ibuf_inserts.info These values shows statistics about how many buffer operations InnoDB has done. The ratio of merges to inserts gives a good idea of how efficient the buffer is.
 ib_ibuf_inserts.draw LINE1
 ib_ibuf_inserts.min 0
@@ -213,10 +228,10 @@ ib_ibuf_merges.draw LINE1
 ib_ibuf_merges.min 0
 ib_ibuf_merges.label Merges
 ib_ibuf_merges.type DERIVE
-graph_args -l 0
+graph_args -l 0 --no-gridfit --slope-mode
 graph_title InnoDB Insert Buffer Size
 graph_vlabel Pages
-graph_category mysql2
+graph_category mysql
 ib_ibuf_seg_size.info Allocated size of insert buffer segment.
 ib_ibuf_seg_size.draw AREA
 ib_ibuf_seg_size.colour cdcfc4
@@ -234,10 +249,10 @@ ib_ibuf_free_len.draw LINE1
 ib_ibuf_free_len.min 0
 ib_ibuf_free_len.label Free pages
 ib_ibuf_free_len.type GAUGE
-graph_args --base 1000
+graph_args --base 1000 --no-gridfit --slope-mode
 graph_title InnoDB IO
 graph_vlabel IO operations per ${graph_period}
-graph_category mysql2
+graph_category mysql
 ib_io_read.info The number of calls to the OS read function.
 ib_io_read.draw LINE1
 ib_io_read.min 0
@@ -258,10 +273,10 @@ ib_io_fsync.draw LINE1
 ib_io_fsync.min 0
 ib_io_fsync.label File syncs
 ib_io_fsync.type DERIVE
-graph_args --base 1000
+graph_args --base 1000 --no-gridfit --slope-mode
 graph_title InnoDB IO Pending
 graph_vlabel Pending operations
-graph_category mysql2
+graph_category mysql
 ib_iop_log.draw LINE1
 ib_iop_log.min 0
 ib_iop_log.label AIO Log
@@ -290,10 +305,10 @@ ib_iop_aiowrite.draw LINE1
 ib_iop_aiowrite.min 0
 ib_iop_aiowrite.label Normal AIO Writes
 ib_iop_aiowrite.type DERIVE
-graph_args --base 1000
+graph_args --base 1000 --no-gridfit --slope-mode
 graph_title InnoDB Log
 graph_vlabel Log activity per ${graph_period}
-graph_category mysql2
+graph_category mysql
 odb_log_buffer_size.info The size in bytes of the buffer that InnoDB  uses to write to the log files on disk.
 odb_log_buffer_size.draw AREA
 odb_log_buffer_size.colour fafd9e
@@ -310,35 +325,35 @@ ib_log_written.draw LINE1
 ib_log_written.min 0
 ib_log_written.label KB Written
 ib_log_written.type DERIVE
-graph_args --base 1000
+graph_args --base 1000 --no-gridfit --slope-mode
 graph_title InnoDB Row Operations
 graph_vlabel Operations per ${graph_period}
 graph_total Total
-graph_category mysql2
+graph_category mysql
 Innodb_rows_deleted.info The number of rows deleted from InnoDB tables.
-Innodb_rows_deleted.draw AREA
+Innodb_rows_deleted.draw AREASTACK
 Innodb_rows_deleted.min 0
 Innodb_rows_deleted.label Deletes
 Innodb_rows_deleted.type DERIVE
 nnodb_rows_inserted.info The number of rows inserted into InnoDB tables.
-nnodb_rows_inserted.draw STACK
+nnodb_rows_inserted.draw AREASTACK
 nnodb_rows_inserted.min 0
 nnodb_rows_inserted.label Inserts
 nnodb_rows_inserted.type DERIVE
 Innodb_rows_read.info The number of rows read from InnoDB tables.
-Innodb_rows_read.draw STACK
+Innodb_rows_read.draw AREASTACK
 Innodb_rows_read.min 0
 Innodb_rows_read.label Reads
 Innodb_rows_read.type DERIVE
 Innodb_rows_updated.info The number of rows updated in InnoDB tables.
-Innodb_rows_updated.draw STACK
+Innodb_rows_updated.draw AREASTACK
 Innodb_rows_updated.min 0
 Innodb_rows_updated.label Updates
 Innodb_rows_updated.type DERIVE
-graph_args --base 1000
+graph_args --base 1000 --no-gridfit --slope-mode
 graph_title InnoDB Semaphores
 graph_vlabel Semaphores per ${graph_period}
-graph_category mysql2
+graph_category mysql
 ib_spin_rounds.draw LINE1
 ib_spin_rounds.min 0
 ib_spin_rounds.label Spin Rounds
@@ -351,148 +366,167 @@ ib_os_waits.draw LINE1
 ib_os_waits.min 0
 ib_os_waits.label OS Waits
 ib_os_waits.type DERIVE
-graph_args --base 1000
+graph_args --base 1000 --no-gridfit --slope-mode
 graph_title InnoDB Transactions
 graph_vlabel Transactions per ${graph_period}
-graph_category mysql2
+graph_category mysql
 ib_tnx.info Number of transactions created.
 ib_tnx.draw LINE1
 ib_tnx.min 0
 ib_tnx.label Transactions created
 ib_tnx.type DERIVE
-graph_args --base 1000
+graph_args --base 1000 --no-gridfit --slope-mode
 graph_title MyISAM Indexes
 graph_vlabel Requests per ${graph_period}
-graph_category mysql2
+graph_category mysql
 Key_read_requests.info The number of requests to read a key block from the cache.
-Key_read_requests.draw LINE2
+Key_read_requests.draw AREA
+Key_read_requests.colour 008800
 Key_read_requests.min 0
 Key_read_requests.label Key read requests
 Key_read_requests.type DERIVE
 Key_reads.info The number of physical reads of a key block from disk.
-Key_reads.draw LINE2
+Key_reads.draw LINE1
+Key_reads.colour 00FF00
 Key_reads.min 0
 Key_reads.label Key reads
 Key_reads.type DERIVE
 Key_write_requests.info The number of requests to write a key block to the cache.
-Key_write_requests.draw LINE2
-Key_write_requests.min 0
-Key_write_requests.label Key write requests
+Key_write_requests.cdef Key_write_requests,-1,*
+Key_write_requests.draw AREA
+Key_write_requests.colour 880000
 Key_write_requests.type DERIVE
+Key_write_requests.label Key write requests
 Key_writes.info The number of physical writes of a key block to disk.
-Key_writes.draw LINE2
-Key_writes.min 0
+Key_writes.cdef Key_writes,-1,*
+Key_writes.draw LINE1
+Key_writes.colour FF0000
 Key_writes.label Key writes
 Key_writes.type DERIVE
-graph_args --base 1024
+graph_args --base 1024 --no-gridfit --slope-mode
 graph_title Network Traffic
 graph_vlabel Bytes received (-) / sent (+) per ${graph_period}
-graph_category mysql2
+graph_category mysql
 Bytes_received.info The number of bytes received from all clients.
-Bytes_received.draw LINE2
+Bytes_received.draw LINE1
 Bytes_received.min 0
 Bytes_received.label Bytes transfered
 Bytes_received.type DERIVE
 Bytes_received.graph no
 Bytes_sent.info The number of bytes sent to all clients.
-Bytes_sent.draw LINE2
+Bytes_sent.draw LINE1
 Bytes_sent.min 0
 Bytes_sent.label Bytes transfered
 Bytes_sent.negative Bytes_received
 Bytes_sent.type DERIVE
-graph_args --base 1000
+graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Processlist states
 graph_vlabel State count per ${graph_period}
-graph_category mysql2
+graph_category mysql
 tate_closing_tables.info The thread is flushing the changed table data to disk and closing the used tables.
-tate_closing_tables.draw AREA
+tate_closing_tables.draw AREASTACK
+tate_closing_tables.colour DE0056
 tate_closing_tables.min 0
 tate_closing_tables.label Closing tables
 tate_closing_tables.type DERIVE
 opying_to_tmp_table.info The thread is processing an ALTER TABLE statement. This state occurs after the table with the new structure has been created but before rows are copied into it.
-opying_to_tmp_table.draw STACK
+opying_to_tmp_table.draw AREASTACK
+opying_to_tmp_table.colour 784890
 opying_to_tmp_table.min 0
 opying_to_tmp_table.label Copying to tmp table
 opying_to_tmp_table.type DERIVE
 State_end.info This occurs at the end but before the cleanup of ALTER TABLE, CREATE VIEW, DELETE, INSERT, SELECT, or UPDATE statements.
-State_end.draw STACK
+State_end.draw AREASTACK
+State_end.colour D1642E
 State_end.min 0
 State_end.label End
 State_end.type DERIVE
 State_freeing_items.info The thread has executed a command. This state is usually followed by cleaning up.
-State_freeing_items.draw STACK
+State_freeing_items.draw AREASTACK
+State_freeing_items.colour 487860
 State_freeing_items.min 0
 State_freeing_items.label Freeing items
 State_freeing_items.type DERIVE
 State_init.info This occurs before the initialization of ALTER TABLE, DELETE, INSERT, SELECT, or UPDATE statements.
-State_init.draw STACK
+State_init.draw AREASTACK
+State_init.colour 907890
 State_init.min 0
 State_init.label Init
 State_init.type DERIVE
 State_locked.info The query is locked by another query.
-State_locked.draw STACK
+State_locked.draw AREASTACK
+State_locked.colour DE0056
 State_locked.min 0
 State_locked.label Locked
 State_locked.type DERIVE
 State_login.info The initial state for a connection thread until the client has been authenticated successfully.
-State_login.draw STACK
+State_login.draw AREASTACK
+State_login.colour 1693A7
 State_login.min 0
 State_login.label Login
 State_login.type DERIVE
 State_preparing.info This state occurs during query optimization.
-State_preparing.draw STACK
+State_preparing.draw AREASTACK
+State_preparing.colour 783030
 State_preparing.min 0
 State_preparing.label Preparing
 State_preparing.type DERIVE
 te_reading_from_net.info The server is reading a packet from the network.
-te_reading_from_net.draw STACK
+te_reading_from_net.draw AREASTACK
+te_reading_from_net.colour FF7F00
 te_reading_from_net.min 0
 te_reading_from_net.label Reading from net
 te_reading_from_net.type DERIVE
 State_sending_data.info The thread is processing rows for a SELECT statement and also is sending data to the client.
-State_sending_data.draw STACK
+State_sending_data.draw AREASTACK
+State_sending_data.colour 54382A
 State_sending_data.min 0
 State_sending_data.label Sending data
 State_sending_data.type DERIVE
 tate_sorting_result.info For a SELECT statement, this is similar to Creating sort index, but for nontemporary tables.
-tate_sorting_result.draw STACK
+tate_sorting_result.draw AREASTACK
+tate_sorting_result.colour B83A04
 tate_sorting_result.min 0
 tate_sorting_result.label Sorting result
 tate_sorting_result.type DERIVE
 State_statistics.info The server is calculating statistics to develop a query execution plan. If a thread is in this state for a long time, the server is probably disk-bound performing other work.
-State_statistics.draw STACK
+State_statistics.draw AREASTACK
+State_statistics.colour 6E3803
 State_statistics.min 0
 State_statistics.label Statistics
 State_statistics.type DERIVE
 State_updating.info The thread is searching for rows to update and is updating them.
-State_updating.draw STACK
+State_updating.draw AREASTACK
+State_updating.colour B56414
 State_updating.min 0
 State_updating.label Updating
 State_updating.type DERIVE
 tate_writing_to_net.info The server is writing a packet to the network.
-tate_writing_to_net.draw STACK
+tate_writing_to_net.draw AREASTACK
+tate_writing_to_net.colour 6E645A
 tate_writing_to_net.min 0
 tate_writing_to_net.label Writing to net
 tate_writing_to_net.type DERIVE
-State_none.info 
-State_none.draw STACK
+State_none.draw AREASTACK
+State_none.colour 521808
 State_none.min 0
 State_none.label None
 State_none.type DERIVE
-State_other.info 
-State_other.draw STACK
+State_other.draw AREASTACK
+State_other.colour 194240
 State_other.min 0
 State_other.label Other
 State_other.type DERIVE
-graph_args --base 1000
+graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Query Cache
 graph_vlabel Commands per ${graph_period}
-graph_category mysql2
+graph_category mysql
 he_queries_in_cache.info The number of queries registered in the query cache.
+he_queries_in_cache.cdef he_queries_in_cache,1024,/
 he_queries_in_cache.draw LINE1
 he_queries_in_cache.min 0
-he_queries_in_cache.label Queries in cache
-he_queries_in_cache.type DERIVE
+he_queries_in_cache.label Queries in cache (K)
+he_queries_in_cache.type GAUGE
 Qcache_hits.info The number of query cache hits.
 Qcache_hits.draw LINE1
 Qcache_hits.min 0
@@ -513,10 +547,10 @@ cache_lowmem_prunes.draw LINE1
 cache_lowmem_prunes.min 0
 cache_lowmem_prunes.label Low-memory prunes
 cache_lowmem_prunes.type DERIVE
-graph_args --base 1024 --lower-limit 0
+graph_args --base 1024 --lower-limit 0 --no-gridfit --slope-mode
 graph_title Query Cache Memory
 graph_vlabel Bytes
-graph_category mysql2
+graph_category mysql
 query_cache_size.info The amount of memory allocated for caching query results.
 query_cache_size.draw AREA
 query_cache_size.min 0
@@ -527,15 +561,17 @@ Qcache_free_memory.draw AREA
 Qcache_free_memory.min 0
 Qcache_free_memory.label Free mem
 Qcache_free_memory.type GAUGE
-graph_args --base 1000
+graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Replication
 graph_vlabel Activity
-graph_category mysql2
+graph_category mysql
 slave_running.draw AREA
+slave_running.colour 00AA00
 slave_running.min 0
 slave_running.label Slave Running
 slave_running.type GAUGE
 slave_stopped.draw AREA
+slave_stopped.colour DD0000
 slave_stopped.min 0
 slave_stopped.label Slave Stopped
 slave_stopped.type GAUGE
@@ -554,120 +590,144 @@ conds_behind_master.draw LINE1
 conds_behind_master.min 0
 conds_behind_master.label Secs Behind Master
 conds_behind_master.type GAUGE
-graph_args --base 1000
+graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Select types
 graph_vlabel Commands per ${graph_period}
 graph_total Total
-graph_category mysql2
+graph_category mysql
 Select_full_join.info The number of joins that perform table scans because they do not use indexes.
-Select_full_join.draw AREA
+Select_full_join.draw AREASTACK
+Select_full_join.colour FF0000
 Select_full_join.min 0
 Select_full_join.label Full join
 Select_full_join.type DERIVE
 ect_full_range_join.info The number of joins that used a range search on a reference table.
-ect_full_range_join.draw STACK
+ect_full_range_join.draw AREASTACK
+ect_full_range_join.colour FF7D00
 ect_full_range_join.min 0
 ect_full_range_join.label Full range
 ect_full_range_join.type DERIVE
 Select_range.info The number of joins that used ranges on the first table.
-Select_range.draw STACK
+Select_range.draw AREASTACK
+Select_range.colour FFF200
 Select_range.min 0
 Select_range.label Range
 Select_range.type DERIVE
 Select_range_check.info The number of joins without keys that check for key usage after each row.
-Select_range_check.draw STACK
+Select_range_check.draw AREASTACK
+Select_range_check.colour 7DFF7D
 Select_range_check.min 0
 Select_range_check.label Range check
 Select_range_check.type DERIVE
 Select_scan.info The number of joins that did a full scan of the first table.
-Select_scan.draw STACK
+Select_scan.draw AREASTACK
+Select_scan.colour 7D7DFF
 Select_scan.min 0
 Select_scan.label Scan
 Select_scan.type DERIVE
-graph_args --base 1000
+graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Slow Queries
 graph_vlabel Slow queries per ${graph_period}
-graph_category mysql2
+graph_category mysql
 Slow_queries.info The number of queries that have taken more than long_query_time seconds.
-Slow_queries.draw LINE2
+Slow_queries.draw LINE1
 Slow_queries.min 0
 Slow_queries.label Slow queries
 Slow_queries.type DERIVE
-graph_args --base 1000
+graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Sorts
 graph_vlabel Sorts / ${graph_period}
-graph_category mysql2
+graph_category mysql
 Sort_rows.info The number of sorted rows.
-Sort_rows.draw LINE2
+Sort_rows.cdef Sort_rows,1024,/
+Sort_rows.draw AREA
+Sort_rows.colour FF7D00
 Sort_rows.min 0
-Sort_rows.label Rows sorted
 Sort_rows.type DERIVE
+Sort_rows.label Rows sorted (K)
 Sort_range.info The number of sorts that were done using ranges.
-Sort_range.draw LINE2
+Sort_range.draw LINE1
+Sort_range.colour 007D00
 Sort_range.min 0
 Sort_range.label Range
 Sort_range.type DERIVE
 Sort_merge_passes.info The number of merge passes that the sort algorithm has had to do.
-Sort_merge_passes.draw LINE2
+Sort_merge_passes.draw LINE1
+Sort_merge_passes.colour 7D0000
 Sort_merge_passes.min 0
 Sort_merge_passes.label Merge passes
 Sort_merge_passes.type DERIVE
 Sort_scan.info The number of sorts that were done by scanning the table.
-Sort_scan.draw LINE2
+Sort_scan.draw LINE1
+Sort_scan.colour 0000D0
 Sort_scan.min 0
 Sort_scan.label Scan
 Sort_scan.type DERIVE
-graph_args --base 1000
+graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Table locks
 graph_vlabel locks per ${graph_period}
-graph_category mysql2
+graph_category mysql
 ble_locks_immediate.info The number of times that a request for a table lock could be granted immediately.
-ble_locks_immediate.draw LINE2
+ble_locks_immediate.draw LINE1
 ble_locks_immediate.min 0
 ble_locks_immediate.label Table locks immed
 ble_locks_immediate.type DERIVE
 Table_locks_waited.info The number of times that a request for a table lock could not be granted immediately and a wait was needed.
-Table_locks_waited.draw LINE2
+Table_locks_waited.draw LINE1
 Table_locks_waited.min 0
 Table_locks_waited.label Table locks waited
 Table_locks_waited.type DERIVE
-graph_args --base 1000
+graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Threads
-graph_vlabel Threads created per ${graph_period}
-graph_category mysql2
+graph_vlabel Threads created
+graph_category mysql
 thread_cache_size.info How many threads the server should cache for reuse
 thread_cache_size.draw AREA
+thread_cache_size.colour 99ff99
 thread_cache_size.min 0
 thread_cache_size.label Thread cache size
-thread_cache_size.type DERIVE
+thread_cache_size.type GAUGE
 Threads_created.info The number of threads created to handle connections
 Threads_created.draw LINE1
+Threads_created.colour 0000ff
 Threads_created.min 0
 Threads_created.label Threads created
 Threads_created.type GAUGE
-graph_args --base 1000
+Threads_connected.info The number of currently open connections
+Threads_connected.draw LINE1
+Threads_connected.colour 7777ff
+Threads_connected.min 0
+Threads_connected.label Threads connected
+Threads_connected.type GAUGE
+Threads_running.info The number of threads that are not sleeping
+Threads_running.draw LINE1
+Threads_running.colour 7d0000
+Threads_running.min 0
+Threads_running.label Threads running
+Threads_running.type GAUGE
+graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Temporary objects
 graph_vlabel Objects per ${graph_period}
-graph_category mysql2
+graph_category mysql
 ted_tmp_disk_tables.info The number of internal on-disk temporary tables created by the server while executing statements.
-ted_tmp_disk_tables.draw LINE2
+ted_tmp_disk_tables.draw LINE1
 ted_tmp_disk_tables.min 0
 ted_tmp_disk_tables.label Temp disk tables
 ted_tmp_disk_tables.type DERIVE
 Created_tmp_tables.info The number of internal temporary tables created by the server while executing statements.
-Created_tmp_tables.draw LINE2
+Created_tmp_tables.draw LINE1
 Created_tmp_tables.min 0
 Created_tmp_tables.label Temp tables
 Created_tmp_tables.type DERIVE
 Created_tmp_files.info How many temporary files mysqld has created.
-Created_tmp_files.draw LINE2
+Created_tmp_files.draw LINE1
 Created_tmp_files.min 0
 Created_tmp_files.label Temp files
 Created_tmp_files.type DERIVE
-graph_args --base 1000
+graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Uptime
 graph_vlabel Uptime in days
-graph_category mysql2
+graph_category mysql
 Uptime_days.info Server uptime in days.
 Uptime_days.draw AREA
 Uptime_days.min 0
