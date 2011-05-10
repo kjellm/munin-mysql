@@ -205,10 +205,14 @@ $graphs{bin_relay_log} = {
                                           info  => 'The number of transactions that used the temporary binary log cache but that exceeded the value of binlog_cache_size and used a temporary file to store statements from the transaction.'},
         {name => 'Binlog_cache_use',      label => 'Binlog Cache Use',
                                           info  => 'The number of transactions that used the temporary binary log cache.'},
-        {name => 'ma_binlog_size',        label => 'Binary Log Space',
-                                          info  => 'The total combined size of all existing binary logs.'},
-        {name => 'relay_log_space',       label => 'Relay Log Space',
-                                          info  => 'The total combined size of all existing relay logs.'},
+        {name => 'ma_binlog_size',        label => 'Binary Log Space (GB)',
+                                          info  => 'The total combined size of all existing binary logs in GB',
+                                          type  => 'GAUGE',
+                                          cdef  => 'ma_binlog_size,1024,/,1024,/,1024,/'},
+        {name => 'relay_log_space',       label => 'Relay Log Space (GB)',
+                                          info  => 'The total combined size of all existing relay logs in GB.',
+                                          type  => 'GAUGE',
+                                          cdef  => 'relay_log_space,1024,/,1024,/,1024,/'},
     ],
 };
 
