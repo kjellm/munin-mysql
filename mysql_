@@ -142,9 +142,10 @@ BEGIN {
 #---------------------------------------------------------------------
 
 my %config = (
-    'dsn'        => $ENV{'mysqlconnection'} || 'DBI:mysql:mysql',
-    'user'       => $ENV{'mysqluser'}       || 'root',
-    'password'   => $ENV{'mysqlpassword'}   || '',
+    'dsn'               => $ENV{'mysqlconnection'}   || 'DBI:mysql:mysql',
+    'user'              => $ENV{'mysqluser'}         || 'root',
+    'password'          => $ENV{'mysqlpassword'}     || '',
+    'maatkit_heartbeat' => $ENV{'maatkit_heartbeat'} || 0,
 );
 
 
@@ -1376,6 +1377,10 @@ sub update_slave {
     }
     $sth->finish();
 
+    if ($config{maatkit_heartbeat}) {
+        update_slave_maatkit_heartbeat($dbh);
+    }
+
     # undef when slave is stopped, or when MySQL fails to calculate
     # the lag (which happens depressingly often). (mk-heartbeat fixes
     # this problem.)
@@ -1386,8 +1391,27 @@ sub update_slave {
             ? $data->{seconds_behind_master} : 0;
     $data->{slave_stopped} = ($data->{slave_sql_running} eq 'Yes')
             ? 0 : $data->{seconds_behind_master};
+}
 
+# Overwrites seconds_behind_master collected from SHOW SLAVE STATUS
+sub update_slave_maatkit_heartbeat {
+    my ($dbh) = @_;
 
+    # The TIME_TO_SEC(TIMEDIFF in the query is necessary as mysql
+    # otherwise calculates the wrong difference (simply substracting
+    # won't work)
+    $sth = $dbh->prepare(q{
+        SELECT TIME_TO_SEC(TIMEDIFF(NOW(), ts)) AS seconds_behind_master
+          FROM maatkit.heartbeat
+         LIMIT 1
+    });
+    $sth->execute();
+    $row = $sth->fetchrow_hashref();
+    return unless $row;
+    while (my ($k, $v) = each %$row) {
+        $data->{$k} = $v;
+    }
+    $sth->finish();
 }
 
 
