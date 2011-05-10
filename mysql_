@@ -680,7 +680,7 @@ $graphs{myisam_key_cache} = {
     data_sources => [
         {name => 'key_buffer_size',    label  => 'Key buffer size',
                                        draw   => 'AREA',
-                                       colour => '99B898',
+                                       colour => '99B898'},
         {name => 'Key_buf_unused',     label  => 'Key buffer bytes unused',
                                        draw   => 'AREA',
                                        colour => '2A363B',
@@ -693,7 +693,7 @@ $graphs{myisam_key_cache} = {
                                        value  => sub {
                                                      $_[0]->{Key_blocks_not_flushed} * $_[0]->{key_cache_block_size}
                                                  }},
-   ],
+    ],
 };
   
 #---------------------------------------------------------------------
@@ -1400,13 +1400,13 @@ sub update_slave_maatkit_heartbeat {
     # The TIME_TO_SEC(TIMEDIFF in the query is necessary as mysql
     # otherwise calculates the wrong difference (simply substracting
     # won't work)
-    $sth = $dbh->prepare(q{
+    my $sth = $dbh->prepare(q{
         SELECT TIME_TO_SEC(TIMEDIFF(NOW(), ts)) AS seconds_behind_master
           FROM maatkit.heartbeat
          LIMIT 1
     });
     $sth->execute();
-    $row = $sth->fetchrow_hashref();
+    my $row = $sth->fetchrow_hashref();
     return unless $row;
     while (my ($k, $v) = each %$row) {
         $data->{$k} = $v;
