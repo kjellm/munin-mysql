@@ -125,6 +125,7 @@ use Math::BigInt; # Used to append "=> lib 'GMP'" here, but GMP caused
                   # segfault on some occasions. Removed as I don't
                   # think the tiny performance boost is worth the
                   # debugging effort.
+use Munin::Plugin;
 use POSIX qw(floor);
 
 #
@@ -1474,24 +1475,6 @@ sub innodb_bigint {
     return defined $y
         ? Math::BigInt->new($x)->blsft(32) + $y
         : Math::BigInt->new("0x$x");
-}
-
-#
-# Can't use variable names longer than 19 characters:
-# http://munin.projects.linpro.no/wiki/notes_on_datasource_names
-#
-sub clean_fieldname {
-    my $name = shift;
-
-    # Replace a sequence of illegal leading chars with a single _
-    $name =~ s/^[^A-Za-z_]+/_/;
-    # Replace remaining illegals with _
-    $name =~ s/[^A-Za-z0-9_]/_/g;
-
-    # And use only the last 19 chars
-    $name = substr($name,-19);
-
-    return $name;
 }
 
 

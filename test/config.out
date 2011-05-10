@@ -2,11 +2,11 @@ graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Binary/Relay Logs
 graph_vlabel Log activity
 graph_category mysql
-nlog_cache_disk_use.info The number of transactions that used the temporary binary log cache but that exceeded the value of binlog_cache_size and used a temporary file to store statements from the transaction.
-nlog_cache_disk_use.draw LINE1
-nlog_cache_disk_use.min 0
-nlog_cache_disk_use.label Binlog Cache Disk Use
-nlog_cache_disk_use.type DERIVE
+Binlog_cache_disk_use.info The number of transactions that used the temporary binary log cache but that exceeded the value of binlog_cache_size and used a temporary file to store statements from the transaction.
+Binlog_cache_disk_use.draw LINE1
+Binlog_cache_disk_use.min 0
+Binlog_cache_disk_use.label Binlog Cache Disk Use
+Binlog_cache_disk_use.type DERIVE
 Binlog_cache_use.info The number of transactions that used the temporary binary log cache.
 Binlog_cache_use.draw LINE1
 Binlog_cache_use.min 0
@@ -89,12 +89,12 @@ max_connections.colour cdcfc4
 max_connections.min 0
 max_connections.label Max connections
 max_connections.type GAUGE
-ax_used_connections.info The maximum number of connections that have been in use simultaneously since the server started.
-ax_used_connections.draw AREA
-ax_used_connections.colour ffd660
-ax_used_connections.min 0
-ax_used_connections.label Max used
-ax_used_connections.type GAUGE
+Max_used_connections.info The maximum number of connections that have been in use simultaneously since the server started.
+Max_used_connections.draw AREA
+Max_used_connections.colour ffd660
+Max_used_connections.min 0
+Max_used_connections.label Max used
+Max_used_connections.type GAUGE
 Aborted_clients.info The number of connections that were aborted because the client died without closing the connection properly.
 Aborted_clients.draw LINE1
 Aborted_clients.min 0
@@ -191,12 +191,12 @@ Handler_read_rnd.colour 5A3D31
 Handler_read_rnd.min 0
 Handler_read_rnd.label Handler Read Random
 Handler_read_rnd.type DERIVE
-ndler_read_rnd_next.info RThe number of requests to read the next row in the data file. This is high if you are doing a lot of table scans. Generally this suggests that your tables are not properly indexed or that your queries are not written to take advantage of the indexes you have.
-ndler_read_rnd_next.draw AREASTACK
-ndler_read_rnd_next.colour 69D2E7
-ndler_read_rnd_next.min 0
-ndler_read_rnd_next.label Handler Read Random Next
-ndler_read_rnd_next.type DERIVE
+Handler_read_rnd_next.info RThe number of requests to read the next row in the data file. This is high if you are doing a lot of table scans. Generally this suggests that your tables are not properly indexed or that your queries are not written to take advantage of the indexes you have.
+Handler_read_rnd_next.draw AREASTACK
+Handler_read_rnd_next.colour 69D2E7
+Handler_read_rnd_next.min 0
+Handler_read_rnd_next.label Handler Read Random Next
+Handler_read_rnd_next.type DERIVE
 graph_args --base 1024 --no-gridfit --slope-mode
 graph_title InnoDB Buffer Pool
 graph_vlabel Pages
@@ -366,12 +366,12 @@ graph_args --base 1000 --no-gridfit --slope-mode
 graph_title InnoDB Log
 graph_vlabel Log activity per ${graph_period}
 graph_category mysql
-odb_log_buffer_size.info The size in bytes of the buffer that InnoDB  uses to write to the log files on disk.
-odb_log_buffer_size.draw AREA
-odb_log_buffer_size.colour fafd9e
-odb_log_buffer_size.min 0
-odb_log_buffer_size.label Buffer Size
-odb_log_buffer_size.type GAUGE
+innodb_log_buffer_size.info The size in bytes of the buffer that InnoDB  uses to write to the log files on disk.
+innodb_log_buffer_size.draw AREA
+innodb_log_buffer_size.colour fafd9e
+innodb_log_buffer_size.min 0
+innodb_log_buffer_size.label Buffer Size
+innodb_log_buffer_size.type GAUGE
 ib_log_flush.info Number of bytes flushed to the transaction log file.
 ib_log_flush.draw LINE1
 ib_log_flush.min 0
@@ -392,11 +392,11 @@ Innodb_rows_deleted.draw AREASTACK
 Innodb_rows_deleted.min 0
 Innodb_rows_deleted.label Deletes
 Innodb_rows_deleted.type DERIVE
-nnodb_rows_inserted.info The number of rows inserted into InnoDB tables.
-nnodb_rows_inserted.draw AREASTACK
-nnodb_rows_inserted.min 0
-nnodb_rows_inserted.label Inserts
-nnodb_rows_inserted.type DERIVE
+Innodb_rows_inserted.info The number of rows inserted into InnoDB tables.
+Innodb_rows_inserted.draw AREASTACK
+Innodb_rows_inserted.min 0
+Innodb_rows_inserted.label Inserts
+Innodb_rows_inserted.type DERIVE
 Innodb_rows_read.info The number of rows read from InnoDB tables.
 Innodb_rows_read.draw AREASTACK
 Innodb_rows_read.min 0
@@ -499,18 +499,18 @@ graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Processlist states
 graph_vlabel State count per ${graph_period}
 graph_category mysql
-tate_closing_tables.info The thread is flushing the changed table data to disk and closing the used tables.
-tate_closing_tables.draw AREASTACK
-tate_closing_tables.colour DE0056
-tate_closing_tables.min 0
-tate_closing_tables.label Closing tables
-tate_closing_tables.type DERIVE
-opying_to_tmp_table.info The thread is processing an ALTER TABLE statement. This state occurs after the table with the new structure has been created but before rows are copied into it.
-opying_to_tmp_table.draw AREASTACK
-opying_to_tmp_table.colour 784890
-opying_to_tmp_table.min 0
-opying_to_tmp_table.label Copying to tmp table
-opying_to_tmp_table.type DERIVE
+State_closing_tables.info The thread is flushing the changed table data to disk and closing the used tables.
+State_closing_tables.draw AREASTACK
+State_closing_tables.colour DE0056
+State_closing_tables.min 0
+State_closing_tables.label Closing tables
+State_closing_tables.type DERIVE
+State_copying_to_tmp_table.info The thread is processing an ALTER TABLE statement. This state occurs after the table with the new structure has been created but before rows are copied into it.
+State_copying_to_tmp_table.draw AREASTACK
+State_copying_to_tmp_table.colour 784890
+State_copying_to_tmp_table.min 0
+State_copying_to_tmp_table.label Copying to tmp table
+State_copying_to_tmp_table.type DERIVE
 State_end.info This occurs at the end but before the cleanup of ALTER TABLE, CREATE VIEW, DELETE, INSERT, SELECT, or UPDATE statements.
 State_end.draw AREASTACK
 State_end.colour D1642E
@@ -547,24 +547,24 @@ State_preparing.colour 783030
 State_preparing.min 0
 State_preparing.label Preparing
 State_preparing.type DERIVE
-te_reading_from_net.info The server is reading a packet from the network.
-te_reading_from_net.draw AREASTACK
-te_reading_from_net.colour FF7F00
-te_reading_from_net.min 0
-te_reading_from_net.label Reading from net
-te_reading_from_net.type DERIVE
+State_reading_from_net.info The server is reading a packet from the network.
+State_reading_from_net.draw AREASTACK
+State_reading_from_net.colour FF7F00
+State_reading_from_net.min 0
+State_reading_from_net.label Reading from net
+State_reading_from_net.type DERIVE
 State_sending_data.info The thread is processing rows for a SELECT statement and also is sending data to the client.
 State_sending_data.draw AREASTACK
 State_sending_data.colour 54382A
 State_sending_data.min 0
 State_sending_data.label Sending data
 State_sending_data.type DERIVE
-tate_sorting_result.info For a SELECT statement, this is similar to Creating sort index, but for nontemporary tables.
-tate_sorting_result.draw AREASTACK
-tate_sorting_result.colour B83A04
-tate_sorting_result.min 0
-tate_sorting_result.label Sorting result
-tate_sorting_result.type DERIVE
+State_sorting_result.info For a SELECT statement, this is similar to Creating sort index, but for nontemporary tables.
+State_sorting_result.draw AREASTACK
+State_sorting_result.colour B83A04
+State_sorting_result.min 0
+State_sorting_result.label Sorting result
+State_sorting_result.type DERIVE
 State_statistics.info The server is calculating statistics to develop a query execution plan. If a thread is in this state for a long time, the server is probably disk-bound performing other work.
 State_statistics.draw AREASTACK
 State_statistics.colour 6E3803
@@ -577,12 +577,12 @@ State_updating.colour B56414
 State_updating.min 0
 State_updating.label Updating
 State_updating.type DERIVE
-tate_writing_to_net.info The server is writing a packet to the network.
-tate_writing_to_net.draw AREASTACK
-tate_writing_to_net.colour 6E645A
-tate_writing_to_net.min 0
-tate_writing_to_net.label Writing to net
-tate_writing_to_net.type DERIVE
+State_writing_to_net.info The server is writing a packet to the network.
+State_writing_to_net.draw AREASTACK
+State_writing_to_net.colour 6E645A
+State_writing_to_net.min 0
+State_writing_to_net.label Writing to net
+State_writing_to_net.type DERIVE
 State_none.draw AREASTACK
 State_none.colour 521808
 State_none.min 0
@@ -597,12 +597,12 @@ graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Query Cache
 graph_vlabel Commands per ${graph_period}
 graph_category mysql
-he_queries_in_cache.info The number of queries registered in the query cache.
-he_queries_in_cache.cdef he_queries_in_cache,1024,/
-he_queries_in_cache.draw LINE1
-he_queries_in_cache.min 0
-he_queries_in_cache.label Queries in cache (K)
-he_queries_in_cache.type GAUGE
+Qcache_queries_in_cache.info The number of queries registered in the query cache.
+Qcache_queries_in_cache.cdef he_queries_in_cache,1024,/
+Qcache_queries_in_cache.draw LINE1
+Qcache_queries_in_cache.min 0
+Qcache_queries_in_cache.label Queries in cache (K)
+Qcache_queries_in_cache.type GAUGE
 Qcache_hits.info The number of query cache hits.
 Qcache_hits.draw LINE1
 Qcache_hits.min 0
@@ -618,11 +618,11 @@ Qcache_not_cached.draw LINE1
 Qcache_not_cached.min 0
 Qcache_not_cached.label Not cached
 Qcache_not_cached.type DERIVE
-cache_lowmem_prunes.info The number of queries that were deleted from the query cache because of low memory.
-cache_lowmem_prunes.draw LINE1
-cache_lowmem_prunes.min 0
-cache_lowmem_prunes.label Low-memory prunes
-cache_lowmem_prunes.type DERIVE
+Qcache_lowmem_prunes.info The number of queries that were deleted from the query cache because of low memory.
+Qcache_lowmem_prunes.draw LINE1
+Qcache_lowmem_prunes.min 0
+Qcache_lowmem_prunes.label Low-memory prunes
+Qcache_lowmem_prunes.type DERIVE
 graph_args --base 1024 --lower-limit 0 --no-gridfit --slope-mode
 graph_title Query Cache Memory
 graph_vlabel Bytes
@@ -651,21 +651,21 @@ slave_stopped.colour DD0000
 slave_stopped.min 0
 slave_stopped.label Slave Stopped
 slave_stopped.type GAUGE
-etried_transactions.info The total number of times since startup that the replication slave SQL thread has retried transactions.
-etried_transactions.draw LINE1
-etried_transactions.min 0
-etried_transactions.label Retried Transactions
-etried_transactions.type DERIVE
-ve_open_temp_tables.info The number of temporary tables that the slave SQL thread currently has open.
-ve_open_temp_tables.draw LINE1
-ve_open_temp_tables.min 0
-ve_open_temp_tables.label Open Temp Tables
-ve_open_temp_tables.type DERIVE
-conds_behind_master.info http://dev.mysql.com/doc/refman/5.1/en/show-slave-status.html
-conds_behind_master.draw LINE1
-conds_behind_master.min 0
-conds_behind_master.label Secs Behind Master
-conds_behind_master.type GAUGE
+Slave_retried_transactions.info The total number of times since startup that the replication slave SQL thread has retried transactions.
+Slave_retried_transactions.draw LINE1
+Slave_retried_transactions.min 0
+Slave_retried_transactions.label Retried Transactions
+Slave_retried_transactions.type DERIVE
+Slave_open_temp_tables.info The number of temporary tables that the slave SQL thread currently has open.
+Slave_open_temp_tables.draw LINE1
+Slave_open_temp_tables.min 0
+Slave_open_temp_tables.label Open Temp Tables
+Slave_open_temp_tables.type DERIVE
+seconds_behind_master.info http://dev.mysql.com/doc/refman/5.1/en/show-slave-status.html
+seconds_behind_master.draw LINE1
+seconds_behind_master.min 0
+seconds_behind_master.label Secs Behind Master
+seconds_behind_master.type GAUGE
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Select types
 graph_vlabel Commands per ${graph_period}
@@ -677,12 +677,12 @@ Select_full_join.colour FF0000
 Select_full_join.min 0
 Select_full_join.label Full join
 Select_full_join.type DERIVE
-ect_full_range_join.info The number of joins that used a range search on a reference table.
-ect_full_range_join.draw AREASTACK
-ect_full_range_join.colour FF7D00
-ect_full_range_join.min 0
-ect_full_range_join.label Full range
-ect_full_range_join.type DERIVE
+Select_full_range_join.info The number of joins that used a range search on a reference table.
+Select_full_range_join.draw AREASTACK
+Select_full_range_join.colour FF7D00
+Select_full_range_join.min 0
+Select_full_range_join.label Full range
+Select_full_range_join.type DERIVE
 Select_range.info The number of joins that used ranges on the first table.
 Select_range.draw AREASTACK
 Select_range.colour FFF200
@@ -743,11 +743,11 @@ graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Table locks
 graph_vlabel locks per ${graph_period}
 graph_category mysql
-ble_locks_immediate.info The number of times that a request for a table lock could be granted immediately.
-ble_locks_immediate.draw LINE1
-ble_locks_immediate.min 0
-ble_locks_immediate.label Table locks immed
-ble_locks_immediate.type DERIVE
+Table_locks_immediate.info The number of times that a request for a table lock could be granted immediately.
+Table_locks_immediate.draw LINE1
+Table_locks_immediate.min 0
+Table_locks_immediate.label Table locks immed
+Table_locks_immediate.type DERIVE
 Table_locks_waited.info The number of times that a request for a table lock could not be granted immediately and a wait was needed.
 Table_locks_waited.draw LINE1
 Table_locks_waited.min 0
@@ -785,11 +785,11 @@ graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Temporary objects
 graph_vlabel Objects per ${graph_period}
 graph_category mysql
-ted_tmp_disk_tables.info The number of internal on-disk temporary tables created by the server while executing statements.
-ted_tmp_disk_tables.draw LINE1
-ted_tmp_disk_tables.min 0
-ted_tmp_disk_tables.label Temp disk tables
-ted_tmp_disk_tables.type DERIVE
+Created_tmp_disk_tables.info The number of internal on-disk temporary tables created by the server while executing statements.
+Created_tmp_disk_tables.draw LINE1
+Created_tmp_disk_tables.min 0
+Created_tmp_disk_tables.label Temp disk tables
+Created_tmp_disk_tables.type DERIVE
 Created_tmp_tables.info The number of internal temporary tables created by the server while executing statements.
 Created_tmp_tables.draw LINE1
 Created_tmp_tables.min 0
