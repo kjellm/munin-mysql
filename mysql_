@@ -903,6 +903,16 @@ $graphs{threads} = {
                                       type  => 'GAUGE',
                                       info  => 'The number of threads created to handle connections',
                                       colour=> '0000ff'},
+        {name => 'Threads_connected', label => 'Threads connected',
+                                      draw  => 'LINE1',
+                                      type  => 'GAUGE',
+                                      info  => 'The number of currently open connections',
+                                      colour=> '7777ff'},
+        {name => 'Threads_running',   label => 'Threads running',
+                                      draw  => 'LINE1',
+                                      type  => 'GAUGE',
+                                      info  => 'The number of threads that are not sleeping',
+                                      colour=> '7d0000'},
     ],
 };
 
