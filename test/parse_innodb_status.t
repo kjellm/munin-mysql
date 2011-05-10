@@ -5,7 +5,7 @@ use FindBin;
 # Both mysql_ and Test::More defines the sub skip. Put mysql_ in its
 # own package so it don't polute the main:: name space
 package mysql_;
-Test::More::require_ok("$FindBin::Bin/../mysql_"); 
+Test::More::require_ok("$FindBin::Bin/../mysql"); 
 package main;
 
 sub dump_data {

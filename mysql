@@ -11,24 +11,16 @@ versions 5.1.41, 5.0.87, and 4.1.22.
 
 =head1 CONFIGURATION
 
-This script is used to generate data for several graphs. To generate
-data for one specific graph, you need to create a symbolic link with a
-name like mysql_<GRAPH> to this script. 
+You need to configure connection parameters to override the
+defaults. These are the defaults:
 
-To get a list of symlinks that can be created, run:
-
-  ./mysql_ suggest
-
-In addition you might need to specify connection parameters in the
-plugin configuration to override the defaults. These are the defaults:
-
-  [mysql_*]
+  [mysql]
     env.mysqlconnection DBI:mysql:mysql
     env.mysqluser root
 
 Non-default example:
 
-  [mysql_*]
+  [mysql]
     env.mysqlconnection DBI:mysql:mysql;host=127.0.0.1;port=3306
     env.mysqluser root
     env.mysqlpassword geheim
@@ -50,11 +42,6 @@ measure slave lag. Add this to the configuration:
 =head1 DEPENDENCIES
 
 =over
-
-=item Cache::Cache and IPC::ShareLite
-
-The plugin uses shared memory to cache the statistics gathered from
-MySQL. This ensures minimal inpact on the MySQL server.
 
 =item DBD::mysql
 
@@ -111,7 +98,7 @@ git-master
 =head1 MAGICK MARKERS
 
   #%# family=auto
-  #%# capabilities=suggest autoconf
+  #%# capabilities=autoconf
 
 =cut
 
@@ -128,21 +115,19 @@ use Math::BigInt; # Used to append "=> lib 'GMP'" here, but GMP caused
 use Munin::Plugin;
 use POSIX qw(floor);
 
+# Check that multigraph is supported
+need_multigraph();
+
 #
 # Global hash holding the data collected from mysql.
 #
 our $data; # Was 'my'. Changed to 'our' to facilitate testing.
 
-
-my $has_cache;
+#
+# FIX
+#
 my $instance;
-my $shared_memory_cache;
 
-
-BEGIN {
-    eval 'require Cache::SharedMemoryCache';
-    $has_cache = $@ ? 0 : 1;
-}
 
 
 #---------------------------------------------------------------------
@@ -1056,32 +1041,32 @@ $graphs{uptime} = {
 
 
 sub main {
-    my $graph = basename($0);
-    # remove prefix and instance number from command name
-    $graph =~ s/^mysql_([0-9]+_)?//;
-
     my $command = $ARGV[0] || 'show';
 
     my %command_map = (
         'autoconf' => \&autoconf,
         'config'   => \&config,
         'show'     => \&show,
-        'suggest'  => \&suggest,
     );
     
     die "Unknown command: $command" 
         unless exists $command_map{$command};
 
-    die "Missing dependency Cache::Cache"
-        unless $has_cache || $command eq 'autoconf';
-    
     build_instance();
 
-    if ($has_cache) {
-        build_shared_memory_cache();
+    if ($command eq 'autoconf') {
+        return $command_map{$command}->();
     }
-
-    return $command_map{$command}->($graph);
+    else {
+        if ($command eq 'show') {
+            collect_data();
+        }
+        for my $graph (sort keys %graphs) {
+            print "multigraph $graph$instance\n";
+            $command_map{$command}->($graph);
+        }
+    }
+    return 0;
 }
 
 
@@ -1094,11 +1079,6 @@ sub main {
 
 # http://munin.projects.linpro.no/wiki/ConcisePlugins#autoconf
 sub autoconf {
-    unless ($has_cache) {
-        print "no (Missing dependency Cache::Cache)\n";
-        return 0;
-    }
-
     eval {
         db_connect();
     };
@@ -1113,42 +1093,11 @@ sub autoconf {
 }
 
 
-# http://munin.projects.linpro.no/wiki/ConcisePlugins#suggest
-sub suggest {
-
-    # What is the best way to decide which graphs is applicable to a
-    # given system?
-    #
-    # Does the database use InnoDB? A zero count from:
-    #
-    #   SELECT COUNT(*) 
-    #     FROM tables
-    #    WHERE table_type = 'base table' 
-    #      AND engine     = 'innodb'
-    #
-    # Does the database use binary logs? 'OFF' as the result from:
-    #
-    #   SHOW GLOBAL variables LIKE 'log_bin'
-    #
-    # Is the database setup as a slave? Empty result from:
-    # 
-    #   SHOW SLAVE STATUS
-
-    local $_;
-    print "$_\n" for (sort keys(%graphs));
-
-    return 0;
-}
-
-
 sub config {
     my $graph_name = shift;
 
-    die 'Unknown graph ' . ($graph_name ? $graph_name : '')
-        unless $graphs{$graph_name};
-
     my $graph = $graphs{$graph_name};
-    
+
     my %conf = (%{$defaults{global_attrs}}, %{$graph->{config}{global_attrs}});
     while (my ($k, $v) = each %conf) {
         print "graph_$k $v\n";
@@ -1175,20 +1124,13 @@ sub config {
             printf("%s.%s %s\n", clean_fieldname($ds->{name}), $k, $v);
         }
     }
-
-    return 0;
 }
 
 sub show {
     my $graph_name = shift;
 
-    die 'Unknown graph ' . ($graph_name ? $graph_name : '')
-        unless $graphs{$graph_name};
-
     my $graph = $graphs{$graph_name};
     
-    update_data();
-
     die "Can't show data for '$graph_name' because InnoDB is disabled."
         if $graph_name =~ /innodb_/ && $data->{_innodb_disabled};
 
@@ -1199,8 +1141,6 @@ sub show {
 
         printf "%s.value %s\n", clean_fieldname($ds->{name}), $value;
     }
-
-    return 0;
 }
 
 
@@ -1212,23 +1152,12 @@ sub show {
 
 sub build_instance {
     $instance = basename($0);
-    if($instance =~ /^mysql_([0-9]+)_/) {
+    if($instance =~ /^mysql_([0-9]+)/) {
         $instance = "-$1";
     }
     else {
         $instance = "";
     }
-}
-
-
-sub build_shared_memory_cache {
-    my %cache_options = ( 
-        'namespace'          => "munin_mysql$instance",
-        'default_expires_in' => 60,
-    );
-
-    $shared_memory_cache = Cache::SharedMemoryCache->new(\%cache_options)
-        or die("Couldn't instantiate SharedMemoryCache");
 }
 
 
@@ -1243,12 +1172,7 @@ sub db_connect {
 }
 
 
-sub update_data {
-    $data = $shared_memory_cache->get('data');
-    return if $data;
-
-    #warn "Need to update cache";
-
+sub collect_data {
     $data = {};
 
     my $dbh = db_connect();
@@ -1267,8 +1191,6 @@ sub update_data {
     update_master($dbh);
     update_slave($dbh);
     update_process_list($dbh);
-
-    $shared_memory_cache->set('data', $data);
 }
 
 
