@@ -44,7 +44,7 @@ how this can be configured.
 
 =over
 
-=item Cache::Cache
+=item Cache::Cache and IPC::ShareLite
 
 The plugin uses shared memory to cache the statistics gathered from
 MySQL. This ensures minimal inpact on the MySQL server.

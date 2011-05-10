@@ -12,7 +12,7 @@ INSTALLATION
  1) Install dependencies
  
      - munin-node
-     - Perl modules: DBI, DBD::mysql, and Cache::Cache
+     - Perl modules: DBI, DBD::mysql, IPC::ShareLite, and Cache::Cache
  
  2) Edit Makefile
  
