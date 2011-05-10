@@ -1399,7 +1399,16 @@ sub parse_innodb_status {
 my $innodb_bigint_rx = qr{([[a-fA-F\d]+)(?: (\d+))?};
 
 
-sub match_dashes { return m/\G-+\n/gc; }
+# Need the negative lookahead in match dashes because some times the
+# TRANSACTION section contains a line of only dashes (see
+# http://munin-monitoring.org/ticket/956):
+#
+# ------- TRX HAS BEEN WAITING 808 SEC FOR THIS LOCK TO BE GRANTED:
+# [...]
+# ------------------
+# ---TRANSACTION 1 2450838625, ACTIVE 831 sec, OS thread id 27 fetching rows, thread declared inside InnoDB 104
+
+sub match_dashes { return m/\G-+\n(?!-)/gc; }
 
 
 sub skip_line    { return m/\G.*\n/gc; }
@@ -1475,7 +1484,7 @@ sub parse_transactions {
 sub parse_file_io {
     parse_section(
         sub {
-            m/\GPending normal aio reads: (\d+), aio writes: (\d+),\n\s*ibuf aio reads: (\d+), log i\/o's: (\d+), sync i\/o's: (\d+)\n/gc && do {
+            m/\GPending normal aio reads: (\d+)(?: \[\d+, \d+, \d+, \d+\] )?, aio writes: (\d+)(?: \[\d+, \d+, \d+, \d+\] )?,\n\s*ibuf aio reads: (\d+), log i\/o's: (\d+), sync i\/o's: (\d+)\n/gc && do {
                 $data->{ib_iop_aioread}  = $1;
                 $data->{ib_iop_aiowrite} = $2;
                 $data->{ib_iop_ibuf_aio} = $3;
