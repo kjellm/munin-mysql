@@ -40,6 +40,13 @@ This plugin can monitor many instances of MySQL. See
 L<http://github.com/kjellm/munin-mysql/issues#issue/22> for a hint on
 how this can be configured.
 
+=head2 Slave lag (mk-heartbeat)
+
+You can use maatkit's mk-heartbeat L<http://www.maatkit.org> to better
+measure slave lag. Add this to the configuration:
+
+  env.maatkit_heartbeat 1
+
 =head1 DEPENDENCIES
 
 =over
