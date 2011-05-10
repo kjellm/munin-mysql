@@ -152,10 +152,12 @@ my %config = (
 #  G R A P H   D E F I N I T I O N S
 #---------------------------------------------------------------------
 
+my $common_global_args = '--no-gridfit --slope-mode';
+
 # These are defaults to save typing in the graph definitions
 my %defaults = (
     global_attrs => {
-        args   => '--base 1000',
+        args   => "--base 1000 $common_global_args",
     },
     data_source_attrs => {
         min   => '0',
@@ -305,7 +307,7 @@ $graphs{innodb_bpool} = {
         global_attrs => {
             title  => 'InnoDB Buffer Pool',
             vlabel => 'Pages',
-            args   => '--base 1024',
+            args   => "--base 1024 $common_global_args",
         },
         data_source_attrs => {
             draw => 'LINE1',
@@ -359,7 +361,7 @@ $graphs{innodb_checkpoint_age} = {
         global_attrs => {
             title  => 'InnoDB Checkpoint Age',
             vlabel => 'Bytes',
-            args   => '--base 1024 -l 0',
+            args   => "--base 1024 -l 0 $common_global_args",
         },
         data_source_attrs => {
             draw  => 'AREA',
@@ -428,7 +430,7 @@ $graphs{innodb_insert_buf_size} = {
         global_attrs => {
             title  => 'InnoDB Insert Buffer Size',
             vlabel => 'Pages',
-            args   => '-l 0',
+            args   => "-l 0 $common_global_args",
         },
         data_source_attrs => {
             draw  => 'LINE1',
@@ -622,7 +624,7 @@ $graphs{network_traffic} = {
     config => {
         global_attrs => {
             title  => 'Network Traffic',
-            args   => '--base 1024',
+            args   => "--base 1024 $common_global_args",
             vlabel => 'Bytes received (-) / sent (+) per ${graph_period}',
         },
         data_source_attrs => {
@@ -737,7 +739,7 @@ $graphs{qcache_mem} = {
         global_attrs => {
             title  => 'Query Cache Memory',
             vlabel => 'Bytes',
-            args   => '--base 1024 --lower-limit 0',
+            args   => "--base 1024 --lower-limit 0 $common_global_args",
         },
         data_source_attrs => {
             draw => 'AREA',
