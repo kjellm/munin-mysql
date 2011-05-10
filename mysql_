@@ -1399,7 +1399,7 @@ sub parse_innodb_status {
 my $innodb_bigint_rx = qr{([[a-fA-F\d]+)(?: (\d+))?};
 
 
-sub match_dashes { return m/\G-+\n/gc; }
+sub match_dashes { return m/\G-{4,}\n/gc; }
 
 
 sub skip_line    { return m/\G.*\n/gc; }
