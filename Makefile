@@ -17,8 +17,8 @@ all:
 test: mysql
 	@ echo testing ... ; \
           export MUNIN_CAP_MULTIGRAPH=1 ; \
-	  perl -Itest/mock mysql > test/values.out~; \
-          perl -Itest/mock mysql config > test/config.out~; \
+	  perl -Ilib -Itest/mock mysql > test/values.out~; \
+          perl -Ilib -Itest/mock mysql config > test/config.out~; \
           diff -q test/values.out test/values.out~ || true; \
           diff -q test/config.out test/config.out~ || true; \
           echo ---------------------------------------------------------; \

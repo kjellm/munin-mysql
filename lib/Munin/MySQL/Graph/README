@@ -1,0 +1,21 @@
+%graphs contains the graph definitions, it is indexed on the graph
+name. The information stored for each graph is used for both showing
+data source values and for printing the graph configuration. Each
+graph follows the followingformat:
+
+$graph{NAME} => {
+    config => {
+        # The global attributes for this graph
+        global_attrs => {} 
+        # Attributes common to all data sources in this graph
+        data_source_attrs => {}
+    },
+    data_sources => [
+        # NAME - The name of the data source (e.g. variable names 
+        #        from SHOW STATUS)
+        # DATA_SOURCE_ATTRS - key-value pairs with data source 
+        #                     attributes
+        {name => 'NAME', (DATA_SOURCE_ATTRS)},
+        {...},
+    ],
+
