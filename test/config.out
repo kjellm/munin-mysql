@@ -1,3 +1,4 @@
+multigraph bin_relay_log
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Binary/Relay Logs
 graph_vlabel Log activity
@@ -24,6 +25,7 @@ relay_log_space.draw LINE1
 relay_log_space.min 0
 relay_log_space.label Relay Log Space (GB)
 relay_log_space.type GAUGE
+multigraph commands
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Command Counters
 graph_vlabel Commands per ${graph_period}
@@ -79,6 +81,7 @@ Com_select.colour FF0000
 Com_select.min 0
 Com_select.label Select
 Com_select.type DERIVE
+multigraph connections
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Connections
 graph_vlabel Connections per ${graph_period}
@@ -115,6 +118,7 @@ Connections.draw LINE1
 Connections.min 0
 Connections.label New connections
 Connections.type DERIVE
+multigraph files_tables
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Files and tables
 graph_vlabel Tables
@@ -140,6 +144,7 @@ Opened_tables.draw LINE1
 Opened_tables.min 0
 Opened_tables.label Opened tables
 Opened_tables.type DERIVE
+multigraph handlers
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Handlers
 graph_category mysql
@@ -197,6 +202,7 @@ Handler_read_rnd_next.colour 69D2E7
 Handler_read_rnd_next.min 0
 Handler_read_rnd_next.label Handler Read Random Next
 Handler_read_rnd_next.type DERIVE
+multigraph innodb_bpool
 graph_args --base 1024 --no-gridfit --slope-mode
 graph_title InnoDB Buffer Pool
 graph_vlabel Pages
@@ -223,6 +229,7 @@ ib_bpool_modpages.draw LINE1
 ib_bpool_modpages.min 0
 ib_bpool_modpages.label Modified pages
 ib_bpool_modpages.type GAUGE
+multigraph innodb_bpool_act
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title InnoDB Buffer Pool Activity
 graph_vlabel Activity per ${graph_period}
@@ -243,6 +250,7 @@ ib_bpool_written.draw LINE1
 ib_bpool_written.min 0
 ib_bpool_written.label Pages written
 ib_bpool_written.type DERIVE
+multigraph innodb_checkpoint_age
 graph_args --base 1024 -l 0 --no-gridfit --slope-mode
 graph_title InnoDB Checkpoint Age
 graph_vlabel Bytes
@@ -259,6 +267,7 @@ ib_log_chkpt_age.colour ffd660
 ib_log_chkpt_age.min 0
 ib_log_chkpt_age.label Uncheckpointed bytes
 ib_log_chkpt_age.type GAUGE
+multigraph innodb_history_length
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title InnoDB History List
 graph_vlabel Transactions
@@ -268,6 +277,7 @@ ib_tnx_hist.draw LINE1
 ib_tnx_hist.min 0
 ib_tnx_hist.label History list length
 ib_tnx_hist.type GAUGE
+multigraph innodb_insert_buf
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title InnoDB Insert Buffer
 graph_vlabel Activity per ${graph_period}
@@ -285,6 +295,7 @@ ib_ibuf_merges.draw LINE1
 ib_ibuf_merges.min 0
 ib_ibuf_merges.label Merges
 ib_ibuf_merges.type DERIVE
+multigraph innodb_insert_buf_size
 graph_args -l 0 --no-gridfit --slope-mode
 graph_title InnoDB Insert Buffer Size
 graph_vlabel Pages
@@ -306,6 +317,7 @@ ib_ibuf_free_len.draw LINE1
 ib_ibuf_free_len.min 0
 ib_ibuf_free_len.label Free pages
 ib_ibuf_free_len.type GAUGE
+multigraph innodb_io
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title InnoDB IO
 graph_vlabel IO operations per ${graph_period}
@@ -330,6 +342,7 @@ ib_io_fsync.draw LINE1
 ib_io_fsync.min 0
 ib_io_fsync.label File syncs
 ib_io_fsync.type DERIVE
+multigraph innodb_io_pend
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title InnoDB IO Pending
 graph_vlabel Pending operations
@@ -362,6 +375,7 @@ ib_iop_aiowrite.draw LINE1
 ib_iop_aiowrite.min 0
 ib_iop_aiowrite.label Normal AIO Writes
 ib_iop_aiowrite.type DERIVE
+multigraph innodb_log
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title InnoDB Log
 graph_vlabel Log activity per ${graph_period}
@@ -382,6 +396,7 @@ ib_log_written.draw LINE1
 ib_log_written.min 0
 ib_log_written.label KB Written
 ib_log_written.type DERIVE
+multigraph innodb_rows
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title InnoDB Row Operations
 graph_vlabel Operations per ${graph_period}
@@ -407,6 +422,7 @@ Innodb_rows_updated.draw AREASTACK
 Innodb_rows_updated.min 0
 Innodb_rows_updated.label Updates
 Innodb_rows_updated.type DERIVE
+multigraph innodb_semaphores
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title InnoDB Semaphores
 graph_vlabel Semaphores per ${graph_period}
@@ -423,6 +439,7 @@ ib_os_waits.draw LINE1
 ib_os_waits.min 0
 ib_os_waits.label OS Waits
 ib_os_waits.type DERIVE
+multigraph innodb_tnx
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title InnoDB Transactions
 graph_vlabel Transactions per ${graph_period}
@@ -432,6 +449,7 @@ ib_tnx.draw LINE1
 ib_tnx.min 0
 ib_tnx.label Transactions created
 ib_tnx.type DERIVE
+multigraph myisam_indexes
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title MyISAM Indexes
 graph_vlabel Requests per ${graph_period}
@@ -452,14 +470,15 @@ Key_write_requests.info The number of requests to write a key block to the cache
 Key_write_requests.cdef Key_write_requests,-1,*
 Key_write_requests.draw AREA
 Key_write_requests.colour 880000
-Key_write_requests.type DERIVE
 Key_write_requests.label Key write requests
+Key_write_requests.type DERIVE
 Key_writes.info The number of physical writes of a key block to disk.
 Key_writes.cdef Key_writes,-1,*
 Key_writes.draw LINE1
 Key_writes.colour FF0000
 Key_writes.label Key writes
 Key_writes.type DERIVE
+multigraph myisam_key_cache
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title MyISAM Key Cache
 graph_vlabel Bytes
@@ -479,6 +498,7 @@ Key_buf_unflush.colour FECEA8
 Key_buf_unflush.min 0
 Key_buf_unflush.label Key buffer bytes unflushed
 Key_buf_unflush.type GAUGE
+multigraph network_traffic
 graph_args --base 1024 --no-gridfit --slope-mode
 graph_title Network Traffic
 graph_vlabel Bytes received (-) / sent (+) per ${graph_period}
@@ -495,6 +515,7 @@ Bytes_sent.min 0
 Bytes_sent.label Bytes transfered
 Bytes_sent.negative Bytes_received
 Bytes_sent.type DERIVE
+multigraph processlist
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Processlist states
 graph_vlabel State count per ${graph_period}
@@ -593,6 +614,7 @@ State_other.colour 194240
 State_other.min 0
 State_other.label Other
 State_other.type DERIVE
+multigraph qcache
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Query Cache
 graph_vlabel Commands per ${graph_period}
@@ -623,6 +645,7 @@ Qcache_lowmem_prunes.draw LINE1
 Qcache_lowmem_prunes.min 0
 Qcache_lowmem_prunes.label Low-memory prunes
 Qcache_lowmem_prunes.type DERIVE
+multigraph qcache_mem
 graph_args --base 1024 --lower-limit 0 --no-gridfit --slope-mode
 graph_title Query Cache Memory
 graph_vlabel Bytes
@@ -637,6 +660,7 @@ Qcache_free_memory.draw AREA
 Qcache_free_memory.min 0
 Qcache_free_memory.label Free mem
 Qcache_free_memory.type GAUGE
+multigraph replication
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Replication
 graph_vlabel Activity
@@ -666,6 +690,7 @@ seconds_behind_master.draw LINE1
 seconds_behind_master.min 0
 seconds_behind_master.label Secs Behind Master
 seconds_behind_master.type GAUGE
+multigraph select_types
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Select types
 graph_vlabel Commands per ${graph_period}
@@ -701,6 +726,7 @@ Select_scan.colour 7D7DFF
 Select_scan.min 0
 Select_scan.label Scan
 Select_scan.type DERIVE
+multigraph slow
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Slow Queries
 graph_vlabel Slow queries per ${graph_period}
@@ -710,6 +736,7 @@ Slow_queries.draw LINE1
 Slow_queries.min 0
 Slow_queries.label Slow queries
 Slow_queries.type DERIVE
+multigraph sorts
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Sorts
 graph_vlabel Sorts / ${graph_period}
@@ -719,8 +746,8 @@ Sort_rows.cdef Sort_rows,1024,/
 Sort_rows.draw AREA
 Sort_rows.colour FF7D00
 Sort_rows.min 0
-Sort_rows.type DERIVE
 Sort_rows.label Rows sorted (K)
+Sort_rows.type DERIVE
 Sort_range.info The number of sorts that were done using ranges.
 Sort_range.draw LINE1
 Sort_range.colour 007D00
@@ -739,6 +766,7 @@ Sort_scan.colour 0000D0
 Sort_scan.min 0
 Sort_scan.label Scan
 Sort_scan.type DERIVE
+multigraph table_locks
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Table locks
 graph_vlabel locks per ${graph_period}
@@ -753,6 +781,7 @@ Table_locks_waited.draw LINE1
 Table_locks_waited.min 0
 Table_locks_waited.label Table locks waited
 Table_locks_waited.type DERIVE
+multigraph threads
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Threads
 graph_vlabel Threads created
@@ -781,6 +810,7 @@ Threads_running.colour 7d0000
 Threads_running.min 0
 Threads_running.label Threads running
 Threads_running.type GAUGE
+multigraph tmp_tables
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Temporary objects
 graph_vlabel Objects per ${graph_period}
@@ -800,6 +830,7 @@ Created_tmp_files.draw LINE1
 Created_tmp_files.min 0
 Created_tmp_files.label Temp files
 Created_tmp_files.type DERIVE
+multigraph uptime
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Uptime
 graph_vlabel Uptime in days
