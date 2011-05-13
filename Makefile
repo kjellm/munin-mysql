@@ -14,7 +14,7 @@ INSTANCES:=""
 
 all: 
 
-test: mysql
+test:
 	@ echo testing ... ; \
           export MUNIN_CAP_MULTIGRAPH=1 ; \
 	  perl -Ilib -Itest/mock mysql > test/values.out~; \
@@ -23,6 +23,10 @@ test: mysql
           diff -q test/config.out test/config.out~ || true; \
           echo ---------------------------------------------------------; \
 	  prove test
+
+show_test_diff:
+	diff test/values.out test/values.out~ | less;
+	diff test/config.out test/config.out~ | less;
 
 
 install:
