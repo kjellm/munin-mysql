@@ -10,7 +10,7 @@ INSTANCES:=""
 
 ### Don't edit below this line
 
-.PHONY: all test clean install
+.PHONY: all test clean install show_test_diff test_diff_ok
 
 all: 
 
@@ -27,6 +27,10 @@ test:
 show_test_diff:
 	diff test/values.out test/values.out~ | less;
 	diff test/config.out test/config.out~ | less;
+
+test_diff_ok:
+	cp test/values.out~ test/values.out
+	cp test/config.out~ test/config.out
 
 
 install:
