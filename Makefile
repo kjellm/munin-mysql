@@ -15,15 +15,14 @@ INSTANCES:=""
 all: 
 
 test: mysql
-	@ echo testing ...
-	@ perl -Itest/mock mysql > test/values.out~; \
+	@ echo testing ... ; \
+          export MUNIN_CAP_MULTIGRAPH=1 ; \
+	  perl -Itest/mock mysql > test/values.out~; \
           perl -Itest/mock mysql config > test/config.out~; \
-        done 
-	diff -q test/values.out test/values.out~ || true
-	diff -q test/config.out test/config.out~ || true
-	@ echo ---------------------------------------------------------
-	@ prove test
-
+          diff -q test/values.out test/values.out~ || true; \
+          diff -q test/config.out test/config.out~ || true; \
+          echo ---------------------------------------------------------; \
+	  prove test
 
 
 install:
