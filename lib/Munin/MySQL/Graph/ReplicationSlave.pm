@@ -1,4 +1,4 @@
-package Munin::MySQL::Graph::Replication;
+package Munin::MySQL::Graph::ReplicationSlave;
 
 use warnings;
 use strict;
