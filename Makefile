@@ -10,28 +10,11 @@ INSTANCES:=""
 
 ### Don't edit below this line
 
+-include local.mk
+
 .PHONY: all test clean install show_test_diff test_diff_ok
 
 all: 
-
-test:
-	@ echo testing ... ; \
-          export MUNIN_CAP_MULTIGRAPH=1 ; \
-	  perl -Ilib -Itest/mock mysql > test/values.out~; \
-          perl -Ilib -Itest/mock mysql config > test/config.out~; \
-          diff -q test/values.out test/values.out~ || true; \
-          diff -q test/config.out test/config.out~ || true; \
-          echo ---------------------------------------------------------; \
-	  prove test
-
-show_test_diff:
-	diff test/values.out test/values.out~ | less;
-	diff test/config.out test/config.out~ | less;
-
-test_diff_ok:
-	cp test/values.out~ test/values.out
-	cp test/config.out~ test/config.out
-
 
 install:
 	mkdir -p $(PLUGIN_DIR)
@@ -54,4 +37,22 @@ install:
 
 clean:
 	rm -f test/values.out~ test/config.out~
+
+test:
+	@ export MUNIN_CAP_MULTIGRAPH=1 ; \
+	  perl -Ilib -Itest/mock mysql > test/values.out~; \
+          perl -Ilib -Itest/mock mysql config > test/config.out~; \
+          diff -q test/values.out test/values.out~ && echo 'values .. ok'; \
+          diff -q test/config.out test/config.out~ && echo 'config .. ok'; \
+          echo '---' ; \
+	  prove test 2>&1 | grep -v 'Output from SHOW ENGINE INNDOB STATUS was truncated'
+
+show_test_diff:
+	diff test/values.out test/values.out~ | less;
+	diff test/config.out test/config.out~ | less;
+
+test_diff_ok:
+	cp test/values.out~ test/values.out
+	cp test/config.out~ test/config.out
+
 
