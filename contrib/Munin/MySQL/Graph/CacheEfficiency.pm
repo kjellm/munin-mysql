@@ -63,3 +63,5 @@ sub graphs { return {
         ],
     },
 }}
+
+1;
