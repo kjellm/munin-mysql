@@ -703,7 +703,7 @@ sub parse_insert_buffer_and_adaptive_hash_index {
                 $data->{ib_ibuf_merges}     = $3;
                 return 1;
             };
-            m/\GIbuf: size (\d+), free list len (\d+), seg size (\d+),\n/gc && do {
+            m/\GIbuf: size (\d+), free list len (\d+), seg size (\d+),(?: \d+ merges)?\n/gc && do {
                 $data->{ib_ibuf_size}     = $1;
                 $data->{ib_ibuf_free_len} = $2;
                 $data->{ib_ibuf_seg_size} = $3;
