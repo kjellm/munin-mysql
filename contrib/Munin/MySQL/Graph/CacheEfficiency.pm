@@ -1,4 +1,4 @@
-package Munin::MySQL::Graph:;CacheEfficiency
+package Munin::MySQL::Graph:;CacheEfficiency;
 
 # Author <mrten+munin@ii.nl>
 #
