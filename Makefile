@@ -3,10 +3,13 @@
 CONFIG_DIR:=/etc/munin
 PLUGIN_DIR:=/usr/local/share/munin/plugins
 MUNIN_NODE:=/etc/init.d/munin-node
+PERL_SITELIB_DIR:=$(shell perl '-V:installsitelib'|cut -d"'" -f2)
 
 # Instance numbers, space separated. Leave empty if you only want to
 # monitor one instance.
 INSTANCES:=""
+
+GRAPHS:=$(shell find lib contrib -name '*.pm')
 
 ### Don't edit below this line
 
@@ -15,6 +18,7 @@ INSTANCES:=""
 .PHONY: all test clean install show_test_diff test_diff_ok
 
 all: 
+	@echo $(GRAPHS)
 
 install:
 	mkdir -p $(PLUGIN_DIR)
@@ -22,16 +26,18 @@ install:
 
 	if [ ! -e $(CONFIG_DIR)/plugin-conf.d/mysql.conf ]; then \
           install mysql.conf $(CONFIG_DIR)/plugin-conf.d; \
-        fi; \
+        fi
 	if [ $(INSTANCES) = "" ]; then \
           ln -sf $(PLUGIN_DIR)/mysql $(CONFIG_DIR)/plugins/mysql; \
         else \
 	  INSTANCES=$(INSTANCES); \
           for I in $$INSTANCES; do \
-            echo $$I; \
             ln -sf $(PLUGIN_DIR)/mysql $(CONFIG_DIR)/plugins/mysql_$${I}; \
           done; \
         fi
+
+	install -d $(PERL_SITELIB_DIR)/Munin/MySQL/Graph
+	install $(GRAPHS) $(PERL_SITELIB_DIR)/Munin/MySQL/Graph
 
 	$(MUNIN_NODE) restart
 
