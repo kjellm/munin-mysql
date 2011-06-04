@@ -26,6 +26,13 @@ Non-default example:
     env.mysqlpassword geheim
 
 
+Warning and critical values can be set via the environment in the usual way. 
+For example: 
+ 
+  [mysql_replication] 
+    env.seconds_behind_master_warning 300 
+    env.seconds_behind_master_critical 600
+
 =head2 Multiple instances
 
 This plugin can monitor many instances of MySQL. See 
@@ -275,6 +282,7 @@ sub config {
 
             printf("%s.%s %s\n", clean_fieldname($ds->{name}), $k, $v);
         }
+        print_thresholds(clean_fieldname($ds->{name}));
     }
 }
 
