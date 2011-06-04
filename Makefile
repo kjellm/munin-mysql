@@ -15,7 +15,7 @@ GRAPHS:=$(shell find lib contrib -name '*.pm')
 
 -include local.mk
 
-.PHONY: all test clean install show_test_diff test_diff_ok
+.PHONY: all test install test_diff_ok
 
 all: 
 	@echo $(GRAPHS)
@@ -41,24 +41,9 @@ install:
 
 	$(MUNIN_NODE) restart
 
-clean:
-	rm -f test/values.out~ test/config.out~
-
 test:
-	@ export MUNIN_CAP_MULTIGRAPH=1 ; \
-	  perl -Ilib -Itest/mock mysql > test/values.out~; \
-          perl -Ilib -Itest/mock mysql config > test/config.out~; \
-          diff -q test/values.out test/values.out~ && echo 'values .. ok'; \
-          diff -q test/config.out test/config.out~ && echo 'config .. ok'; \
-          echo '---' ; \
-	  prove test 2>&1 | grep -v 'Output from SHOW ENGINE INNDOB STATUS was truncated'
-
-show_test_diff:
-	diff test/values.out test/values.out~ | less;
-	diff test/config.out test/config.out~ | less;
+	prove t
 
 test_diff_ok:
-	cp test/values.out~ test/values.out
-	cp test/config.out~ test/config.out
-
+	TEST_REGRESSION_GEN=1 prove t/regression.t
 

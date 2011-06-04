@@ -2,6 +2,8 @@ use Test::More tests => 3;
 use Test::Exception;
 use FindBin;
 
+$ENV{MUNIN_CAP_MULTIGRAPH} = 1;
+
 # Both mysql_ and Test::More defines the sub skip. Put mysql_ in its
 # own package so it don't polute the main:: name space
 package mysql_;
