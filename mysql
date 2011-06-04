@@ -2,12 +2,11 @@
 
 =head1 NAME
 
-mysql_ - Munin plugin to display misc MySQL server status 
+mysql - Munin plugin to display misc MySQL server status 
 
 =head1 APPLICABLE SYSTEMS
 
-Should work on most MySQL platforms, tested by the author on MySQL
-versions 5.1.41, 5.0.87, and 4.1.22.
+Should work on most MySQL platforms.
 
 =head1 CONFIGURATION
 
@@ -82,7 +81,7 @@ when the SQL thread runs and the color of slave_stopped otherwise.
 
 =head1 LICENSE
 
-Copyright (C) 2008,2009 Kjell-Magne Øierud
+Copyright (C) 2008-2011 Kjell-Magne Øierud
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
