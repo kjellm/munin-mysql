@@ -257,7 +257,6 @@ sub config {
     }
     print "graph_category mysql$instance\n";
 
-    my $i = 0;
     for my $ds (@{$graph->{data_sources}}) {
         my %ds_spec = (
             %{$defaults{data_source_attrs}},
