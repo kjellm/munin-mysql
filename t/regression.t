@@ -1,10 +1,11 @@
 use strict;
 use warnings;
 
-use Test::More;
-use Test::Regression;
 use FindBin;
 use Path::Class qw(dir);
+use Test::More;
+use Test::Output qw(:functions);
+use Test::Regression;
 
 $ENV{MUNIN_CAP_MULTIGRAPH} = 1;
 use lib "$FindBin::Bin/mock";
@@ -17,12 +18,7 @@ package main;
 
 sub helper {
     @ARGV = @_;
-    my $output;
-    local *STDOUT;
-    open STDOUT, '>', \$output
-        or die $!;
-    mysql_::main();
-    return $output;
+    return stdout_from(sub {mysql_::main()});
 }
 
 no warnings;
