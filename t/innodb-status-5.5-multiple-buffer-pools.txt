@@ -1,0 +1,108 @@
+
+=====================================
+090220 12:36:43 INNODB MONITOR OUTPUT
+=====================================
+Per second averages calculated from the last 5 seconds
+----------------------
+BUFFER POOL AND MEMORY
+----------------------
+Total memory allocated 29783752704; in additional pool allocated 0
+Internal hash tables (constant factor + variable factor)
+    Adaptive hash index 2048919104      (458995144 + 1589923960)
+    Page hash           7172584 (buffer pool 0 only)
+    Dictionary cache    115766209       (114750256 + 1015953)
+    File system         110832  (82672 + 28160)
+    Lock system         71736872        (71718824 + 18048)
+    Recovery system     0       (0 + 0)
+Dictionary memory allocated 1015953
+Buffer pool size        1769468
+Buffer pool size, bytes 28990963712
+Free buffers            1
+Database pages          1672426
+Old database pages      617279
+Modified db pages       2923
+Pending reads 0
+Pending writes: LRU 0, flush list 0, single page 0
+Pages made young 31483253, not young 1915732679
+4.20 youngs/s, 16.20 non-youngs/s
+Pages read 50141845, created 1051953, written 69568873
+7.40 reads/s, 0.60 creates/s, 0.00 writes/s
+Buffer pool hit rate 1000 / 1000, young-making rate 0 / 1000 not 0 / 1000
+Pages read ahead 0.00/s, evicted without access 0.00/s
+LRU len: 1672426, unzip_LRU len: 0
+I/O sum[10216]:cur[8], unzip sum[0]:cur[0]
+----------------------
+INDIVIDUAL BUFFER POOL INFO
+----------------------
+---BUFFER POOL 0
+Buffer pool size        442367
+Buffer pool size, bytes 7247740928
+Free buffers            0
+Database pages          418135
+Old database pages      154331
+Modified db pages       876
+Pending reads 0
+Pending writes: LRU 0, flush list 0, single page 0
+Pages made young 8012138, not young 512929033
+1.20 youngs/s, 5.00 non-youngs/s
+Pages read 12839051, created 265441, written 17463949
+2.60 reads/s, 0.00 creates/s, 0.00 writes/s
+Buffer pool hit rate 1000 / 1000, young-making rate 0 / 1000 not 0 / 1000
+Pages read ahead 0.00/s, evicted without access 0.00/s
+LRU len: 418135, unzip_LRU len: 0
+I/O sum[2554]:cur[2], unzip sum[0]:cur[0]
+---BUFFER POOL 1
+Buffer pool size        442367
+Buffer pool size, bytes 7247740928
+Free buffers            1
+Database pages          418057
+Old database pages      154301
+Modified db pages       404
+Pending reads 0
+Pending writes: LRU 0, flush list 0, single page 0
+Pages made young 7874890, not young 474563887
+1.40 youngs/s, 4.60 non-youngs/s
+Pages read 12537934, created 258941, written 17405384
+1.80 reads/s, 0.00 creates/s, 0.00 writes/s
+Buffer pool hit rate 1000 / 1000, young-making rate 0 / 1000 not 0 / 1000
+Pages read ahead 0.00/s, evicted without access 0.00/s
+LRU len: 418057, unzip_LRU len: 0
+I/O sum[2554]:cur[2], unzip sum[0]:cur[0]
+---BUFFER POOL 2
+Buffer pool size        442367
+Buffer pool size, bytes 7247740928
+Free buffers            0
+Database pages          418148
+Old database pages      154335
+Modified db pages       774
+Pending reads 0
+Pending writes: LRU 0, flush list 0, single page 0
+Pages made young 7765924, not young 451795351
+1.40 youngs/s, 1.80 non-youngs/s
+Pages read 12311287, created 261939, written 17323009
+1.40 reads/s, 0.20 creates/s, 0.00 writes/s
+Buffer pool hit rate 1000 / 1000, young-making rate 0 / 1000 not 0 / 1000
+Pages read ahead 0.00/s, evicted without access 0.00/s
+LRU len: 418148, unzip_LRU len: 0
+I/O sum[2554]:cur[2], unzip sum[0]:cur[0]
+---BUFFER POOL 3
+Buffer pool size        442367
+Buffer pool size, bytes 7247740928
+Free buffers            0
+Database pages          418086
+Old database pages      154312
+Modified db pages       869
+Pending reads 0
+Pending writes: LRU 0, flush list 0, single page 0
+Pages made young 7830301, not young 476444408
+0.20 youngs/s, 4.80 non-youngs/s
+Pages read 12453573, created 265632, written 17376531
+1.60 reads/s, 0.40 creates/s, 0.00 writes/s
+Buffer pool hit rate 1000 / 1000, young-making rate 0 / 1000 not 0 / 1000
+Pages read ahead 0.00/s, evicted without access 0.00/s
+LRU len: 418086, unzip_LRU len: 0
+I/O sum[2554]:cur[2], unzip sum[0]:cur[0]
+----------------------------
+END OF INNODB MONITOR OUTPUT
+============================
+
