@@ -9,7 +9,10 @@ PERL_SITELIB_DIR:=$(shell perl '-V:installsitelib'|cut -d"'" -f2)
 # monitor one instance.
 INSTANCES:=""
 
-GRAPHS:=$(shell find lib contrib -name '*.pm')
+GRAPHS:=$(shell find lib -name '*.pm')
+# Uncomment the following line if you also want to install all the
+# contributed graphs:
+# GRAPHS:=$(shell find lib contrib -name '*.pm')
 
 ### Don't edit below this line
 
