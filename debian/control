@@ -1,0 +1,21 @@
+Source: munin-mysql-plugins
+Section: net
+Priority: optional
+Maintainer: Yamashita Yuu <yamashita@geishatokyo.com>
+Build-Depends-Indep: perl, htmldoc, html2text
+Build-Depends: debhelper (>=5.0.42), quilt
+Standards-Version: 3.9.1
+Homepage: https://github.com/kjellm/munin-mysql
+
+Package: munin-mysql-plugins
+Architecture: all
+Depends: ${perl:Depends}, ${misc:Depends}, munin-node
+Replaces: munin-node (<< 1.4.0-1)
+Suggests: libclass-dbi-mysql-perl, libdbd-mysql-perl
+Description: Improved MySQL Graphs for Munin
+ Munin is a highly flexible and powerful solution used to create graphs of
+ virtually everything imaginable throughout your network, while still
+ maintaining a rattling ease of installation and configuration.
+ .
+ This package contains unsupported plugins for the Munin node. contributed by
+ kjellm.

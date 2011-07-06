@@ -1,0 +1,5 @@
+munin-mysql-plugins (0.3.1-1) unstable; urgency=low
+
+  * added debian meta files.
+
+ -- Yamashita Yuu <yamashita@geishatokyo.com>  Wed, 06 Jul 2011 22:34:16 +0900

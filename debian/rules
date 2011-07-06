@@ -1,0 +1,52 @@
+#! /usr/bin/make -f
+
+export DH_VERBOSE=
+
+PERLLIB = $(shell perl -V:vendorlib | cut -d= -f2 | sed "s/[\';]//g")
+GRAPHS:=$(CURDIR)/$(shell find lib -name '*.pm')
+
+include /usr/share/quilt/quilt.make
+
+buildpackages=munin-mysql-plugins
+
+# generate -pfoo commandline for debhelper
+dhbuildpackages=$(addprefix -p,$(buildpackages))
+
+build: build-stamp
+build-stamp: $(QUILT_STAMPFN) 
+	dh_testdir
+	dh_installdirs
+	install -D -m0644 mysql $(CURDIR)/debian/munin-mysql-plugins/usr/share/munin/plugins/mysql
+	install -D -m0644 mysql.conf $(CURDIR)/debian/munin-mysql-plugins/etc/munin-plugin-conf.d/munin-mysql-plugins
+	install -d -m0755 $(CURDIR)/debian/munin-mysql-plugins/$(PERLLIB)/Munin/MySQL/Graph
+	install -D -m0644 $(GRAPHS) $(CURDIR)/debian/munin-mysql-plugins/$(PERLLIB)/Munin/MySQL/Graph
+	touch build-stamp
+
+clean: unpatch
+	dh_testdir
+	dh_clean
+
+binary: binary-indep
+
+binary-arch:
+
+binary-indep: build-stamp
+	dh_testdir $(dhbuildpackages)
+	dh_testroot $(dhbuildpackages)
+	dh_installdocs $(dhbuildpackages)
+	dh_installchangelogs $(dhbuildpackages)
+	dh_installman $(dhbuildpackages)
+	dh_installinit --error-handler=true $(dhbuildpackages) -- "defaults 98 20"
+	dh_installcron $(dhbuildpackages)
+	dh_installlogrotate $(dhbuildpackages)
+	dh_installdebconf $(dhbuildpackages)
+	dh_link $(dhbuildpackages)
+	dh_fixperms $(dhbuildpackages)
+	dh_compress $(dhbuildpackages)
+	dh_perl $(dhbuildpackages)
+	dh_installdeb $(dhbuildpackages)
+	dh_gencontrol $(dhbuildpackages)
+	dh_md5sums $(dhbuildpackages)
+	dh_builddeb $(dhbuildpackages)
+
+.PHONY: build clean binary binary-arch binary-indep
