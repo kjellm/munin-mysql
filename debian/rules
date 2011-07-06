@@ -16,7 +16,7 @@ build: build-stamp
 build-stamp: $(QUILT_STAMPFN) 
 	dh_testdir
 	dh_installdirs
-	install -D -m0644 mysql $(CURDIR)/debian/munin-mysql-plugins/usr/share/munin/plugins/mysql
+	install -D -m0755 mysql $(CURDIR)/debian/munin-mysql-plugins/usr/share/munin/plugins/mysql
 	install -D -m0644 mysql.conf $(CURDIR)/debian/munin-mysql-plugins/etc/munin-plugin-conf.d/munin-mysql-plugins
 	install -d -m0755 $(CURDIR)/debian/munin-mysql-plugins/$(PERLLIB)/Munin/MySQL/Graph
 	install -D -m0644 $(GRAPHS) $(CURDIR)/debian/munin-mysql-plugins/$(PERLLIB)/Munin/MySQL/Graph
@@ -25,6 +25,7 @@ build-stamp: $(QUILT_STAMPFN)
 clean: unpatch
 	dh_testdir
 	dh_clean
+	rm -f build-stamp
 
 binary: binary-indep
 
