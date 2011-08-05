@@ -17,7 +17,7 @@ sub graphs { return {
         data_sources => [
             {name => 'Qcache_queries_in_cache', label => 'Queries in cache (K)',
                                                 info  => 'The number of queries registered in the query cache.',
-                                                cdef  => 'he_queries_in_cache,1024,/',
+                                                cdef  => 'Qcache_queries_in_cache,1024,/',
                                                 type  => 'GAUGE'},
             {name => 'Qcache_hits',             label => 'Cache hits',
                                                 info  => 'The number of query cache hits.'},

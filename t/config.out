@@ -620,7 +620,7 @@ graph_title Query Cache
 graph_vlabel Commands per ${graph_period}
 graph_category mysql
 Qcache_queries_in_cache.info The number of queries registered in the query cache.
-Qcache_queries_in_cache.cdef he_queries_in_cache,1024,/
+Qcache_queries_in_cache.cdef Qcache_queries_in_cache,1024,/
 Qcache_queries_in_cache.draw LINE1
 Qcache_queries_in_cache.min 0
 Qcache_queries_in_cache.label Queries in cache (K)
