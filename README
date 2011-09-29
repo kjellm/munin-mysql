@@ -1,4 +1,3 @@
-
                        M U N I N  -  M Y S Q L
                       =========================
 
@@ -12,7 +11,7 @@ INSTALLATION
  1) Install dependencies
  
      - munin-node
-     - Perl modules: DBI, DBD::mysql
+     - Perl modules: DBI, DBD::mysql, Pluggable
  
  2) Edit Makefile
  
