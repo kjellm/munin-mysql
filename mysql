@@ -51,6 +51,8 @@ measure slave lag. Add this to the configuration:
 
 =item DBD::mysql
 
+=item Module::Pluggable
+
 =back
 
 =head1 INTERPRETATION
