@@ -21,6 +21,16 @@ INSTALLATION
  4) Run `make install'
 
 
+ALTERNATIVE INSTALLATION METHODS
+--------------------------------
+
+DEBIAN/UBUNTU PACKAGES
+
+yyuu provides a fork containing the packaging meta files for
+Debian/Ubuntu systems. You can use these to build a Debian
+package. The fork can be found at https://github.com/yyuu/munin-mysql/
+
+
 FURTHER INFORMATION
 -------------------
 
