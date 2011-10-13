@@ -36,15 +36,21 @@ FURTHER INFORMATION
 The plugin documentation is contained in the plugin file as POD. View
 it with perldoc.
 
-View the project home page at
+There is a blog post with some general information and screenshots at
 <http://oierud.name/~kjellm/bliki/ImprovedMuninGraphsForMySQL.html>
+
+Wiki
+
+There is a wiki at <https://github.com/kjellm/munin-mysql/wiki>
 
 Mailing list 
 
  - munin-mysql@googlegroups.com
  - http://groups.google.com/group/munin-mysql
 
-Source code is hosted at github
+Source code
+
+The source is hosted at github:
 <http://github.com/kjellm/munin-mysql/>
 
 
