@@ -81,7 +81,9 @@ sub graphs { return {
                                          colour => 'ffd660',
                                          info   => 'The age in bytes of InnoDB checkpoint.',
                                          value  => sub {
-                                             $_[0]->{ib_log_flush} - $_[0]->{ib_log_checkpoint}
+                                             exists $_[0]->{ib_log_chkpt_age}
+                                               ? $_[0]->{ib_log_chkpt_age}
+                                               : $_[0]->{ib_log_written} - $_[0]->{ib_log_checkpoint}
                                          }},
         ],
     },

@@ -524,6 +524,14 @@ sub innodb_bigint {
         : Math::BigInt->new("0x$x");
 }
 
+sub innodb_bigint_nohex {
+    my ($x, $y) = @_;
+
+    return defined $y
+        ? Math::BigInt->new($x)->blsft(32) + $y
+        : Math::BigInt->new($x);
+}
+
 
 #---------------------------------------------------------------------
 #  P A R S E   'SHOW ENGINE INNODB STATUS'   O U T P U T
@@ -735,19 +743,23 @@ sub parse_log {
     parse_section(
         sub {
             m/\GLog sequence number $innodb_bigint_rx\n/gc && do {
-                $data->{ib_log_written} = innodb_bigint($1, $2);
+                $data->{ib_log_written} = innodb_bigint_nohex($1, $2);
                 return 1;
             };
             m/\GLog flushed up to\s+$innodb_bigint_rx\n/gc && do {
-                $data->{ib_log_flush} = innodb_bigint($1, $2);
+                $data->{ib_log_flush} = innodb_bigint_nohex($1, $2);
                 return 1;
             };
             m/\GLast checkpoint at\s+$innodb_bigint_rx\n/gc && do {
-                $data->{ib_log_checkpoint} = innodb_bigint($1, $2);
+                $data->{ib_log_checkpoint} = innodb_bigint_nohex($1, $2);
                 return 1;
             };
             m/\G(\d+) log i\/o's done.*\n/gc && do {
                 $data->{ib_io_log} = $1;
+                return 1;
+            };
+            m/\GCheckpoint age\s+(\d+)/gc && do {
+                $data->{ib_log_checkpt_age} = $1;
                 return 1;
             };
         }
