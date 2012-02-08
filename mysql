@@ -300,7 +300,8 @@ sub show {
             ? $ds->{value}($data) 
                 : $data->{$ds->{name}};
 
-        printf "%s.value %s\n", clean_fieldname($ds->{name}), $value;
+        printf "%s.value %s\n", clean_fieldname($ds->{name}), defined($value) ? $value : 'U';
+
     }
 }
 
