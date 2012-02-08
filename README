@@ -39,6 +39,11 @@ it with perldoc.
 There is a blog post with some general information and screenshots at
 <http://oierud.name/~kjellm/bliki/ImprovedMuninGraphsForMySQL.html>
 
+The information on
+<http://code.google.com/p/mysql-cacti-templates/wiki/MySQLTemplates>
+should be relevant (As these munin graphs are heavily inspired by
+Xaprb's cacti graphs.)
+
 Wiki
 
 There is a wiki at <https://github.com/kjellm/munin-mysql/wiki>
