@@ -221,7 +221,7 @@ sub main {
             collect_data();
         }
         for my $graph (sort keys %graphs) {
-            print "multigraph $graph$instance\n";
+            print "multigraph mysql_$graph$instance\n";
             $command_map{$command}->($graph);
         }
     }
