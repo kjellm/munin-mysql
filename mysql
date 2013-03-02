@@ -38,12 +38,23 @@ This plugin can monitor many instances of MySQL. See
 L<http://github.com/kjellm/munin-mysql/issues#issue/22> for a hint on
 how this can be configured.
 
-=head2 Slave lag (mk-heartbeat)
+=head2 Slave lag (mk-heartbeat, pt-heartbeat)
 
-You can use maatkit's mk-heartbeat L<http://www.maatkit.org> to better
-measure slave lag. Add this to the configuration:
+You can use Percona's pt-hearbeat L<http://www.percona.com/software/percona-toolkit>, formerly known as 
+maatkit's mk-heartbeat L<http://www.maatkit.org> to better measure slave lag. Add this to the configuration:
 
   env.maatkit_heartbeat 1
+
+or:
+ 
+ env.pt_heartbeat 1
+
+If you want to use a table other than maatkit.heartbeat, name it like this:
+
+  env.maatkit_heartbeat_table schema.heartbeattable
+
+or:
+	env.pt_heartbeat_table schema.heartbeattable
 
 =head1 DEPENDENCIES
 
@@ -146,7 +157,8 @@ my %config = (
     'dsn'               => $ENV{'mysqlconnection'}   || 'DBI:mysql:mysql',
     'user'              => $ENV{'mysqluser'}         || 'root',
     'password'          => $ENV{'mysqlpassword'}     || '',
-    'maatkit_heartbeat' => $ENV{'maatkit_heartbeat'} || 0,
+    'maatkit_heartbeat' => $ENV{'maatkit_heartbeat'} || ( $ENV{'pt_heartbeat'} ? $ENV{'pt_heartbeat'} : 0 ),
+    'maatkit_heartbeat_table' => $ENV{'maatkit_heartbeat_table'} || ( $ENV{'pt_heartbeat_table'} ? $ENV{'pt_heartbeat_table'} : 'maatkit.heartbeat'),
 );
 
 
@@ -456,11 +468,10 @@ sub update_slave_maatkit_heartbeat {
     # The TIME_TO_SEC(TIMEDIFF in the query is necessary as mysql
     # otherwise calculates the wrong difference (simply substracting
     # won't work)
-    my $sth = $dbh->prepare(q{
-        SELECT TIME_TO_SEC(TIMEDIFF(NOW(), ts)) AS seconds_behind_master
-          FROM maatkit.heartbeat
-         LIMIT 1
-    });
+    my $heartbeat_query = "SELECT TIME_TO_SEC(TIMEDIFF(NOW(), ts)) AS seconds_behind_master
+          FROM $config{maatkit_heartbeat_table}
+         LIMIT 1";
+    my $sth = $dbh->prepare($heartbeat_query);
     $sth->execute();
     my $row = $sth->fetchrow_hashref();
     return unless $row;
