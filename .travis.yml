@@ -2,5 +2,5 @@ language: perl
 branches:
   only:
     - master
-install: cpanm -n Test::Exception Test::Output Test::Regression Path::Class
+install: cpanm -n DBI Test::Exception Test::Output Test::Regression Path::Class
 
