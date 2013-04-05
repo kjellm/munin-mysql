@@ -45,7 +45,7 @@ install:
 	$(MUNIN_NODE) restart
 
 test:
-	prove t
+	prove -It/mock t
 
 test_diff_ok:
 	TEST_REGRESSION_GEN=1 prove t/regression.t
