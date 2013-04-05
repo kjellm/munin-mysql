@@ -1,36 +1,34 @@
-                       M U N I N  -  M Y S Q L
-                      =========================
+Munin - MySQL
+=============
+
+[![Build Status](https://travis-ci.org/kjellm/munin-mysql.png?branch=master)](https://travis-ci.org/kjellm/munin-mysql)
 
 
 Munin plugin for showing graphs of MySQL resource usage.
 
 
-INSTALLATION
+Installation
 ------------
 
- 1) Install dependencies
- 
-     - munin-node
-     - Perl modules: DBI, DBD::mysql, Module::Pluggable
- 
- 2) Edit Makefile
- 
- 3) Edit mysql.conf
- 
- 4) Run `make install'
+1. Install dependencies 
+    - munin-node
+    - Perl modules: DBI, DBD::mysql, Module::Pluggable
+2. Edit Makefile
+3. Edit mysql.conf
+4. Run `make install'
 
 
-ALTERNATIVE INSTALLATION METHODS
+Alternative Installation Methods
 --------------------------------
 
-DEBIAN/UBUNTU PACKAGES
+### Debian/Ubuntu Packages
 
 yyuu provides a fork containing the packaging meta files for
 Debian/Ubuntu systems. You can use these to build a Debian
 package. The fork can be found at https://github.com/yyuu/munin-mysql/
 
 
-FURTHER INFORMATION
+Further Information
 -------------------
 
 The plugin documentation is contained in the plugin file as POD. View
@@ -44,22 +42,17 @@ The information on
 should be relevant (As these munin graphs are heavily inspired by
 Xaprb's cacti graphs.)
 
-Wiki
+### Wiki
 
 There is a wiki at <https://github.com/kjellm/munin-mysql/wiki>
 
-Mailing list 
-
- - munin-mysql@googlegroups.com
- - http://groups.google.com/group/munin-mysql
-
-Source code
+### Source code
 
 The source is hosted at github:
 <http://github.com/kjellm/munin-mysql/>
 
 
-TROUBLESHOOTING
+Troubleshooting
 ---------------
 
 - If you get warnings saying "Output from SHOW ENGINE INNDOB STATUS
@@ -78,15 +71,12 @@ TROUBLESHOOTING
   <http://github.com/kjellm/munin-mysql/issues>
 
 
-AUTHOR
+Author
 ------
 
-Kjell-Magne Øierud <kjellm AT acm DOT org>
+Kjell-Magne Øierud <kjellm AT oierud DOT net>
 
 Inspired by the cacti graphs made by Xaprb
 http://code.google.com/p/mysql-cacti-templates/ as viewed on
 http://www.xaprb.com/blog/2008/05/25/screenshots-of-improved-mysql-cacti-templates/.
 
-Initial version sponsored by Telenor <http://telenor.com/>
-
-Later versions sponsored by Redpill Linpro <http://redpill-linpro.com>
