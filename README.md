@@ -74,7 +74,7 @@ Troubleshooting
 Author
 ------
 
-Kjell-Magne Øierud &lt; kjellm AT oierud DOT net &gt;
+Kjell-Magne Øierud &lt;kjellm AT oierud DOT net&gt;
 
 Inspired by the cacti graphs made by Xaprb
 http://code.google.com/p/mysql-cacti-templates/ as viewed on
