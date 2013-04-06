@@ -10,7 +10,7 @@ Munin plugin for showing graphs of MySQL resource usage.
 Installation
 ------------
 
-1. Download from zip file from Github (https://github.com/kjellm/munin-mysql/archive/master.zip)
+1. Download zip file from Github and unzip (https://github.com/kjellm/munin-mysql/archive/master.zip)
 2. Install dependencies 
     - munin-node
     - Perl modules: DBI, DBD::mysql, Module::Pluggable
