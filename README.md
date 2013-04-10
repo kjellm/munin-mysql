@@ -3,7 +3,6 @@ Munin - MySQL
 
 [![Build Status](https://travis-ci.org/kjellm/munin-mysql.png?branch=master)](https://travis-ci.org/kjellm/munin-mysql)
 
-
 Munin plugin for showing graphs of MySQL resource usage.
 
 
@@ -64,8 +63,6 @@ Troubleshooting
 
 - You can find some tips for debugging munin plugin problems here:
   <http://munin.projects.linpro.no/wiki/Debugging_Munin_plugins>
-
-- If you still have problems, try asking on the mailing list.
 
 - Bugs should be reported to the issue tracker on github
   <http://github.com/kjellm/munin-mysql/issues>
