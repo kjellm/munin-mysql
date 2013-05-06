@@ -26,7 +26,7 @@ sub graphs { return {
             global_attrs => {
                 title  => 'Cache efficiency',
                 vlabel => '%',
-                order => 'krd=Key_reads krrd=Key_read_requests qh=Qcache_hits cs=Com_select bcdu=nlog_cache_disk_use bcu=Binlog_cache_use key_cache_eff qcache_eff bl_cache_eff',
+                order => 'krd=Key_reads krrd=Key_read_requests qh=Qcache_hits cs=Com_select bcdu=Binlog_cache_disk_use bcu=Binlog_cache_use key_cache_eff qcache_eff bl_cache_eff',
             },
             data_source_attrs => {
                 draw  => 'LINE1',
