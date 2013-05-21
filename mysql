@@ -326,7 +326,7 @@ sub show {
 sub build_instance {
     $instance = basename($0);
     if($instance =~ /^mysql_([0-9]+)/) {
-        $instance = "-$1";
+        $instance = "_$1";
     }
     else {
         $instance = "";
