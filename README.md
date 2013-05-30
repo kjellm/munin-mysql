@@ -35,7 +35,7 @@ The plugin documentation is contained in the plugin file as POD. View
 it with perldoc.
 
 There is a blog post with some general information and screenshots at
-<http://oierud.name/~kjellm/bliki/ImprovedMuninGraphsForMySQL.html>
+<http://oierud.name/bliki/ImprovedMuninGraphsForMySQL.html>
 
 The information on
 <http://code.google.com/p/mysql-cacti-templates/wiki/MySQLTemplates>
