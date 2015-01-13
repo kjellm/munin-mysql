@@ -402,12 +402,13 @@ sub update_innodb {
     eval {
         $sth->execute();
     };
-    if ($@) {
-        if ($@ =~ /Unknown (storage|table) engine 'INNODB'|Cannot call SHOW INNODB STATUS because skip-innodb is defined/) {
+    my $exit_message = $@;
+    if ($exit_message) {
+        if ($exit_message =~ /Unknown (storage|table) engine 'INNODB'|Cannot call SHOW INNODB STATUS because skip-innodb is defined/) {
             $data->{_innodb_disabled} = 1;
             return;
         }
-        die $@;
+        die $exit_message;
     }
     my $row = $sth->fetchrow_hashref();
     my $status = $row->{'status'};
