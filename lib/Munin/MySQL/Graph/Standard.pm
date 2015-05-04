@@ -32,9 +32,31 @@ sub graphs { return {
                                               cdef  => 'relay_log_space,1024,/,1024,/,1024,/'},
         ],
     },
-    
+
     #---------------------------------------------------------------------
-    
+
+    binlog_commits => {
+        config => {
+            global_attrs => {
+                title  => 'Binary Log Commits',
+                vlabel => 'Number of commits',
+            },
+            data_source_attrs => {
+                draw  => 'LINE1',
+            },
+        },
+        data_sources => [
+            {name => 'Binlog_commits',        label => 'Binlog commits',
+                                              info  => 'The number of transactions committed to the binary log',
+                                              type  => 'COUNTER'},
+            {name => 'Binlog_group_commits',  label => 'Binlog group commits',
+                                              info  => 'The number of group commits done to the binary log',
+                                              type  => 'COUNTER'},
+        ],
+    },
+
+    #---------------------------------------------------------------------
+
     commands => {
         config => {
             global_attrs => {

@@ -111,6 +111,8 @@ $results1 = {
         {variable_name => 'Aborted_connects',                  value => 0},
         {variable_name => 'Binlog_cache_disk_use',             value => 0},
         {variable_name => 'Binlog_cache_use',                  value => 8388142},
+        {variable_name => 'Binlog_commits',                    value => 0},
+        {variable_name => 'Binlog_group_commits',              value => 0},
         {variable_name => 'Bytes_received',                    value => 162368494765},
         {variable_name => 'Bytes_sent',                        value => 188482967756},
         {variable_name => 'Com_admin_commands',                value => 1},
