@@ -3,6 +3,9 @@ Binlog_cache_disk_use.value 0
 Binlog_cache_use.value 8388142
 ma_binlog_size.value 12887116460
 relay_log_space.value 504
+multigraph mysql_binlog_commits
+Binlog_commits.value 0
+Binlog_group_commits.value 0
 multigraph mysql_commands
 Com_replace_select.value 0
 Com_update_multi.value 0

@@ -25,6 +25,21 @@ relay_log_space.draw LINE1
 relay_log_space.min 0
 relay_log_space.label Relay Log Space (GB)
 relay_log_space.type GAUGE
+multigraph mysql_binlog_commits
+graph_args --base 1000 --no-gridfit --slope-mode
+graph_title Binary Log Commits
+graph_vlabel Number of commits
+graph_category mysql
+Binlog_commits.info The number of transactions committed to the binary log
+Binlog_commits.draw LINE1
+Binlog_commits.min 0
+Binlog_commits.label Binlog commits
+Binlog_commits.type COUNTER
+Binlog_group_commits.info The number of group commits done to the binary log
+Binlog_group_commits.draw LINE1
+Binlog_group_commits.min 0
+Binlog_group_commits.label Binlog group commits
+Binlog_group_commits.type COUNTER
 multigraph mysql_commands
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Command Counters
