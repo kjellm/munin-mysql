@@ -78,3 +78,5 @@ Inspired by the cacti graphs made by Xaprb
 http://code.google.com/p/mysql-cacti-templates/ as viewed on
 http://www.xaprb.com/blog/2008/05/25/screenshots-of-improved-mysql-cacti-templates/.
 
+This plugin also contains changes from the upstream munin mysql plugin. See [the list of contributors](https://github.com/munin-monitoring/munin/blob/devel/authors).
+
