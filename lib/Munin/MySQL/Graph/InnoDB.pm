@@ -152,12 +152,20 @@ sub graphs { return {
             global_attrs => {
                 title  => 'InnoDB Log Sequence Number',
             },
-            data_source_attrs => {},
+            data_source_attrs => {
+                draw  => 'LINE1',
+            },
         },
         data_sources => [
-            {name => 'Innodb_lsn_current',         label => 'Log sequence number as shown in the LOG section of the SHOW ENGINE INNODB STATUS output.'},
-            {name => 'Innodb_lsn_flushed',         label => 'Flushed up to log sequence number as shown in the LOG section of the SHOW ENGINE INNODB '},
-            {name => 'Innodb_lsn_last_checkpoint', label => 'Log sequence number last checkpoint as shown in the LOG section of the SHOW ENGINE INNODB STATUS output.'},
+            { name  => 'Innodb_lsn_current',
+              label => 'Current',
+              info  => 'Log sequence number as shown in the LOG section of the SHOW ENGINE INNODB STATUS output.'},
+            { name  => 'Innodb_lsn_flushed',
+              label => 'Flushed',
+              info  => 'Flushed up to log sequence number as shown in the LOG section of the SHOW ENGINE INNODB '},
+            { name  => 'Innodb_lsn_last_checkpoint', 
+              label => 'Last checkpoint',
+              info  => 'Log sequence number last checkpoint as shown in the LOG section of the SHOW ENGINE INNODB STATUS output.'},
         ],
     },
 

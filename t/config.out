@@ -521,17 +521,20 @@ multigraph mysql_innodb_lsn
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title InnoDB Log Sequence Number
 graph_category mysql
-Innodb_lsn_current.draw AREASTACK
+Innodb_lsn_current.info Log sequence number as shown in the LOG section of the SHOW ENGINE INNODB STATUS output.
+Innodb_lsn_current.draw LINE1
 Innodb_lsn_current.min 0
-Innodb_lsn_current.label Log sequence number as shown in the LOG section of the SHOW ENGINE INNODB STATUS output.
+Innodb_lsn_current.label Current
 Innodb_lsn_current.type DERIVE
-Innodb_lsn_flushed.draw AREASTACK
+Innodb_lsn_flushed.info Flushed up to log sequence number as shown in the LOG section of the SHOW ENGINE INNODB 
+Innodb_lsn_flushed.draw LINE1
 Innodb_lsn_flushed.min 0
-Innodb_lsn_flushed.label Flushed up to log sequence number as shown in the LOG section of the SHOW ENGINE INNODB 
+Innodb_lsn_flushed.label Flushed
 Innodb_lsn_flushed.type DERIVE
-Innodb_lsn_last_checkpoint.draw AREASTACK
+Innodb_lsn_last_checkpoint.info Log sequence number last checkpoint as shown in the LOG section of the SHOW ENGINE INNODB STATUS output.
+Innodb_lsn_last_checkpoint.draw LINE1
 Innodb_lsn_last_checkpoint.min 0
-Innodb_lsn_last_checkpoint.label Log sequence number last checkpoint as shown in the LOG section of the SHOW ENGINE INNODB STATUS output.
+Innodb_lsn_last_checkpoint.label Last checkpoint
 Innodb_lsn_last_checkpoint.type DERIVE
 multigraph mysql_innodb_queries
 graph_args --lower-limit 0 --no-gridfit --slope-mode
