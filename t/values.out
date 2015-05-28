@@ -208,7 +208,7 @@ Opened_views.value U
 multigraph mysql_tables_definitions
 table_definition_cache.value 256
 Open_table_definitions.value 23
-Opened_definitions.value U
+Opened_table_definitions.value 55
 multigraph mysql_threads
 thread_cache_size.value 0
 Threads_created.value 979

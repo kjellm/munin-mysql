@@ -1053,11 +1053,11 @@ Open_table_definitions.draw LINE1
 Open_table_definitions.min 0
 Open_table_definitions.label Open table definitions
 Open_table_definitions.type GAUGE
-Opened_definitions.info Number of .frm files that have been cached.
-Opened_definitions.draw LINE1
-Opened_definitions.min 0
-Opened_definitions.label Opened table definitions
-Opened_definitions.type GAUGE
+Opened_table_definitions.info Number of .frm files that have been cached.
+Opened_table_definitions.draw LINE1
+Opened_table_definitions.min 0
+Opened_table_definitions.label Opened table definitions
+Opened_table_definitions.type GAUGE
 multigraph mysql_threads
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Threads

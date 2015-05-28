@@ -199,7 +199,7 @@ sub graphs { return {
             {name => 'Open_table_definitions',
                                          label  => 'Open table definitions',
                                          info   => 'Number of currently cached .frm files.'},
-            {name => 'Opened_definitions',
+            {name => 'Opened_table_definitions',
                                          label  => 'Opened table definitions',
                                          info   => 'Number of .frm files that have been cached.'},
         ],
