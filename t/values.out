@@ -110,6 +110,8 @@ Innodb_lsn_last_checkpoint.value U
 multigraph mysql_innodb_queries
 ib_innodb_queries.value 0
 ib_innodb_transactions_active.value U
+ib_innodb_rw_transactions_active.value U
+ib_innodb_ro_transactions_active.value U
 ib_innodb_query_queue_len.value 0
 multigraph mysql_innodb_read_views
 ib_innodb_read_views.value 1

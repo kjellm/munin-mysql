@@ -241,6 +241,8 @@ sub graphs { return {
         data_sources => [
             {name => 'ib_innodb_queries', label => 'Active'},
             {name => 'ib_innodb_transactions_active', label => 'Transactions'},
+            {name => 'ib_innodb_rw_transactions_active', label => 'RW Transactions'},
+            {name => 'ib_innodb_ro_transactions_active', label => 'RO Transactions'},
             {name => 'ib_innodb_query_queue_len', label => 'Queued'},
         ],
     },

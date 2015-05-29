@@ -548,6 +548,14 @@ ib_innodb_transactions_active.draw GAUGE
 ib_innodb_transactions_active.min 0
 ib_innodb_transactions_active.label Transactions
 ib_innodb_transactions_active.type DERIVE
+ib_innodb_rw_transactions_active.draw GAUGE
+ib_innodb_rw_transactions_active.min 0
+ib_innodb_rw_transactions_active.label RW Transactions
+ib_innodb_rw_transactions_active.type DERIVE
+ib_innodb_ro_transactions_active.draw GAUGE
+ib_innodb_ro_transactions_active.min 0
+ib_innodb_ro_transactions_active.label RO Transactions
+ib_innodb_ro_transactions_active.type DERIVE
 ib_innodb_query_queue_len.draw GAUGE
 ib_innodb_query_queue_len.min 0
 ib_innodb_query_queue_len.label Queued

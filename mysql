@@ -753,6 +753,14 @@ sub parse_row_operations {
                 $data->{ib_innodb_transactions_active}  = $1;
                 return 1;
             };
+            m/\G(\d+) RW transactions active inside InnoDB\n/gc && do {
+                $data->{ib_innodb_rw_transactions_active}  = $1;
+                return 1;
+            };
+            m/\G(\d+) RO transactions active inside InnoDB\n/gc && do {
+                $data->{ib_innodb_ro_transactions_active}  = $1;
+                return 1;
+            };
             m/\G(\d+) out of (\d+) descriptors used\n/gc && do {
                 $data->{ib_innodb_descriptors}  = $1;
                 $data->{ib_innodb_descriptors_max} = $2;
