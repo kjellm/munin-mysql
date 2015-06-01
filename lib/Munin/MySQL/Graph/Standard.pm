@@ -22,6 +22,8 @@ sub graphs { return {
                                               info  => 'The number of transactions that used the temporary binary log cache but that exceeded the value of binlog_cache_size and used a temporary file to store statements from the transaction.'},
             {name => 'Binlog_cache_use',      label => 'Binlog Cache Use',
                                               info  => 'The number of transactions that used the temporary binary log cache.'},
+            {name => 'Binlog_stmt_cache_disk_use', label => 'Binlog Statement Cache Disk Use'},
+            {name => 'Binlog_stmt_cache_use',      label => 'Binlog Statement Cache Use'},
             {name => 'ma_binlog_size',        label => 'Binary Log Space (GB)',
                                               info  => 'The total combined size of all existing binary logs in GB',
                                               type  => 'GAUGE',
@@ -47,11 +49,15 @@ sub graphs { return {
         },
         data_sources => [
             {name => 'Binlog_commits',        label => 'Binlog commits',
-                                              info  => 'The number of transactions committed to the binary log',
-                                              type  => 'COUNTER'},
+                                              info  => 'The number of transactions committed to the binary log'},
             {name => 'Binlog_group_commits',  label => 'Binlog group commits',
-                                              info  => 'The number of group commits done to the binary log',
-                                              type  => 'COUNTER'},
+                                              info  => 'The number of group commits done to the binary log'},
+            {name => 'Binlog_group_commit_trigger_count',     label => 'Triggered by count',
+             info => 'Group commits triggered by count'},
+            {name => 'Binlog_group_commit_trigger_timeout',   label => 'Triggered by timeout',
+             info => 'Group commits triggered by timeout'},
+            {name => 'Binlog_group_commit_trigger_lock_wait', label => 'Triggered by lock_wait',
+             info => 'Group commits triggered by lock_wait'},
         ],
     },
 
@@ -67,16 +73,16 @@ sub graphs { return {
             data_source_attrs => {},
         },
         data_sources => [
-            {name => 'Com_replace_select', label => 'Replace select',  colour=>'00B99B'},
-            {name => 'Com_update_multi',   label => 'Update multi',    colour=>'D8ACE0'},
-            {name => 'Com_insert_select',  label => 'Insert select',   colour=>'AAABA1'},
-            {name => 'Com_delete_multi',   label => 'Delete multi',    colour=>'942D0C'},
-            {name => 'Com_load',           label => 'Load Data',       colour=>'55009D'},
             {name => 'Com_delete',         label => 'Delete',          colour=>'FF7D00'},
-            {name => 'Com_replace',        label => 'Replace',         colour=>'2175D9'},
-            {name => 'Com_update',         label => 'Update',          colour=>'00CF00'},
+            {name => 'Com_delete_multi',   label => 'Delete multi',    colour=>'942D0C'},
             {name => 'Com_insert',         label => 'Insert',          colour=>'FFF200'},
+            {name => 'Com_insert_select',  label => 'Insert select',   colour=>'AAABA1'},
+            {name => 'Com_load',           label => 'Load Data',       colour=>'55009D'},
+            {name => 'Com_replace',        label => 'Replace',         colour=>'2175D9'},
+            {name => 'Com_replace_select', label => 'Replace select',  colour=>'00B99B'},
             {name => 'Com_select',         label => 'Select',          colour=>'FF0000'},
+            {name => 'Com_update',         label => 'Update',          colour=>'00CF00'},
+            {name => 'Com_update_multi',   label => 'Update multi',    colour=>'D8ACE0'},
         ],
     },
     
@@ -109,7 +115,10 @@ sub graphs { return {
                                              info   => 'The number of failed attempts to connect to the MySQL server.'},
             {name => 'Threads_connected',    label  => 'Threads connected',
                                              type   => 'GAUGE',
-                                             info   => 'The number of currently open connections.'},
+                                             info   => 'The number of open connections.'},
+            {name => 'Threads_running',      label  => 'Threads running',
+                                             type   => 'GAUGE',
+                                             info   => 'Number of threads that are actively running, not sleeping.'},
             {name => 'Connections',          label  => 'New connections',
                                              info   => 'The number of connection attempts (successful or not) to the MySQL server.'},
         ],
@@ -117,11 +126,33 @@ sub graphs { return {
     
     #---------------------------------------------------------------------
     
-    files_tables => {
+    files => {
         config => {
             global_attrs => {
-                title  => 'Files and tables',
-                vlabel => 'Tables',
+                title  => 'Files',
+            },
+            data_source_attrs => {
+                type  => 'GAUGE',
+                draw  => 'LINE1',
+            },
+        },
+        data_sources => [
+            {name => 'open_files_limit', label  => 'File limit',
+                                         draw   => 'AREA',
+                                         colour => 'cdcfc4',
+                                         info   => 'The number of file descriptors available to mysqld.'},
+            {name => 'Open_files',       label  => 'Open files',
+                                         info   => 'The number of files that are open.'},
+        ],
+    },
+    
+    
+    #---------------------------------------------------------------------
+    
+    tables => {
+        config => {
+            global_attrs => {
+                title  => 'Tables',
             },
             data_source_attrs => {
                 type  => 'GAUGE',
@@ -133,15 +164,47 @@ sub graphs { return {
                                          draw   => 'AREA',
                                          colour => 'cdcfc4',
                                          info   => 'The number of open tables for all threads.'},
-            {name => 'Open_files',       label  => 'Open files',
-                                         info   => 'The number of files that are open.'},
+            {name => 'innodb_open_files',
+                                         label  => 'Innodb Table Cache Limit',
+                                         draw   => 'AREA',
+                                         colour => 'ffd660'},
+            {name => 'Slave_open_temp_tables',
+                                         label  => 'Open Slave Temp Tables'},
             {name => 'Open_tables',      label  => 'Open tables',
                                          info   => 'The number of tables that are open.'},
             {name => 'Opened_tables',    label  => 'Opened tables',
-                                         type   => 'DERIVE',
                                          info   => 'The number of tables that have been opened.'},
+            {name => 'Opened_views',     label  => 'Opened Views'},
         ],
     },
+
+    #---------------------------------------------------------------------
+
+    tables_definitions=> {
+        config => {
+            global_attrs => {
+                title  => 'Tables Definitions',
+            },
+            data_source_attrs => {
+                type  => 'GAUGE',
+                draw  => 'LINE1',
+            },
+        },
+        data_sources => [
+            {name => 'table_definition_cache',
+                                         label  => 'Cache Limit',
+                                         draw   => 'AREA',
+                                         colour => 'cdcfc4',
+                                         info   => 'Number of table definitions that can be cached.'},
+            {name => 'Open_table_definitions',
+                                         label  => 'Open table definitions',
+                                         info   => 'Number of currently cached .frm files.'},
+            {name => 'Opened_table_definitions',
+                                         label  => 'Opened table definitions',
+                                         info   => 'Number of .frm files that have been cached.'},
+        ],
+    },
+    
     
     #---------------------------------------------------------------------
     
@@ -258,6 +321,12 @@ sub graphs { return {
             {name => 'State_statistics',           label => 'Statistics',
                                                    info  => 'The server is calculating statistics to develop a query execution plan. If a thread is in this state for a long time, the server is probably disk-bound performing other work.',
                                                    colour=> '6E3803'},
+            {name => 'State_system_lock',          label => 'System lock',
+                                                   info  => 'Requesting or waiting for a table system lock.',
+                                                   colour=> 'c564a4'},
+            {name => 'State_table_lock',           label => 'Table lock',
+                                                   info  => 'About to request an internal table lock after acquiring an external lock. Follows from System lock.',
+                                                   colour=> '151414'},
             {name => 'State_updating',             label => 'Updating',
                                                    info  => 'The thread is searching for rows to update and is updating them.',
                                                    colour=> 'B56414'},

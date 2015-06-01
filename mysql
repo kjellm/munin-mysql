@@ -497,6 +497,8 @@ sub update_process_list {
     $data->{State_sending_data}         = 0;
     $data->{State_sorting_result}       = 0;
     $data->{State_statistics}           = 0;
+    $data->{State_system_lock}          = 0;
+    $data->{State_table_lock}           = 0;
     $data->{State_updating}             = 0;
     $data->{State_writing_to_net}       = 0;
     $data->{State_none}                 = 0;
@@ -570,17 +572,17 @@ sub parse_innodb_status {
     my %section_map = (
 
         'BUFFER POOL AND MEMORY'      => \&parse_buffer_pool_and_memory,
-        'INDIVIDUAL BUFFER POOL INFO' => \&skip,
+        'INDIVIDUAL BUFFER POOL INFO' => \&parse_individual_buffer_pool,
         'FILE I/O'                    => \&parse_file_io,
         'INSERT BUFFER AND ADAPTIVE HASH INDEX' 
             => \&parse_insert_buffer_and_adaptive_hash_index,
         'LATEST DETECTED DEADLOCK'    => \&skip,
         'LATEST FOREIGN KEY ERROR'    => \&skip,
         'LOG'                         => \&parse_log,
-        'ROW OPERATIONS'              => \&skip,
+        'ROW OPERATIONS'              => \&parse_row_operations,
         'SEMAPHORES'                  => \&parse_semaphores,
         'TRANSACTIONS'                => \&parse_transactions,
-        'BACKGROUND THREAD'           => \&skip,
+        'BACKGROUND THREAD'           => \&parse_background_thread,
     );
 
     skip_heading();
@@ -661,6 +663,18 @@ sub parse_semaphores {
                 $data->{ib_os_waits}    = $3;
                 return 1;
             };
+            m/\GRW-shared spins (\d+), rounds (\d+), OS waits (\d+)\n/gc && do {
+                $data->{ib_rw_shared_waits}  = $1;
+                $data->{ib_rw_shared_rounds} = $2;
+                $data->{ib_rw_shared_os_waits}    = $3;
+                return 1;
+            };
+            m/\GRW-excl spins (\d+), rounds (\d+), OS waits (\d+)\n/gc && do {
+                $data->{ib_rw_excl_waits}  = $1;
+                $data->{ib_rw_excl_rounds} = $2;
+                $data->{ib_rw_excl_os_waits}    = $3;
+                return 1;
+            };
         }
     );
 }
@@ -723,6 +737,40 @@ sub parse_file_io {
 }
 
 
+sub parse_row_operations {
+    parse_section(
+        sub {
+            m/\G(\d+) queries inside InnoDB, (\d+) queries in queue\n/gc && do {
+                $data->{ib_innodb_queries}  = $1;
+                $data->{ib_innodb_query_queue_len} = $2;
+                return 1;
+            };
+            m/\G(\d+) read views open inside InnoDB\n/gc && do {
+                $data->{ib_innodb_read_views}  = $1;
+                return 1;
+            };
+            m/\G(\d+) transactions active inside InnoDB\n/gc && do {
+                $data->{ib_innodb_transactions_active}  = $1;
+                return 1;
+            };
+            m/\G(\d+) RW transactions active inside InnoDB\n/gc && do {
+                $data->{ib_innodb_rw_transactions_active}  = $1;
+                return 1;
+            };
+            m/\G(\d+) RO transactions active inside InnoDB\n/gc && do {
+                $data->{ib_innodb_ro_transactions_active}  = $1;
+                return 1;
+            };
+            m/\G(\d+) out of (\d+) descriptors used\n/gc && do {
+                $data->{ib_innodb_descriptors}  = $1;
+                $data->{ib_innodb_descriptors_max} = $2;
+                return 1;
+            };
+        }
+    );
+}
+
+
 sub parse_insert_buffer_and_adaptive_hash_index {
     parse_section(
         sub {
@@ -734,9 +782,14 @@ sub parse_insert_buffer_and_adaptive_hash_index {
                 return 1;
             };
             # MySQL >= 5.5
-            m/\Gmerged operations:\n insert (\d+), delete mark \d+, delete \d+\ndiscarded operations:\n insert (\d+), delete mark \d+, delete \d+\n/gc && do {
+            m/\Gmerged operations:\n insert (\d+), delete mark (\d+), delete (\d+)\ndiscarded operations:\n insert (\d+), delete mark (\d+), delete (\d+)\n/gc && do {
                 $data->{ib_ibuf_inserts} = $1;
-                $data->{ib_ibuf_merged_rec} = $1 + $2;
+                $data->{ib_ibuf_delete_mark} = $2;
+                $data->{ib_ibuf_delete} = $3;
+                $data->{ib_ibuf_discard_inserts} = $4;
+                $data->{ib_ibuf_discard_delete_mark} = $5;
+                $data->{ib_ibuf_discard_delete} = $6;
+                $data->{ib_ibuf_merged_rec} = $data->{ib_ibuf_inserts} +  $data->{ib_ibuf_discard_inserts};
                 return 1;
             };
             m/\GIbuf: size (\d+), free list len (\d+), seg size (\d+),(?: (\d+) merges)?\n/gc && do {
@@ -778,6 +831,21 @@ sub parse_log {
     );
 }
 
+sub parse_background_thread {
+    parse_section(
+        sub {
+            m/\Gsrv_master_thread loops: \d+ 1_second, \d+ sleeps, \d+ 10_second, (\d+) background, (\d+) flush\n/gc && do {
+                $data->{ib_srv_main_flush_loops} = $1;
+                $data->{ib_srv_main_background_loops} = $2;
+                return 1;
+            };
+            m/\Gsrv_master_thread log flush and writes: (\d+)\n/gc && do {
+                $data->{ib_srv_main_flushs_writes}  = $1;
+                return 1;
+            };
+        }
+    );
+}
 
 sub parse_buffer_pool_and_memory {
     parse_section(
@@ -798,16 +866,78 @@ sub parse_buffer_pool_and_memory {
                 $data->{ib_bpool_modpages} = $1;
                 return 1;
             };
+            m/\GOld database pages\s+(\d+)\n/gc && do {
+                $data->{ib_bpool_oldpages} = $1;
+                return 1;
+            };
+            m/\GPages made young (\d+), not young (\d+)\n/gc && do {
+                $data->{ib_bpool_made_young}     = $1;
+                $data->{ib_bpool_made_not_young} = $2;
+                return 1;
+            };
             m/\GPages read (\d+), created (\d+), written (\d+)\n/gc && do {
                 $data->{ib_bpool_read}    = $1;
                 $data->{ib_bpool_created} = $2;
                 $data->{ib_bpool_written} = $3;
                 return 1;
             };
+            m/\GInternal hash tables \(constant factor \+ variable factor\)\n\s*Adaptive hash index\s*(\d+)\s*\((\d+) \+ (\d+)\) *\n\s+Page hash +(\d+) +\(buffer pool \d+ only\) *\n\s+Dictionary cache\s*(\d+)\s+\((\d+) \+ (\d+)\) *\n\s+File system\s+(\d+)\s+\((\d+) \+ (\d+)\) *\n\s+Lock system\s+(\d+)\s+\((\d+) \+ (\d+)\) *\n\s+Recovery system\s*(\d+)\s+\((\d+) \+ (\d+)\) *\n/gc  
+            && do {
+                $data->{ib_bpool_internal_adaptive_hash_size_total}  = $1;
+                $data->{ib_bpool_internal_adaptive_hash_size_const}  = $2;
+                $data->{ib_bpool_internal_adaptive_hash_size_var}    = $3;
+                $data->{ib_bpool_internal_page_hash_size_total}  = $4;
+                $data->{ib_bpool_internal_dictionary_cache_size_total}  = $5;
+                $data->{ib_bpool_internal_dictionary_cache_size_const}  = $6;
+                $data->{ib_bpool_internal_dictionary_cache_size_var}    = $7;
+                $data->{ib_bpool_internal_file_system_size_total}  = $8;
+                $data->{ib_bpool_internal_file_system_size_const}  = $9;
+                $data->{ib_bpool_internal_file_system_size_var}    = $10;
+                $data->{ib_bpool_internal_lock_system_size_total}  = $11;
+                $data->{ib_bpool_internal_lock_system_size_const}  = $12;
+                $data->{ib_bpool_internal_lock_system_size_var}    = $13;
+                $data->{ib_bpool_internal_recovery_system_size_total}  = $14;
+                $data->{ib_bpool_internal_recovery_system_size_const}  = $15;
+                $data->{ib_bpool_internal_recovery_system_size_var}    = $16;
+                return 1;
+            };
         }
     );
 }
 
+sub parse_individual_buffer_pool {
+    parse_section(
+        sub {
+            m/\G---BUFFER POOL (\d+)\n/gc && do {
+                my $pool = $1;
+                $data->{ib_bpool_individual_pool_count} = $pool + 1;
+                m/\GBuffer pool size\s+(\d+)\n/gc && do {
+                    $data->{"ib_bpool_individual_pool_${pool}_size"} = $1;
+                };
+                m/\GBuffer pool size, bytes\s+(\d+)\n/gc && do {
+                    $data->{"ib_bpool_individual_pool_${pool}_size_bytes"} = $1;
+                };
+                m/\GFree buffers\s+(\d+)\nDatabase pages\s+(\d+)\nOld database pages\s+(\d+)\nModified db pages\s+(\d+)\nPending reads\s+(\d+)\nPending writes: LRU\s+(\d+), flush list\s+(\d+), single page\s+(\d+)\n/gc && do {
+                    $data->{"ib_bpool_individual_pool_${pool}_free"} = $1;
+                    $data->{"ib_bpool_individual_pool_${pool}_dbpages"} = $2;
+                    $data->{"ib_bpool_individual_pool_${pool}_oldpages"} = $3;
+                    $data->{"ib_bpool_individual_pool_${pool}_modpages"} = $4;
+                    $data->{"ib_bpool_individual_pool_${pool}_pending_reads"} = $5;
+                    $data->{"ib_bpool_individual_pool_${pool}_pending_writes_lru"} = $6;
+                    $data->{"ib_bpool_individual_pool_${pool}_pending_writes_flush"} = $7;
+                    $data->{"ib_bpool_individual_pool_${pool}_pending_writes_single"} = $8;
+                };
+                skip_line();
+                m/\GPages read (\d+), created (\d+), written (\d+)\n/gc && do {
+                    $data->{"ib_bpool_individual_pool_${pool}_read"}    = $1;
+                    $data->{"ib_bpool_individual_pool_${pool}_created"} = $2;
+                    $data->{"ib_bpool_individual_pool_${pool}_written"} = $3;
+                };
+                return 1;
+            };
+        }
+    );
+}
 
 sub handle_incomplete_innodb_status {
 

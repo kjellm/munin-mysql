@@ -13,6 +13,14 @@ Binlog_cache_use.draw LINE1
 Binlog_cache_use.min 0
 Binlog_cache_use.label Binlog Cache Use
 Binlog_cache_use.type DERIVE
+Binlog_stmt_cache_disk_use.draw LINE1
+Binlog_stmt_cache_disk_use.min 0
+Binlog_stmt_cache_disk_use.label Binlog Statement Cache Disk Use
+Binlog_stmt_cache_disk_use.type DERIVE
+Binlog_stmt_cache_use.draw LINE1
+Binlog_stmt_cache_use.min 0
+Binlog_stmt_cache_use.label Binlog Statement Cache Use
+Binlog_stmt_cache_use.type DERIVE
 ma_binlog_size.info The total combined size of all existing binary logs in GB
 ma_binlog_size.cdef ma_binlog_size,1024,/,1024,/,1024,/
 ma_binlog_size.draw LINE1
@@ -34,68 +42,83 @@ Binlog_commits.info The number of transactions committed to the binary log
 Binlog_commits.draw LINE1
 Binlog_commits.min 0
 Binlog_commits.label Binlog commits
-Binlog_commits.type COUNTER
+Binlog_commits.type DERIVE
 Binlog_group_commits.info The number of group commits done to the binary log
 Binlog_group_commits.draw LINE1
 Binlog_group_commits.min 0
 Binlog_group_commits.label Binlog group commits
-Binlog_group_commits.type COUNTER
+Binlog_group_commits.type DERIVE
+Binlog_group_commit_trigger_count.info Group commits triggered by count
+Binlog_group_commit_trigger_count.draw LINE1
+Binlog_group_commit_trigger_count.min 0
+Binlog_group_commit_trigger_count.label Triggered by count
+Binlog_group_commit_trigger_count.type DERIVE
+Binlog_group_commit_trigger_timeout.info Group commits triggered by timeout
+Binlog_group_commit_trigger_timeout.draw LINE1
+Binlog_group_commit_trigger_timeout.min 0
+Binlog_group_commit_trigger_timeout.label Triggered by timeout
+Binlog_group_commit_trigger_timeout.type DERIVE
+Binlog_group_commit_trigger_lock_wait.info Group commits triggered by lock_wait
+Binlog_group_commit_trigger_lock_wait.draw LINE1
+Binlog_group_commit_trigger_lock_wait.min 0
+Binlog_group_commit_trigger_lock_wait.label Triggered by lock_wait
+Binlog_group_commit_trigger_lock_wait.type DERIVE
 multigraph mysql_commands
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Command Counters
 graph_vlabel Commands per ${graph_period}
 graph_total Questions
 graph_category mysql
-Com_replace_select.draw AREASTACK
-Com_replace_select.colour 00B99B
-Com_replace_select.min 0
-Com_replace_select.label Replace select
-Com_replace_select.type DERIVE
-Com_update_multi.draw AREASTACK
-Com_update_multi.colour D8ACE0
-Com_update_multi.min 0
-Com_update_multi.label Update multi
-Com_update_multi.type DERIVE
-Com_insert_select.draw AREASTACK
-Com_insert_select.colour AAABA1
-Com_insert_select.min 0
-Com_insert_select.label Insert select
-Com_insert_select.type DERIVE
-Com_delete_multi.draw AREASTACK
-Com_delete_multi.colour 942D0C
-Com_delete_multi.min 0
-Com_delete_multi.label Delete multi
-Com_delete_multi.type DERIVE
-Com_load.draw AREASTACK
-Com_load.colour 55009D
-Com_load.min 0
-Com_load.label Load Data
-Com_load.type DERIVE
 Com_delete.draw AREASTACK
 Com_delete.colour FF7D00
 Com_delete.min 0
 Com_delete.label Delete
 Com_delete.type DERIVE
-Com_replace.draw AREASTACK
-Com_replace.colour 2175D9
-Com_replace.min 0
-Com_replace.label Replace
-Com_replace.type DERIVE
-Com_update.draw AREASTACK
-Com_update.colour 00CF00
-Com_update.min 0
-Com_update.label Update
-Com_update.type DERIVE
+Com_delete_multi.draw AREASTACK
+Com_delete_multi.colour 942D0C
+Com_delete_multi.min 0
+Com_delete_multi.label Delete multi
+Com_delete_multi.type DERIVE
 Com_insert.draw AREASTACK
 Com_insert.colour FFF200
 Com_insert.min 0
 Com_insert.label Insert
 Com_insert.type DERIVE
+Com_insert_select.draw AREASTACK
+Com_insert_select.colour AAABA1
+Com_insert_select.min 0
+Com_insert_select.label Insert select
+Com_insert_select.type DERIVE
+Com_load.draw AREASTACK
+Com_load.colour 55009D
+Com_load.min 0
+Com_load.label Load Data
+Com_load.type DERIVE
+Com_replace.draw AREASTACK
+Com_replace.colour 2175D9
+Com_replace.min 0
+Com_replace.label Replace
+Com_replace.type DERIVE
+Com_replace_select.draw AREASTACK
+Com_replace_select.colour 00B99B
+Com_replace_select.min 0
+Com_replace_select.label Replace select
+Com_replace_select.type DERIVE
 Com_select.draw AREASTACK
 Com_select.colour FF0000
 Com_select.min 0
 Com_select.label Select
 Com_select.type DERIVE
+Com_update.draw AREASTACK
+Com_update.colour 00CF00
+Com_update.min 0
+Com_update.label Update
+Com_update.type DERIVE
+Com_update_multi.draw AREASTACK
+Com_update_multi.colour D8ACE0
+Com_update_multi.min 0
+Com_update_multi.label Update multi
+Com_update_multi.type DERIVE
 multigraph mysql_connections
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Connections
@@ -123,42 +146,36 @@ Aborted_connects.draw LINE1
 Aborted_connects.min 0
 Aborted_connects.label Aborted connects
 Aborted_connects.type DERIVE
-Threads_connected.info The number of currently open connections.
+Threads_connected.info The number of open connections.
 Threads_connected.draw LINE1
 Threads_connected.min 0
 Threads_connected.label Threads connected
 Threads_connected.type GAUGE
+Threads_running.info Number of threads that are actively running, not sleeping.
+Threads_running.draw LINE1
+Threads_running.min 0
+Threads_running.label Threads running
+Threads_running.type GAUGE
 Connections.info The number of connection attempts (successful or not) to the MySQL server.
 Connections.draw LINE1
 Connections.min 0
 Connections.label New connections
 Connections.type DERIVE
-multigraph mysql_files_tables
+multigraph mysql_files
 graph_args --base 1000 --no-gridfit --slope-mode
-graph_title Files and tables
-graph_vlabel Tables
+graph_title Files
 graph_category mysql
-table_open_cache.info The number of open tables for all threads.
-table_open_cache.draw AREA
-table_open_cache.colour cdcfc4
-table_open_cache.min 0
-table_open_cache.label Table cache
-table_open_cache.type GAUGE
+open_files_limit.info The number of file descriptors available to mysqld.
+open_files_limit.draw AREA
+open_files_limit.colour cdcfc4
+open_files_limit.min 0
+open_files_limit.label File limit
+open_files_limit.type GAUGE
 Open_files.info The number of files that are open.
 Open_files.draw LINE1
 Open_files.min 0
 Open_files.label Open files
 Open_files.type GAUGE
-Open_tables.info The number of tables that are open.
-Open_tables.draw LINE1
-Open_tables.min 0
-Open_tables.label Open tables
-Open_tables.type GAUGE
-Opened_tables.info The number of tables that have been opened.
-Opened_tables.draw LINE1
-Opened_tables.min 0
-Opened_tables.label Opened tables
-Opened_tables.type DERIVE
 multigraph mysql_handlers
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Handlers
@@ -244,6 +261,11 @@ ib_bpool_modpages.draw LINE1
 ib_bpool_modpages.min 0
 ib_bpool_modpages.label Modified pages
 ib_bpool_modpages.type GAUGE
+ib_bpool_oldpages.info The number of pages in the old sublist of the buffer pool
+ib_bpool_oldpages.draw LINE1
+ib_bpool_oldpages.min 0
+ib_bpool_oldpages.label Old pages
+ib_bpool_oldpages.type GAUGE
 multigraph mysql_innodb_bpool_act
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title InnoDB Buffer Pool Activity
@@ -265,6 +287,65 @@ ib_bpool_written.draw LINE1
 ib_bpool_written.min 0
 ib_bpool_written.label Pages written
 ib_bpool_written.type DERIVE
+ib_bpool_made_young.info The number of old pages that were moved to the head of the buffer pool
+ib_bpool_made_young.draw LINE1
+ib_bpool_made_young.min 0
+ib_bpool_made_young.label Made young
+ib_bpool_made_young.type DERIVE
+ib_bpool_made_not_young.info The number of pages that have remained in the old sublist without being made new.
+ib_bpool_made_not_young.draw LINE1
+ib_bpool_made_not_young.min 0
+ib_bpool_made_not_young.label Made not young
+ib_bpool_made_not_young.type DERIVE
+multigraph mysql_innodb_bpool_internal_breakdown
+graph_args --base 1024 --lower-limit 0 --no-gridfit --slope-mode
+graph_title InnoDB Buffer Pool Internal breakdown
+graph_vlabel bytes
+graph_category mysql
+ib_bpool_internal_adaptive_hash_size_const.draw AREASTACK
+ib_bpool_internal_adaptive_hash_size_const.min 0
+ib_bpool_internal_adaptive_hash_size_const.label Adaptive Hash const
+ib_bpool_internal_adaptive_hash_size_const.type GAUGE
+ib_bpool_internal_adaptive_hash_size_var.draw AREASTACK
+ib_bpool_internal_adaptive_hash_size_var.min 0
+ib_bpool_internal_adaptive_hash_size_var.label Adaptive Hash var
+ib_bpool_internal_adaptive_hash_size_var.type GAUGE
+ib_bpool_internal_page_hash_size_total.draw AREASTACK
+ib_bpool_internal_page_hash_size_total.min 0
+ib_bpool_internal_page_hash_size_total.label Page Hash
+ib_bpool_internal_page_hash_size_total.type GAUGE
+ib_bpool_internal_dictionary_cache_size_const.draw AREASTACK
+ib_bpool_internal_dictionary_cache_size_const.min 0
+ib_bpool_internal_dictionary_cache_size_const.label Dictionary const
+ib_bpool_internal_dictionary_cache_size_const.type GAUGE
+ib_bpool_internal_dictionary_cache_size_var.draw AREASTACK
+ib_bpool_internal_dictionary_cache_size_var.min 0
+ib_bpool_internal_dictionary_cache_size_var.label Dictionary var
+ib_bpool_internal_dictionary_cache_size_var.type GAUGE
+ib_bpool_internal_file_system_size_const.draw AREASTACK
+ib_bpool_internal_file_system_size_const.min 0
+ib_bpool_internal_file_system_size_const.label Filesystem const
+ib_bpool_internal_file_system_size_const.type GAUGE
+ib_bpool_internal_file_system_size_var.draw AREASTACK
+ib_bpool_internal_file_system_size_var.min 0
+ib_bpool_internal_file_system_size_var.label Filesystem var
+ib_bpool_internal_file_system_size_var.type GAUGE
+ib_bpool_internal_lock_system_size_const.draw AREASTACK
+ib_bpool_internal_lock_system_size_const.min 0
+ib_bpool_internal_lock_system_size_const.label Lock system const
+ib_bpool_internal_lock_system_size_const.type GAUGE
+ib_bpool_internal_lock_system_size_var.draw AREASTACK
+ib_bpool_internal_lock_system_size_var.min 0
+ib_bpool_internal_lock_system_size_var.label Lock system var
+ib_bpool_internal_lock_system_size_var.type GAUGE
+ib_bpool_internal_recovery_system_size_const.draw AREASTACK
+ib_bpool_internal_recovery_system_size_const.min 0
+ib_bpool_internal_recovery_system_size_const.label Recovery system const
+ib_bpool_internal_recovery_system_size_const.type GAUGE
+ib_bpool_internal_recovery_system_size_var.draw AREASTACK
+ib_bpool_internal_recovery_system_size_var.min 0
+ib_bpool_internal_recovery_system_size_var.label Recovery system var
+ib_bpool_internal_recovery_system_size_var.type GAUGE
 multigraph mysql_innodb_checkpoint_age
 graph_args --base 1024 -l 0 --no-gridfit --slope-mode
 graph_title InnoDB Checkpoint Age
@@ -282,6 +363,19 @@ ib_log_chkpt_age.colour ffd660
 ib_log_chkpt_age.min 0
 ib_log_chkpt_age.label Uncheckpointed bytes
 ib_log_chkpt_age.type GAUGE
+multigraph mysql_innodb_descriptors
+graph_args --lower-limit 0 --no-gridfit --slope-mode
+graph_title InnoDB Descriptors
+graph_category mysql
+ib_innodb_descriptors.draw AREASTACK
+ib_innodb_descriptors.min 0
+ib_innodb_descriptors.label Descriptors
+ib_innodb_descriptors.type GAUGE
+ib_innodb_descriptors_max.draw AREA
+ib_innodb_descriptors_max.colour ffd660
+ib_innodb_descriptors_max.min 0
+ib_innodb_descriptors_max.label Max
+ib_innodb_descriptors_max.type GAUGE
 multigraph mysql_innodb_history_length
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title InnoDB History List
@@ -300,8 +394,12 @@ graph_category mysql
 ib_ibuf_inserts.info These values shows statistics about how many buffer operations InnoDB has done. The ratio of merges to inserts gives a good idea of how efficient the buffer is.
 ib_ibuf_inserts.draw LINE1
 ib_ibuf_inserts.min 0
-ib_ibuf_inserts.label Inserts
+ib_ibuf_inserts.label Merge Inserts
 ib_ibuf_inserts.type DERIVE
+ib_ibuf_delete.draw LINE1
+ib_ibuf_delete.min 0
+ib_ibuf_delete.label Merge Deletes
+ib_ibuf_delete.type DERIVE
 ib_ibuf_merged_rec.draw LINE1
 ib_ibuf_merged_rec.min 0
 ib_ibuf_merged_rec.label Merged Records
@@ -310,6 +408,14 @@ ib_ibuf_merges.draw LINE1
 ib_ibuf_merges.min 0
 ib_ibuf_merges.label Merges
 ib_ibuf_merges.type DERIVE
+ib_ibuf_discard_inserts.draw LINE1
+ib_ibuf_discard_inserts.min 0
+ib_ibuf_discard_inserts.label Discard Inserts
+ib_ibuf_discard_inserts.type DERIVE
+ib_ibuf_discard_delete.draw LINE1
+ib_ibuf_discard_delete.min 0
+ib_ibuf_discard_delete.label Discard Deletes
+ib_ibuf_discard_delete.type DERIVE
 multigraph mysql_innodb_insert_buf_size
 graph_args -l 0 --no-gridfit --slope-mode
 graph_title InnoDB Insert Buffer Size
@@ -411,6 +517,57 @@ ib_log_written.draw LINE1
 ib_log_written.min 0
 ib_log_written.label KB Written
 ib_log_written.type DERIVE
+multigraph mysql_innodb_lsn
+graph_args --base 1000 --no-gridfit --slope-mode
+graph_title InnoDB Log Sequence Number
+graph_category mysql
+Innodb_lsn_current.info Log sequence number as shown in the LOG section of the SHOW ENGINE INNODB STATUS output.
+Innodb_lsn_current.draw LINE1
+Innodb_lsn_current.min 0
+Innodb_lsn_current.label Current
+Innodb_lsn_current.type DERIVE
+Innodb_lsn_flushed.info Flushed up to log sequence number as shown in the LOG section of the SHOW ENGINE INNODB 
+Innodb_lsn_flushed.draw LINE1
+Innodb_lsn_flushed.min 0
+Innodb_lsn_flushed.label Flushed
+Innodb_lsn_flushed.type DERIVE
+Innodb_lsn_last_checkpoint.info Log sequence number last checkpoint as shown in the LOG section of the SHOW ENGINE INNODB STATUS output.
+Innodb_lsn_last_checkpoint.draw LINE1
+Innodb_lsn_last_checkpoint.min 0
+Innodb_lsn_last_checkpoint.label Last checkpoint
+Innodb_lsn_last_checkpoint.type DERIVE
+multigraph mysql_innodb_queries
+graph_args --lower-limit 0 --no-gridfit --slope-mode
+graph_title InnoDB Engine Queries and Transactions
+graph_category mysql
+ib_innodb_queries.draw GAUGE
+ib_innodb_queries.min 0
+ib_innodb_queries.label Active
+ib_innodb_queries.type DERIVE
+ib_innodb_transactions_active.draw GAUGE
+ib_innodb_transactions_active.min 0
+ib_innodb_transactions_active.label Transactions
+ib_innodb_transactions_active.type DERIVE
+ib_innodb_rw_transactions_active.draw GAUGE
+ib_innodb_rw_transactions_active.min 0
+ib_innodb_rw_transactions_active.label RW Transactions
+ib_innodb_rw_transactions_active.type DERIVE
+ib_innodb_ro_transactions_active.draw GAUGE
+ib_innodb_ro_transactions_active.min 0
+ib_innodb_ro_transactions_active.label RO Transactions
+ib_innodb_ro_transactions_active.type DERIVE
+ib_innodb_query_queue_len.draw GAUGE
+ib_innodb_query_queue_len.min 0
+ib_innodb_query_queue_len.label Queued
+ib_innodb_query_queue_len.type DERIVE
+multigraph mysql_innodb_read_views
+graph_args --lower-limit 0 --no-gridfit --slope-mode
+graph_title InnoDB Read Views
+graph_category mysql
+ib_innodb_read_views.draw AREASTACK
+ib_innodb_read_views.min 0
+ib_innodb_read_views.label Views
+ib_innodb_read_views.type GAUGE
 multigraph mysql_innodb_rows
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title InnoDB Row Operations
@@ -454,6 +611,54 @@ ib_os_waits.draw LINE1
 ib_os_waits.min 0
 ib_os_waits.label OS Waits
 ib_os_waits.type DERIVE
+ib_rw_shared_rounds.draw LINE1
+ib_rw_shared_rounds.min 0
+ib_rw_shared_rounds.label RW/S Rounds
+ib_rw_shared_rounds.type DERIVE
+ib_rw_shared_waits.draw LINE1
+ib_rw_shared_waits.min 0
+ib_rw_shared_waits.label RW/S Waits
+ib_rw_shared_waits.type DERIVE
+ib_rw_shared_os_waits.draw LINE1
+ib_rw_shared_os_waits.min 0
+ib_rw_shared_os_waits.label RW/S OS Waits
+ib_rw_shared_os_waits.type DERIVE
+ib_rw_excl_rounds.draw LINE1
+ib_rw_excl_rounds.min 0
+ib_rw_excl_rounds.label RW/X Rounds
+ib_rw_excl_rounds.type DERIVE
+ib_rw_excl_waits.draw LINE1
+ib_rw_excl_waits.min 0
+ib_rw_excl_waits.label RW/X Waits
+ib_rw_excl_waits.type DERIVE
+ib_rw_excl_os_waits.draw LINE1
+ib_rw_excl_os_waits.min 0
+ib_rw_excl_os_waits.label RW/X OS Waits
+ib_rw_excl_os_waits.type DERIVE
+multigraph mysql_innodb_srv_master_thread
+graph_args --base 1000 --no-gridfit --slope-mode
+graph_title InnoDB Master Thread
+graph_category mysql
+Innodb_master_thread_active_loops.draw AREASTACK
+Innodb_master_thread_active_loops.min 0
+Innodb_master_thread_active_loops.label Active Loops
+Innodb_master_thread_active_loops.type DERIVE
+Innodb_master_thread_idle_loops.draw AREASTACK
+Innodb_master_thread_idle_loops.min 0
+Innodb_master_thread_idle_loops.label Idle Loops
+Innodb_master_thread_idle_loops.type DERIVE
+ib_srv_main_flush_loops.draw AREASTACK
+ib_srv_main_flush_loops.min 0
+ib_srv_main_flush_loops.label Flush Loop
+ib_srv_main_flush_loops.type DERIVE
+ib_srv_main_background_loops.draw AREASTACK
+ib_srv_main_background_loops.min 0
+ib_srv_main_background_loops.label Background Loop
+ib_srv_main_background_loops.type DERIVE
+ib_srv_main_flushs_writes.draw LINE1
+ib_srv_main_flushs_writes.min 0
+ib_srv_main_flushs_writes.label Flushes/Writes
+ib_srv_main_flushs_writes.type DERIVE
 multigraph mysql_innodb_tnx
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title InnoDB Transactions
@@ -607,6 +812,18 @@ State_statistics.colour 6E3803
 State_statistics.min 0
 State_statistics.label Statistics
 State_statistics.type DERIVE
+State_system_lock.info Requesting or waiting for a table system lock.
+State_system_lock.draw AREASTACK
+State_system_lock.colour c564a4
+State_system_lock.min 0
+State_system_lock.label System lock
+State_system_lock.type DERIVE
+State_table_lock.info About to request an internal table lock after acquiring an external lock. Follows from System lock.
+State_table_lock.draw AREASTACK
+State_table_lock.colour 151414
+State_table_lock.min 0
+State_table_lock.label Table lock
+State_table_lock.type DERIVE
 State_updating.info The thread is searching for rows to update and is updating them.
 State_updating.draw AREASTACK
 State_updating.colour B56414
@@ -796,6 +1013,59 @@ Table_locks_waited.draw LINE1
 Table_locks_waited.min 0
 Table_locks_waited.label Table locks waited
 Table_locks_waited.type DERIVE
+multigraph mysql_tables
+graph_args --base 1000 --no-gridfit --slope-mode
+graph_title Tables
+graph_category mysql
+table_open_cache.info The number of open tables for all threads.
+table_open_cache.draw AREA
+table_open_cache.colour cdcfc4
+table_open_cache.min 0
+table_open_cache.label Table cache
+table_open_cache.type GAUGE
+innodb_open_files.draw AREA
+innodb_open_files.colour ffd660
+innodb_open_files.min 0
+innodb_open_files.label Innodb Table Cache Limit
+innodb_open_files.type GAUGE
+Slave_open_temp_tables.draw LINE1
+Slave_open_temp_tables.min 0
+Slave_open_temp_tables.label Open Slave Temp Tables
+Slave_open_temp_tables.type GAUGE
+Open_tables.info The number of tables that are open.
+Open_tables.draw LINE1
+Open_tables.min 0
+Open_tables.label Open tables
+Open_tables.type GAUGE
+Opened_tables.info The number of tables that have been opened.
+Opened_tables.draw LINE1
+Opened_tables.min 0
+Opened_tables.label Opened tables
+Opened_tables.type GAUGE
+Opened_views.draw LINE1
+Opened_views.min 0
+Opened_views.label Opened Views
+Opened_views.type GAUGE
+multigraph mysql_tables_definitions
+graph_args --base 1000 --no-gridfit --slope-mode
+graph_title Tables Definitions
+graph_category mysql
+table_definition_cache.info Number of table definitions that can be cached.
+table_definition_cache.draw AREA
+table_definition_cache.colour cdcfc4
+table_definition_cache.min 0
+table_definition_cache.label Cache Limit
+table_definition_cache.type GAUGE
+Open_table_definitions.info Number of currently cached .frm files.
+Open_table_definitions.draw LINE1
+Open_table_definitions.min 0
+Open_table_definitions.label Open table definitions
+Open_table_definitions.type GAUGE
+Opened_table_definitions.info Number of .frm files that have been cached.
+Opened_table_definitions.draw LINE1
+Opened_table_definitions.min 0
+Opened_table_definitions.label Opened table definitions
+Opened_table_definitions.type GAUGE
 multigraph mysql_threads
 graph_args --base 1000 --no-gridfit --slope-mode
 graph_title Threads
