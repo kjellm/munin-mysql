@@ -235,7 +235,7 @@ sub graphs { return {
                 args   => '--lower-limit 0',
             },
             data_source_attrs => {
-                draw => 'GAUGE',
+                type => 'GAUGE',
             },
         },
         data_sources => [
