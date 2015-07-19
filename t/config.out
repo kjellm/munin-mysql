@@ -540,26 +540,26 @@ multigraph mysql_innodb_queries
 graph_args --lower-limit 0 --no-gridfit --slope-mode
 graph_title InnoDB Engine Queries and Transactions
 graph_category mysql
-ib_innodb_queries.draw GAUGE
+ib_innodb_queries.draw AREASTACK
 ib_innodb_queries.min 0
 ib_innodb_queries.label Active
-ib_innodb_queries.type DERIVE
-ib_innodb_transactions_active.draw GAUGE
+ib_innodb_queries.type GAUGE
+ib_innodb_transactions_active.draw AREASTACK
 ib_innodb_transactions_active.min 0
 ib_innodb_transactions_active.label Transactions
-ib_innodb_transactions_active.type DERIVE
-ib_innodb_rw_transactions_active.draw GAUGE
+ib_innodb_transactions_active.type GAUGE
+ib_innodb_rw_transactions_active.draw AREASTACK
 ib_innodb_rw_transactions_active.min 0
 ib_innodb_rw_transactions_active.label RW Transactions
-ib_innodb_rw_transactions_active.type DERIVE
-ib_innodb_ro_transactions_active.draw GAUGE
+ib_innodb_rw_transactions_active.type GAUGE
+ib_innodb_ro_transactions_active.draw AREASTACK
 ib_innodb_ro_transactions_active.min 0
 ib_innodb_ro_transactions_active.label RO Transactions
-ib_innodb_ro_transactions_active.type DERIVE
-ib_innodb_query_queue_len.draw GAUGE
+ib_innodb_ro_transactions_active.type GAUGE
+ib_innodb_query_queue_len.draw AREASTACK
 ib_innodb_query_queue_len.min 0
 ib_innodb_query_queue_len.label Queued
-ib_innodb_query_queue_len.type DERIVE
+ib_innodb_query_queue_len.type GAUGE
 multigraph mysql_innodb_read_views
 graph_args --lower-limit 0 --no-gridfit --slope-mode
 graph_title InnoDB Read Views
