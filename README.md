@@ -55,7 +55,7 @@ The source is hosted at github:
 Troubleshooting
 ---------------
 
-- If you get warnings saying "Output from SHOW ENGINE INNDOB STATUS
+- If you get warnings saying "Output from SHOW ENGINE INNODB STATUS
   was truncated" that means that a very large deadlock are causing the
   output to be truncated. The consequence is that data for many of the
   InnoDB related data sources will be missing. For solutions to this
