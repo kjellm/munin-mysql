@@ -163,7 +163,7 @@ sub graphs { return {
               value  => sub {
                                 $_[0]->{ib_log_written}
                             }
-                                                        },
+                        },
             },
             { name  => 'Innodb_lsn_flushed',
               label => 'Flushed',
