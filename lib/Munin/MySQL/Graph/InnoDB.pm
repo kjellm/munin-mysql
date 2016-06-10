@@ -160,23 +160,17 @@ sub graphs { return {
             { name  => 'Innodb_lsn_current',
               label => 'Current',
               info  => 'Log sequence number as shown in the LOG section of the SHOW ENGINE INNODB STATUS output.',
-              value  => sub {
-                                $_[0]->{ib_log_written}
-                            }
+              value  => sub { $_[0]->{ib_log_written} }
             },
             { name  => 'Innodb_lsn_flushed',
               label => 'Flushed',
               info  => 'Flushed up to log sequence number as shown in the LOG section of the SHOW ENGINE INNODB ',
-              value  => sub {
-                                $_[0]->{ib_log_flush}
-                            },
+              value  => sub { $_[0]->{ib_log_flush} },
             },
             { name  => 'Innodb_lsn_last_checkpoint', 
               label => 'Last checkpoint',
               info  => 'Log sequence number last checkpoint as shown in the LOG section of the SHOW ENGINE INNODB STATUS output.',
-              value  => sub {
-                                $_[0]->{ib_log_checkpoint}
-                            },
+              value  => sub { $_[0]->{ib_log_checkpoint} },
             },
         ],
     },

@@ -67,9 +67,9 @@ Hash table size 27624811, node heap has 1717 buffer(s)
 ---
 LOG
 ---
-Log sequence number 3 1444276404
-Log flushed up to   3 1444276404
-Last checkpoint at  3 1316559540
+Log sequence number 1444276404
+Log flushed up to   1444276404
+Last checkpoint at  1316559540
 0 pending log writes, 0 pending chkp writes
 16813492 log i/o's done, 85.84 log i/o's/second
 ----------------------

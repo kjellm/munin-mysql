@@ -807,16 +807,16 @@ sub parse_insert_buffer_and_adaptive_hash_index {
 sub parse_log {
     parse_section(
         sub {
-            m/\GLog sequence number $innodb_bigint_rx\n/gc && do {
-                $data->{ib_log_written} = innodb_bigint_nohex($1, $2);
+            m/\GLog sequence number\s+(\d+)\n/gc && do {
+                $data->{ib_log_written} = $1;
                 return 1;
             };
-            m/\GLog flushed up to\s+$innodb_bigint_rx\n/gc && do {
-                $data->{ib_log_flush} = innodb_bigint_nohex($1, $2);
+            m/\GLog flushed up to\s+(\d+)\n/gc && do {
+                $data->{ib_log_flush} = $1;
                 return 1;
             };
-            m/\GLast checkpoint at\s+$innodb_bigint_rx\n/gc && do {
-                $data->{ib_log_checkpoint} = innodb_bigint_nohex($1, $2);
+            m/\GLast checkpoint at\s+(\d+)\n/gc && do {
+                $data->{ib_log_checkpoint} = $1;
                 return 1;
             };
             m/\G(\d+) log i\/o's done.*\n/gc && do {
