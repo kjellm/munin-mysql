@@ -101,12 +101,12 @@ ib_iop_aioread.value 0
 ib_iop_aiowrite.value 0
 multigraph mysql_innodb_log
 innodb_log_buffer_size.value 33554432
-ib_log_flush.value 14329178292
-ib_log_written.value 14329178292
+ib_log_flush.value 1444276404
+ib_log_written.value 1444276404
 multigraph mysql_innodb_lsn
-Innodb_lsn_current.value U
-Innodb_lsn_flushed.value U
-Innodb_lsn_last_checkpoint.value U
+Innodb_lsn_current.value 1444276404
+Innodb_lsn_flushed.value 1444276404
+Innodb_lsn_last_checkpoint.value 1316559540
 multigraph mysql_innodb_queries
 ib_innodb_queries.value 0
 ib_innodb_transactions_active.value U
