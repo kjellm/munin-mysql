@@ -1,6 +1,48 @@
+sudo: false
+
 language: perl
+
+perl:
+  - "dev"
+  - "5.20"
+  - "5.18"
+  - "5.16"
+  - "5.14"
+  - "5.12"
+  - "5.10"
+
+matrix:
+  include:
+    - addons:
+        mariadb: 5.5
+      perl: "5.16"
+    - addons:
+        mariadb: 10.0
+      perl: "5.16"
+    - addons:
+        mariadb: 10.1
+      perl: "5.16"
+    - addons:
+        mariadb: 5.5
+      perl: "5.20"
+    - addons:
+        mariadb: 10.0
+      perl: "5.20"
+    - addons:
+        mariadb: 10.1
+      perl: "5.20"
+
 branches:
   only:
     - master
-install: cpanm -n DBI Test::Exception Test::Output Test::Regression Path::Class
+
+before_install:
+   - git clone git://github.com/travis-perl/helpers ~/travis-perl-helpers
+   - source ~/travis-perl-helpers/init
+   - build-perl
+   - perl -V
+
+install:
+  - cpanm --notest -n DBI DBD::mysql Module::Pluggable Test::Exception Test::Output Test::Regression Path::Class \
+    || find ~/.cpanm -name build.log -exec cat {} \;
 

@@ -18,7 +18,7 @@ package main;
 
 sub helper {
     @ARGV = @_;
-    return stdout_from(sub {mysql_::main()});
+    return join("\n",sort(split(/\n/, stdout_from(sub {mysql_::main()}))))."\n";
 }
 
 no warnings;
