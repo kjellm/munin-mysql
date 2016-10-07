@@ -34,9 +34,9 @@ Handler_read_rnd.value 0
 Handler_read_rnd_next.value 477487
 Handler_update.value 0
 Handler_write.value 553921509
-Innodb_lsn_current.value U
-Innodb_lsn_flushed.value U
-Innodb_lsn_last_checkpoint.value U
+Innodb_lsn_current.value 14329178292
+Innodb_lsn_flushed.value 14329178292
+Innodb_lsn_last_checkpoint.value 14201461428
 Innodb_master_thread_active_loops.value U
 Innodb_master_thread_idle_loops.value U
 Innodb_rows_deleted.value 2471842
