@@ -23,7 +23,8 @@ Non-default example:
     env.mysqlconnection DBI:mysql:mysql;host=127.0.0.1;port=3306
     env.mysqluser root
     env.mysqlpassword geheim
-
+    env.skip_binlog_commits 1
+    env.skip_innodb_bpool_internal_breakdown 1
 
 Warning and critical values can be set via the environment in the usual way. 
 For example: 
@@ -211,6 +212,12 @@ sub main {
 
     for my $graph_package (__PACKAGE__->plugins) {
         %graphs = (%graphs, %{$graph_package->graphs});
+    }
+
+    for my $key (keys %graphs) {
+        if ( defined $ENV{'skip_'.$key} && $ENV{'skip_'.$key} ) {
+            delete $graphs{$key};
+        }
     }
 
     my %command_map = (
