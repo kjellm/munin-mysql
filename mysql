@@ -23,8 +23,6 @@ Non-default example:
     env.mysqlconnection DBI:mysql:mysql;host=127.0.0.1;port=3306
     env.mysqluser root
     env.mysqlpassword geheim
-    env.skip_binlog_commits 1
-    env.skip_innodb_bpool_internal_breakdown 1
 
 Warning and critical values can be set via the environment in the usual way. 
 For example: 
@@ -56,6 +54,14 @@ If you want to use a table other than maatkit.heartbeat, name it like this:
 
 or:
 	env.pt_heartbeat_table schema.heartbeattable
+
+=head2 Skipping graphs
+
+You can skip graphs by using skip_* configuration variables:
+
+  [mysql]
+    env.skip_binlog_commits 1
+    env.skip_innodb_bpool_internal_breakdown 1
 
 =head1 DEPENDENCIES
 
