@@ -289,16 +289,17 @@ Opened_table_definitions.draw LINE1
 Opened_table_definitions.info Number of .frm files that have been cached.
 Opened_table_definitions.label Opened table definitions
 Opened_table_definitions.min 0
-Opened_table_definitions.type GAUGE
+Opened_table_definitions.type DERIVE
 Opened_tables.draw LINE1
 Opened_tables.info The number of tables that have been opened.
 Opened_tables.label Opened tables
 Opened_tables.min 0
-Opened_tables.type GAUGE
+Opened_tables.type DERIVE
 Opened_views.draw LINE1
+Opened_views.info The number of views that have been opened.
 Opened_views.label Opened Views
 Opened_views.min 0
-Opened_views.type GAUGE
+Opened_views.type DERIVE
 Qcache_free_memory.draw AREA
 Qcache_free_memory.info The amount of free memory for the query cache.
 Qcache_free_memory.label Free mem
@@ -362,6 +363,7 @@ Select_scan.min 0
 Select_scan.type DERIVE
 Slave_open_temp_tables.draw LINE1
 Slave_open_temp_tables.draw LINE1
+Slave_open_temp_tables.info The number of temporary tables that the slave SQL thread currently has open.
 Slave_open_temp_tables.info The number of temporary tables that the slave SQL thread currently has open.
 Slave_open_temp_tables.label Open Slave Temp Tables
 Slave_open_temp_tables.label Open Temp Tables

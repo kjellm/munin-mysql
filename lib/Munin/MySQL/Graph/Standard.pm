@@ -172,7 +172,7 @@ sub graphs { return {
             {name => 'Slave_open_temp_tables',
                                          label  => 'Open Slave Temp Tables',
                                          type   => 'GAUGE',
-                                         info   => 'The number of temporary tables that the slave SQL thread currently has open'},
+                                         info   => 'The number of temporary tables that the slave SQL thread currently has open.'},
             {name => 'Open_tables',      label  => 'Open tables',
                                          type   => 'GAUGE',
                                          info   => 'The number of tables that are open.'},
