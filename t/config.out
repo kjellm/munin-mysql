@@ -1015,8 +1015,8 @@ innodb_log_size.info The size in bytes of InnoDB log space.
 innodb_log_size.label InnoDB log size
 innodb_log_size.min 0
 innodb_log_size.type GAUGE
-innodb_open_files.colour ffd660
-innodb_open_files.draw AREA
+innodb_open_files.colour 66ffff
+innodb_open_files.draw LINE1
 innodb_open_files.label Innodb Table Cache Limit
 innodb_open_files.min 0
 innodb_open_files.type GAUGE
