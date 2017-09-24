@@ -403,6 +403,12 @@ sub update_variables {
             my $var = $variable_name_map{$row->[0]} || $row->[0];
             $data->{$var} = $row->[1];
         }
+        
+        # qcache hit rate percentage calculation
+        if (defined($data->{Qcache_hits})) {
+            $data->{query_cache_hit_rate} = (($data->{Qcache_hits} / ($data->{Qcache_hits} + $data->{Com_select})) * 100);
+        }
+        
         $sth->finish();
     }
 }

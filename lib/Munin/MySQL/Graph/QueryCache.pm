@@ -51,6 +51,25 @@ sub graphs { return {
                                             info  => 'The amount of free memory for the query cache.'},
         ],
     },
+    
+    #---------------------------------------------------------------------
+
+    qcache_hit_rate => {
+        config => {
+            global_attrs => {
+                title  => 'Query Cache Hit Rate',
+                vlabel => '%',
+            },
+            data_source_attrs => {
+                draw => 'LINE1',
+                type => 'GAUGE',
+            },
+        },
+        data_sources => [
+            {name => 'query_cache_hit_rate',    label => 'Hit Rate',
+                                                info  => 'The percentage of queries served by cache instead of being re-executed by the database repeatedly.'},
+        ],
+    },
 }}
 
 1;
