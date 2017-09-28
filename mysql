@@ -383,8 +383,8 @@ sub collect_data {
 sub update_variables {
     my ($dbh) = @_;
     my @queries = (
-        'SHOW /*!50002 GLOBAL*/ STATUS',
         'SHOW /*!40003 GLOBAL*/ VARIABLES',
+        'SHOW /*!50002 GLOBAL*/ STATUS',
     );
 
     my %variable_name_map = (
@@ -407,6 +407,7 @@ sub update_variables {
         # qcache hit rate percentage calculation
         if (defined($data->{Qcache_hits})) {
             $data->{query_cache_hit_rate} = (($data->{Qcache_hits} / ($data->{Qcache_hits} + $data->{Com_select})) * 100);
+            $data->{Qcache_avg_rslt_size} = (($data->{query_cache_size} - $data->{Qcache_free_memory}) / $data->{Qcache_queries_in_cache} * 1024);
         }
         
         $sth->finish();

@@ -45,10 +45,12 @@ sub graphs { return {
             },
         },
         data_sources => [
-            {name => 'query_cache_size',    label => 'Cache size',
-                                            info  => 'The amount of memory allocated for caching query results.'},
-            {name => 'Qcache_free_memory',  label => 'Free mem',
-                                            info  => 'The amount of free memory for the query cache.'},
+            {name => 'query_cache_size',     label => 'Cache size',
+                                             info  => 'The amount of memory allocated for caching query results.'},
+            {name => 'Qcache_free_memory',   label => 'Free mem',
+                                             info  => 'The amount of free memory for the query cache.'},
+            {name => 'Qcache_avg_rslt_size', label => 'Average result size',
+                                             info  => 'The average result size.'},
         ],
     },
     
