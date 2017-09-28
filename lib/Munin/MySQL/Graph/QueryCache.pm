@@ -53,6 +53,28 @@ sub graphs { return {
     },
     
     #---------------------------------------------------------------------
+    
+    qcache_blocks => {
+        config => {
+            global_attrs => {
+                title  => 'Query Cache Blocks',
+                vlabel => 'Blocks',
+                args   => "--base 1024 --lower-limit 0",
+            },
+            data_source_attrs => {
+                draw => 'AREA',
+                type => 'GAUGE',
+            },
+        },
+        data_sources => [
+            {name => 'Qcache_total_blocks',     label => 'Total blocks',
+                                                info  => 'The number of total blocks'},
+            {name => 'Qcache_free_blocks',      label => 'Free blocks',
+                                                info  => 'The number of free blocks in memory'},
+        ],
+    },
+    
+    #---------------------------------------------------------------------
 
     qcache_hit_rate => {
         config => {
