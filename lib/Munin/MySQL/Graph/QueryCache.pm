@@ -27,6 +27,8 @@ sub graphs { return {
                                                 info  => 'The number of noncached queries (not cacheable, or not cached due to the query_cache_type setting).'},
             {name => 'Qcache_lowmem_prunes',    label => 'Low-memory prunes',
                                                 info  => 'The number of queries that were deleted from the query cache because of low memory.'},
+            {name => 'Qcache_invalidations',    label => 'Invalidations',
+                                                info  => 'The number of query cache invalidations.'},
         ],
     },
 
