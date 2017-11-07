@@ -23,6 +23,7 @@ Non-default example:
     env.mysqlconnection DBI:mysql:mysql;host=127.0.0.1;port=3306
     env.mysqluser root
     env.mysqlpassword geheim
+    env.hostname mysqlserver
 
 Warning and critical values can be set via the environment in the usual way. 
 For example: 
@@ -163,6 +164,7 @@ my %config = (
     'dsn'               => $ENV{'mysqlconnection'}   || 'DBI:mysql:mysql',
     'user'              => $ENV{'mysqluser'}         || 'root',
     'password'          => $ENV{'mysqlpassword'}     || '',
+    'hostname'          => $ENV{'hostname'}          // '',
     'maatkit_heartbeat' => $ENV{'maatkit_heartbeat'} || ( $ENV{'pt_heartbeat'} ? $ENV{'pt_heartbeat'} : 0 ),
     'maatkit_heartbeat_table' => $ENV{'maatkit_heartbeat_table'} || ( $ENV{'pt_heartbeat_table'} ? $ENV{'pt_heartbeat_table'} : 'maatkit.heartbeat'),
 );
@@ -243,7 +245,10 @@ sub main {
     else {
         if ($command eq 'show') {
             collect_data();
-        }
+        } elsif ($config{hostname}) {
+	    # Config mode and hostname is set
+	    print "host_name ", $config{hostname}, "\n";
+	}
         for my $graph (sort keys %graphs) {
             print "multigraph mysql_$graph$instance\n";
             $command_map{$command}->($graph);
@@ -280,7 +285,7 @@ sub config {
     my $graph_name = shift;
 
     my $graph = $graphs{$graph_name};
-
+    
     my %conf = (%{$defaults{global_attrs}}, %{$graph->{config}{global_attrs}});
     $conf{args} .=  ' --no-gridfit --slope-mode';
 
