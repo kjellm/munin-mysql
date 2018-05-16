@@ -28,7 +28,7 @@ install:
 	install mysql $(PLUGIN_DIR)
 
 	if [ ! -e $(CONFIG_DIR)/plugin-conf.d/mysql.conf ]; then \
-          install mysql.conf $(CONFIG_DIR)/plugin-conf.d; \
+          install -m 0644 mysql.conf $(CONFIG_DIR)/plugin-conf.d; \
         fi
 	if [ $(INSTANCES) = "" ]; then \
           ln -sf $(PLUGIN_DIR)/mysql $(CONFIG_DIR)/plugins/mysql; \
