@@ -44,5 +44,5 @@ before_install:
 
 install:
   - cpanm --notest -n DBI DBD::mysql Module::Pluggable Test::Exception Test::Output Test::Regression Path::Class \
-    || find ~/.cpanm -name build.log -exec cat {} \;
+    || find ~/.cpanm -name build.log -exec cat "{}" ";"
 
