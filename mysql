@@ -36,7 +36,8 @@ For example:
 
 This plugin can monitor many instances of MySQL. See 
 L<http://github.com/kjellm/munin-mysql/issues#issue/22> for a hint on
-how this can be configured.
+how this can be configured. In this case you can also set env.titlepostfix
+for distinguishing the different servers in their graph titles.
 
 =head2 Slave lag (mk-heartbeat, pt-heartbeat)
 
@@ -290,7 +291,11 @@ sub config {
     $conf{args} .=  ' --no-gridfit --slope-mode';
 
     while (my ($k, $v) = each %conf) {
-        print "graph_$k $v\n";
+    	if ($k eq 'title') {
+    	    print "graph_$k $v $ENV{'titlepostfix'}\n";
+    	} else {
+            print "graph_$k $v\n";
+    	}
     }
     print "graph_category mysql$instance\n";
 
